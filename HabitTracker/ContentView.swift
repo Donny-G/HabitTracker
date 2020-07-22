@@ -13,14 +13,24 @@ struct ContentView: View {
             UITableView.appearance().backgroundColor = .clear // tableview background
             UITableViewCell.appearance().backgroundColor = .clear // cell background
         }
-        
-        @ObservedObject var habits = Habits()
+    
+        //Core Data
+        @Environment(\.managedObjectContext) var moc
+        @FetchRequest(entity: Habit.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Habit.name, ascending: true)]) var habits: FetchedResults<Habit>
+    
         @State private var habitViewOpen = false
         @Environment(\.presentationMode) var presentationMode
         
+        //Core Data
         func removeHabits(at offsets: IndexSet) {
-            habits.habitItems.remove(atOffsets: offsets)
+        for offset in offsets {
+            let habit = habits[offset]
+            moc.delete(habit)
         }
+            try? moc.save()
+        }
+    
+    
         
         var body: some View {
             NavigationView {
@@ -28,32 +38,34 @@ struct ContentView: View {
                     Color(red: 0.942, green: 0.993, blue: 0.716)
                         .edgesIgnoringSafeArea(.all)
                 List {
-                    ForEach(habits.habitItems) {
+                    ForEach(habits, id: \.id) {
                         
-                        item in
-               //
-                        NavigationLink(destination: DetailHabitView(habit: item, habits: self.habits)) {
+                        habit in
+               // Core Data
+                        NavigationLink(destination: DetailHabitView(habit: habit)) {
                             
                             HStack(alignment: .center, spacing: 20) {
-                        Text(item.name)
+                                //Core Data
+                                Text(habit.wrappedName)
                             .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
                             .foregroundColor(.orange)
                             
                                 VStack(alignment: .leading, spacing: 5) {
-                            Text("Goal: \(item.goal)")
+                                    //Core Data
+                                    Text("Goal: \(habit.wrappedGoal)")
                                 .font(.system(size: 15, weight: .black, design: .rounded))
                                 .foregroundColor(.purple)
-                            
-                            Text("Streaks: \(item.steps)")
+                            //Core Data
+                            Text("Streaks: \(habit.wrappedSteps)")
                                 .font(.system(size: 17, weight: Font.Weight.black, design: Font.Design.rounded))
                                 .foregroundColor(.gray)
-                                
-                            Text("Progress: \(item.percentCompletion)")
+                                    //Core Data
+                                    Text("Progress: \(habit.wrappedPercentCompletion)")
                                 .font(.system(size: 15, weight: .black, design: .rounded))
                                 .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
                             
-                        }
-                            Image("\(item.typeOfAction)")
+                        }   //Core Data
+                            Image("\(habit.typeOfAction)")
                             .resizable()
                             .frame(width: 80, height: 80)
                                 .scaledToFit()
@@ -79,8 +91,8 @@ struct ContentView: View {
                             }) {
                                 Image(systemName: "plus")
                                     }
-                            
-                }) .sheet(isPresented: $habitViewOpen) { HabitView(habits: self.habits)
+                                                                                    //Core Data
+                }) .sheet(isPresented: $habitViewOpen) { HabitView().environment(\.managedObjectContext, self.moc)
                 }
                 
             }

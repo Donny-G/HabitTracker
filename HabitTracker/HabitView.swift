@@ -12,16 +12,18 @@ import UIKit
 
 struct HabitView: View {
     @State private var habitName = ""
-    @State private var habitGoal = 0
+    @State private var habitGoal: Int16 = 0
     @State private var habitDescription = ""
     @State private var habitType = 0
-    @ObservedObject var habits: Habits
+    //Core Data
+    @Environment(\.managedObjectContext) var moc
     @State private var goalExamples = [1, 5, 10, 15, 20, 50, 100]
     
     @Environment (\.presentationMode) var presentationMode
     
     var validData: Bool {
         if habitGoal == 0{
+            
             return false
         }
         return true
@@ -103,8 +105,17 @@ struct HabitView: View {
             }
             .navigationBarTitle("New habit", displayMode: .inline)
             .navigationBarItems(leading: Button("Save habit"){
-                let newHabit = HabitItem(name: self.habitName, description: self.habitDescription, goal: self.habitGoal, typeOfAction: self.habitType)
-                self.habits.habitItems.insert(newHabit, at: 0)
+                //Core Data
+                let newHabit = Habit(context: self.moc)
+                newHabit.name = self.habitName
+                newHabit.descr = self.habitDescription
+                newHabit.goal = self.habitGoal
+                newHabit.typeOfAction = Int16(self.habitType)
+            
+                if self.moc.hasChanges {
+                try? self.moc.save()
+                }
+                
                 self.presentationMode.wrappedValue.dismiss()
             })
         }
@@ -112,9 +123,5 @@ struct HabitView: View {
     }
 }
 
-struct HabitView_Previews: PreviewProvider {
-    static var previews: some View {
-        HabitView(habits: Habits())
-    }
-}
+
 

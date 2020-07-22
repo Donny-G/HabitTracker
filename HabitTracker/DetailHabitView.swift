@@ -7,17 +7,36 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct DetailHabitView: View {
- @State  var habit: HabitItem
-   @ObservedObject var habits: Habits
+    //Core Data
+    var habit: Habit
+    @FetchRequest(entity: Habit.entity(), sortDescriptors: []) var habits: FetchedResults<Habit>
+    @Environment(\.managedObjectContext) var moc
     
-    //находим элемент массива с id и обновляем аргументы
+    //Core Data
     func updateValues(){
-        guard let index = habits.habitItems.firstIndex(where: { $0.id == habit.id
+        guard let index = habits.firstIndex(where: { $0.id == habit.id
         }) else {return}
-        habits.habitItems[index].steps = habit.steps
+        habits[index].steps = habit.steps
+        if self.moc.hasChanges {
+        try? self.moc.save()
+        }
     }
+    
+    var percentOfGoal: String {
+        var text = "%"
+        //Core Data
+        if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
+            let percent = (100 * habit.wrappedSteps) / habit.wrappedGoal
+        
+        text = "\(percent) %"
+        }
+        return text
+    }
+    
+    
     
     var body: some View {
         ZStack {
@@ -30,7 +49,8 @@ struct DetailHabitView: View {
                 HStack {
                     Text("Habit name:")
                         .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
-                    Text(self.habit.name)
+                    //Core Data
+                    Text(self.habit.wrappedName)
                     .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
                     .foregroundColor(.orange)
                 }
@@ -38,14 +58,15 @@ struct DetailHabitView: View {
                 HStack {
                     Text("Habit description: ")
                     .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
-                    Text(self.habit.description)
+                    //Core Data
+                    Text(self.habit.wrappedDescr)
                     .font(.system(size: 20, weight: Font.Weight.bold, design: Font.Design.rounded))
                     .foregroundColor(.gray)
                 }
                 
         }
-            
-            Image("\(self.habit.typeOfAction)")
+        //Core Data
+        Image("\(self.habit.typeOfAction)")
             .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200, alignment: .center)
@@ -59,8 +80,8 @@ struct DetailHabitView: View {
                     Capsule()
                         .frame(width: 100, height: 100, alignment: .center)
                     .shadow(color: .orange, radius: 1, x: 5, y: 5)
-                
-                    Text("\(self.habit.goal)")
+                    //Core Data
+                    Text("\(self.habit.wrappedGoal)")
                     .font(.system(size: 30, weight: .black, design: .rounded))
                     .foregroundColor(.orange)
                     }
@@ -72,8 +93,8 @@ struct DetailHabitView: View {
                     Capsule()
                         .shadow(color: .orange, radius: 1, x: 5, y: 5)
                         .frame(width: 100, height: 100, alignment: .center)
-                        
-                    Text("\(self.habit.steps)")
+                        //Core Data
+                        Text("\(self.habit.wrappedSteps)")
                     .font(.system(size: 30, weight: Font.Weight.black, design: Font.Design.rounded))
                         .foregroundColor(Color.init(red: 0.239, green: 0.694, blue: 0.557))
                     }
@@ -86,16 +107,19 @@ struct DetailHabitView: View {
                 Capsule()
                     .frame(width: 100, height: 100, alignment: .center)
                     .shadow(color: .orange, radius: 1, x: 5, y: 5)
-                    Text("\(self.habit.percentCompletion)")
+                    //Core Data
+                    Text("\(self.habit.wrappedPercentCompletion)")
                     .font(.system(size: 30, weight: .black, design: .rounded))
                     .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
                 }
                 }
             }
                 
-            
+            //Core Data
             Button(action: {
                 self.habit.steps += 1
+                self.habit.percentCompletion = self.percentOfGoal
+                print(self.percentOfGoal)
                 self.updateValues()
             }) {
                 Image("push")
@@ -117,9 +141,6 @@ struct DetailHabitView: View {
     }
 }
 
-struct DetailHabitView_Previews: PreviewProvider {
-    static var previews: some View {
-        DetailHabitView(habit: HabitItem(name: "Example", description: "This is example", goal: 10, typeOfAction: 0), habits: Habits())
-    
-    }
-}
+
+
+ 
