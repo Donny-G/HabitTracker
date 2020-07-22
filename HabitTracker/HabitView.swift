@@ -17,7 +17,7 @@ struct HabitView: View {
     @State private var habitType = 0
     //Core Data
     @Environment(\.managedObjectContext) var moc
-    @State private var goalExamples = [1, 5, 10, 15, 20, 50, 100]
+    @State private var goalExamples: [Int16] = [1, 5, 10, 15, 20, 50, 100]
     
     @Environment (\.presentationMode) var presentationMode
     
