@@ -14,7 +14,20 @@ struct HabitView: View {
     @State private var habitName = ""
     @State private var habitGoal: Int16 = 0
     @State private var habitDescription = ""
-    @State private var habitType = 0
+    @State private var habitType = 11
+    
+    //Image Picker
+    @State private var selectedImage: Image?
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var selectedImageId: UUID?
+    @State private var source = 0
+    func loadSelectedImage() {
+        guard let inputImage = inputImage else { return }
+       selectedImage = Image(uiImage: inputImage)
+        habitType = 11
+    }
+    
     //Core Data
     @Environment(\.managedObjectContext) var moc
     @State private var goalExamples: [Int16] = [1, 5, 10, 15, 20, 50, 100]
@@ -73,7 +86,6 @@ struct HabitView: View {
                 }
                 
                 Section(header: Text("Type of action")) {
-                //  UIImagePickerController() возможность выбора объекта
                 Picker("Choose type of action", selection: $habitType) {
                     ForEach(0..<11) {
                         
@@ -91,14 +103,36 @@ struct HabitView: View {
                     
                     .cornerRadius(5)
                     .shadow(color: .black, radius: 1, x: 5, y: 5)
-                  
-                   
-                Image("\(habitType)")
+                    
+                    //Image Picker
+                    HStack {
+                        Button(action: {
+                            self.showingImagePicker = true
+                            self.source = 0
+                        }) { Image(systemName: "camera")
+                        }
+                        Button(action: {
+                            self.showingImagePicker = true
+                            self.source = 1
+                        }) { Image(systemName: "photo")
+                        }
+                    }
+                    
+                    //Image Picker
+                    if selectedImage == nil || habitType != 11 {
+                        Image("\(habitType)")
                                        .resizable()
                                        .scaledToFit()
-                        
-                    .frame(width: 250, height: 250, alignment: .center)
-                     .shadow(color: .black, radius: 1, x: 5, y: 5)
+                                       .frame(width: 250, height: 250, alignment: .center)
+                                       .shadow(color: .black, radius: 1, x: 5, y: 5)
+                    } else if selectedImage != nil {
+                        selectedImage?
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 250, height: 250, alignment: .center)
+                        .shadow(color: .black, radius: 1, x: 5, y: 5)
+                        .cornerRadius(20)
+                    }
                    
                 }
                 }
@@ -118,6 +152,9 @@ struct HabitView: View {
                 
                 self.presentationMode.wrappedValue.dismiss()
             })
+            .sheet(isPresented: $showingImagePicker, onDismiss: loadSelectedImage) {
+                ImagePicker(image: self.$inputImage, typeOfSource: self.$source)
+            }
         }
     
     }
