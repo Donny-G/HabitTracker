@@ -30,6 +30,17 @@ struct ContentView: View {
             try? moc.save()
         }
     
+        //load image object from Core Data
+        func imageFromCoreData(habit: Habit) -> UIImage {
+            var imageToLoad = UIImage(systemName: "xmark")
+            if let data = habit.img {
+                if let image = UIImage(data: data) {
+                    imageToLoad = image
+                }
+            }
+            return imageToLoad ?? UIImage(systemName: "xmark") as! UIImage
+        }
+    
     
         
         var body: some View {
@@ -64,13 +75,19 @@ struct ContentView: View {
                                 .font(.system(size: 15, weight: .black, design: .rounded))
                                 .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
                             
-                        }   //Core Data
-                            Image("\(habit.typeOfAction)")
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                                .scaledToFit()
-                            .shadow(color: .black, radius: 1, x: 5, y: 5)
-                            
+                        }   //Core Data + image from ImagePicker
+                                if habit.typeOfAction != 11 {
+                                    Image("\(habit.typeOfAction)")
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                            .scaledToFit()
+                                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                                } else {
+                                    Image(uiImage: self.imageFromCoreData(habit: habit))
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                            .scaledToFit()
+                                }
                     }
                             
                   //окончание navlink

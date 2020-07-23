@@ -36,6 +36,17 @@ struct DetailHabitView: View {
         return text
     }
     
+    //load image object from Core Data
+    func imageFromCoreData(habit: Habit) -> UIImage {
+        var imageToLoad = UIImage(systemName: "xmark")
+        if let data = habit.img {
+            if let image = UIImage(data: data) {
+                imageToLoad = image
+            }
+        }
+        return imageToLoad ?? UIImage(systemName: "xmark") as! UIImage
+    }
+    
     
     
     var body: some View {
@@ -65,13 +76,21 @@ struct DetailHabitView: View {
                 }
                 
         }
-        //Core Data
-        Image("\(self.habit.typeOfAction)")
-            .resizable()
+        //Core Data + Image Picker
+        if habit.typeOfAction != 11 {
+            Image("\(self.habit.typeOfAction)")
+                .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200, alignment: .center)
                 .shadow(color: .black, radius: 1, x: 5, y: 5)
-                
+         } else {
+            Image(uiImage: imageFromCoreData(habit: habit))
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 200, alignment: .center)
+                .shadow(color: .black, radius: 1, x: 5, y: 5)
+        }
+        
         HStack(spacing: 20){
                 VStack{
                     Text("Goal")
@@ -111,6 +130,7 @@ struct DetailHabitView: View {
                     Text("\(self.habit.wrappedPercentCompletion)")
                     .font(.system(size: 30, weight: .black, design: .rounded))
                     .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
+                    
                 }
                 }
             }

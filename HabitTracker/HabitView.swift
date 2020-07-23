@@ -20,11 +20,10 @@ struct HabitView: View {
     @State private var selectedImage: Image?
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
-    @State private var selectedImageId: UUID?
     @State private var source = 0
     func loadSelectedImage() {
         guard let inputImage = inputImage else { return }
-       selectedImage = Image(uiImage: inputImage)
+        selectedImage = Image(uiImage: inputImage)
         habitType = 11
     }
     
@@ -121,17 +120,17 @@ struct HabitView: View {
                     //Image Picker
                     if selectedImage == nil || habitType != 11 {
                         Image("\(habitType)")
-                                       .resizable()
-                                       .scaledToFit()
-                                       .frame(width: 250, height: 250, alignment: .center)
-                                       .shadow(color: .black, radius: 1, x: 5, y: 5)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 250, height: 250, alignment: .center)
+                            .shadow(color: .black, radius: 1, x: 5, y: 5)
                     } else if selectedImage != nil {
                         selectedImage?
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 250, height: 250, alignment: .center)
-                        .shadow(color: .black, radius: 1, x: 5, y: 5)
-                        .cornerRadius(20)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 250, height: 250, alignment: .center)
+                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                            .cornerRadius(20)
                     }
                    
                 }
@@ -141,10 +140,13 @@ struct HabitView: View {
             .navigationBarItems(leading: Button("Save habit"){
                 //Core Data
                 let newHabit = Habit(context: self.moc)
+                newHabit.id = UUID()
                 newHabit.name = self.habitName
                 newHabit.descr = self.habitDescription
                 newHabit.goal = self.habitGoal
                 newHabit.typeOfAction = Int16(self.habitType)
+                //Image Picker + Core Data
+                newHabit.img = self.inputImage?.jpegData(compressionQuality: 1.0)
             
                 if self.moc.hasChanges {
                 try? self.moc.save()

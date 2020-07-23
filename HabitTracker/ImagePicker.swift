@@ -16,6 +16,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     
     //6 прописыааем биндинг и энвайромент переменные
     @Binding var image: UIImage?
+    @Binding var typeOfSource: Int
     @Environment(\.presentationMode) var presentationMode
     
     //4 создаем класс координатор,наследуемый от NSObject со всеми необходимыми протоколами в котром инициализируем родительсткую структуруу для использования переменных напрямую. прописыааем методы из вью контроллера
@@ -41,6 +42,14 @@ struct ImagePicker: UIViewControllerRepresentable {
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
+        switch typeOfSource {
+        case 0:
+            picker.sourceType = .camera
+        case 1:
+            picker.sourceType = .photoLibrary
+        default:
+            picker.sourceType = .savedPhotosAlbum
+        }
         return picker
     }
     
