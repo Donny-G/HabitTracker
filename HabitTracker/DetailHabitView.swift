@@ -134,7 +134,7 @@ struct DetailHabitView: View {
                 }
                 }
             }
-                
+        
             //Core Data
             Button(action: {
                 self.habit.steps += 1
@@ -164,3 +164,9 @@ struct DetailHabitView: View {
 
 
  
+
+struct DetailHabitView_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}
