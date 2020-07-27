@@ -2,7 +2,7 @@
 //  Habit+CoreDataProperties.swift
 //  HabitTracker
 //
-//  Created by DeNNiO   G on 22.07.2020.
+//  Created by DeNNiO   G on 27.07.2020.
 //  Copyright © 2020 Donny G. All rights reserved.
 //
 //
@@ -28,25 +28,18 @@ extension Habit {
     }
     
     @NSManaged public var id: UUID?
-    
     @NSManaged public var img: Data?
-    
     @NSManaged public var name: String?
     public var wrappedName: String {
-        name ?? ""
-    }
+           name ?? ""
+       }
     
-    @NSManaged public var percentCompletion: String?
-    public var wrappedPercentCompletion: String {
-        percentCompletion ?? ""
-    }
-
+    @NSManaged public var percentCompletion: Float
     @NSManaged public var steps: Int16
     public var wrappedSteps: Int16 {
         steps ?? 0
     }
     
     @NSManaged public var typeOfAction: Int16
-   
-
+    
 }

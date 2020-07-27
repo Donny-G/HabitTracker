@@ -25,15 +25,15 @@ struct DetailHabitView: View {
         }
     }
     
-    var percentOfGoal: String {
-        var text = "%"
+    var percentOfGoal: Float {
+        var tempPercent: Float = 0.0
         //Core Data
         if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
             let percent = (100 * habit.wrappedSteps) / habit.wrappedGoal
         
-        text = "\(percent) %"
+            tempPercent = Float(percent)
         }
-        return text
+        return tempPercent
     }
     
     //load image object from Core Data
@@ -122,19 +122,12 @@ struct DetailHabitView: View {
                     Text("Progress:")
                     .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
                 
-                ZStack{
-                Capsule()
-                    .frame(width: 100, height: 100, alignment: .center)
-                    .shadow(color: .orange, radius: 1, x: 5, y: 5)
-                    //Core Data
-                    Text("\(self.habit.wrappedPercentCompletion)")
-                    .font(.system(size: 30, weight: .black, design: .rounded))
-                    .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
-                    
-                }
+                ProgressCircle(percent: CGFloat(habit.percentCompletion))
                 }
             }
         
+        
+                
             //Core Data
             Button(action: {
                 self.habit.steps += 1

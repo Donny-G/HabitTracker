@@ -71,7 +71,7 @@ struct ContentView: View {
                                 .font(.system(size: 17, weight: Font.Weight.black, design: Font.Design.rounded))
                                 .foregroundColor(.gray)
                                     //Core Data
-                                    Text("Progress: \(habit.wrappedPercentCompletion)")
+                                    Text("Progress: \(habit.percentCompletion)")
                                 .font(.system(size: 15, weight: .black, design: .rounded))
                                 .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
                             
