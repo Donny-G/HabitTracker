@@ -60,7 +60,17 @@ struct ContentView: View {
                                 Text(habit.wrappedName)
                             .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
                             .foregroundColor(.orange)
-                            
+                            .contextMenu {
+                                Button(action: {
+                                    habit.steps += 1
+                                    if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
+                                        habit.percentCompletion = Float((100 * habit.wrappedSteps) / habit.wrappedGoal)
+                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                    }
+                                }
+                                
                                 VStack(alignment: .leading, spacing: 5) {
                                     //Core Data
                                     Text("Goal: \(habit.wrappedGoal)")
@@ -91,7 +101,6 @@ struct ContentView: View {
                                             .scaledToFit()
                                 }
                     }
-                            
                   //окончание navlink
                         
                     }
