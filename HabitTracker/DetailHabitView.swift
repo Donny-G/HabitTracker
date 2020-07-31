@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CoreData
+import UserNotifications
 
 struct DetailHabitView: View {
     //Core Data
@@ -45,6 +46,22 @@ struct DetailHabitView: View {
             }
         }
         return imageToLoad ?? UIImage(systemName: "xmark") as! UIImage
+    }
+    
+    //local notifications
+    func deleteLocalNotification(identifier: String) {
+        let notifCenter = UNUserNotificationCenter.current()
+        notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
+    
+    //check lnf
+    func checkLocalNotifications() {
+        let notifcenter = UNUserNotificationCenter.current()
+        notifcenter.getPendingNotificationRequests { (notificationRequests) in
+            for notificationRequest: UNNotificationRequest in notificationRequests {
+                print(notificationRequest.identifier)
+            }
+        }
     }
     
     
@@ -126,7 +143,44 @@ struct DetailHabitView: View {
                 }
             }
         
-        
+        //ntfn
+        if habit.ntfnEnabled == true {
+            HStack {
+                Text("Notification")
+                Image(systemName: "checkmark.rectangle")
+            }
+            HStack {
+                Text("Type of notification")
+                Image(systemName: habit.typeOfNtfn == "Default" ? "gear" : "hand.raised.fill")
+            }
+            if habit.typeOfNtfn != "Default" {
+                HStack {
+                    Image(systemName: "alarm")
+                    Text(habit.wrappedTimeForNtfn)
+                    if habit.wrappedDaysForNtfn != nil {
+                       Image(systemName: "calendar")
+                        Text(habit.wrappedDaysForNtfn)
+                    }
+                    Text("Is continues")
+                    Image(systemName: habit.isNtfnContinues ? "checkmark.rectangle" : "rectangle")
+                }
+            }
+            Button(action: {
+                self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+            }){
+            Text("Cancel notification")
+            }
+            Button(action: {
+                self.checkLocalNotifications()
+            }) {
+                Text("Check")
+            }
+        } else {
+            HStack {
+                Text("Notification")
+                Image(systemName: "rectangle")
+            }
+        }
                 
             //Core Data
             Button(action: {

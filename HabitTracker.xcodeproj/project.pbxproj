@@ -21,6 +21,7 @@
 		C324166A24C88A1300984E30 /* Habit+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166824C88A1300984E30 /* Habit+CoreDataClass.swift */; };
 		C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */; };
 		C324166D24C8D32200984E30 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166C24C8D32200984E30 /* ImagePicker.swift */; };
+		C335028424D05838003FEEBE /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C335028324D05838003FEEBE /* logo.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		C324166824C88A1300984E30 /* Habit+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		C324166C24C8D32200984E30 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		C335028324D05838003FEEBE /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				C322F5CE24C7852400FC116A /* HabitView.swift */,
 				C324166C24C8D32200984E30 /* ImagePicker.swift */,
 				C322F5D024C7858E00FC116A /* DetailHabitView.swift */,
+				C335028324D05838003FEEBE /* logo.jpg */,
 				C322F5BC24C7830300FC116A /* Assets.xcassets */,
 				C322F5C124C7830300FC116A /* LaunchScreen.storyboard */,
 				C322F5C424C7830300FC116A /* Info.plist */,
@@ -157,6 +160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C335028424D05838003FEEBE /* logo.jpg in Resources */,
 				C322F5C324C7830300FC116A /* LaunchScreen.storyboard in Resources */,
 				C322F5C024C7830300FC116A /* Preview Assets.xcassets in Resources */,
 				C322F5BD24C7830300FC116A /* Assets.xcassets in Resources */,

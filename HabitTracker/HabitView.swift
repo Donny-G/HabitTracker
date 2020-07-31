@@ -10,6 +10,8 @@ import SwiftUI
 
 import UIKit
 
+import UserNotifications
+
 struct HabitView: View {
     @State private var habitName = ""
     @State private var habitGoal: Int16 = 0
@@ -27,6 +29,12 @@ struct HabitView: View {
         habitType = 11
     }
     
+    //local notifications
+    @State private var notificationIsEnabled = false
+    var id = UUID().uuidString
+    @State private var isDefaultNotificationEnabled = false
+    @State private var isManualNotificationEnabled = false
+    
     //Core Data
     @Environment(\.managedObjectContext) var moc
     @State private var goalExamples: [Int16] = [1, 5, 10, 15, 20, 50, 100]
@@ -39,6 +47,56 @@ struct HabitView: View {
             return false
         }
         return true
+    }
+    
+    //local notifications
+    func setDefaultNotification(title: String?, subtitle: String?) {
+        guard notificationIsEnabled == true else { return }
+        let content = UNMutableNotificationContent()
+        content.title = title ?? "Do it"
+        content.subtitle = subtitle ?? "Right now"
+        content.sound = UNNotificationSound.default
+        
+        //logo for notification
+        let imageName = "logo"
+        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "jpg") else { return }
+        let attachment  = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
+        content.attachments = [attachment]
+    
+        var dateComponents = DateComponents()
+        dateComponents.hour = 9
+        dateComponents.minute = 0
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    //local notifications
+    func startNotification() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.badge,.sound]) { success, error in
+            if success {
+                print("All set!")
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    //local notifications
+    func deleteDefaultLocalNotification(identifier: String) {
+        let notifCenter = UNUserNotificationCenter.current()
+        notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
+    
+    //check lnf
+    func checkLocalNotifications() {
+        let notifcenter = UNUserNotificationCenter.current()
+        notifcenter.getPendingNotificationRequests { (notificationRequests) in
+            for notificationRequest: UNNotificationRequest in notificationRequests {
+                print(notificationRequest.identifier)
+            }
+        }
     }
   
     
@@ -83,6 +141,44 @@ struct HabitView: View {
                         .cornerRadius(5)
                         .shadow(color: .black, radius: 1, x: 5, y: 5)
                 }
+                
+                //local notifications
+                Toggle(isOn: $notificationIsEnabled.animation()) {
+                    Text("Set notification")
+                }
+                if notificationIsEnabled {
+                    HStack {
+                        
+                        Button(action: {
+                            if self.isDefaultNotificationEnabled == false {
+                                self.setDefaultNotification(title: self.habitName, subtitle: nil)
+                                self.isDefaultNotificationEnabled = true
+                            } else {
+                                self.deleteDefaultLocalNotification(identifier: self.id)
+                                self.isDefaultNotificationEnabled = false
+                            }
+                        }) {
+                            Text("Set default notification at 9:00 everyday")
+                        }
+                            .background(isDefaultNotificationEnabled ? Color.red : Color.white)
+                            .onAppear(perform: startNotification)
+                    
+                        Button(action: {
+                            //
+                        }) {
+                        Text("Set manual notification")
+                        }
+                    }
+                        .buttonStyle(BorderlessButtonStyle())
+                    //check lnf
+                    Button(action: {
+                        self.checkLocalNotifications()
+                    }) {
+                        Text("Check")
+                    }
+                }
+                
+                
                 
                 Section(header: Text("Type of action")) {
                 Picker("Choose type of action", selection: $habitType) {
@@ -147,6 +243,13 @@ struct HabitView: View {
                 newHabit.typeOfAction = Int16(self.habitType)
                 //Image Picker + Core Data
                 newHabit.img = self.inputImage?.jpegData(compressionQuality: 1.0)
+                
+                //ntfn
+                if self.notificationIsEnabled {
+                    newHabit.ntfnEnabled = true
+                    newHabit.typeOfNtfn = "Default"
+                    newHabit.idForNtfn = self.id
+                }
             
                 if self.moc.hasChanges {
                 try? self.moc.save()
