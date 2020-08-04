@@ -13,7 +13,6 @@ import UIKit
 import UserNotifications
 
 struct HabitView: View {
-    @State private var habitName = ""
     @State private var habitGoal: Int16 = 0
     @State private var habitDescription = ""
     @State private var habitType = 11
@@ -45,161 +44,66 @@ struct HabitView: View {
     
     //local notifications
     @State private var notificationIsEnabled = false
-    var id = UUID().uuidString
+    //binds
+    @State var id = UUID().uuidString
     @State private var isDefaultNotificationEnabled = false
     @State private var isManualNotificationEnabled = false
-    
-    @State private var time = Date()
-     
-    @State private var title = ""
-    @State private var subtitle = ""
-     
+    @State private var habitName = ""
     @State private var typeOfNotification = 0
-    let typesOfNotifications = ["Time delay", "Time + days"]
-     
     @State private var delayInMinutes = ""
     @State private var delayInHours = ""
     @State private var typeOfDelay = 0
-    let typesOfDelay = ["Minutes", "Hours"]
-     
     @State private var isContinues = false
     @State private var showDaysOfTheWeek = false
-    
-    @State private var selectedButtonsArray = [Int]()
-    let weekDaysArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    
-    @State private var daysNotifyArray = [Int]()
     @State private var selectedDaysArray = [String]()
-
-    func hourFromPicker()->Int {
-         let components = Calendar.current.dateComponents([.hour, .minute, .weekday], from: time)
-         return components.hour ?? 9
-    }
+    @State var hourFromPicker: Int = 9
+    @State var minuteFromPicker: Int = 0
+    
+    func saveToCoreData() {
+        let newHabit = Habit(context: self.moc)
+        newHabit.id = UUID()
+        newHabit.name = self.habitName
+        newHabit.descr = self.habitDescription
+        newHabit.goal = self.habitGoal
+        newHabit.typeOfAction = Int16(self.habitType)
+        //Image Picker + Core Data
+        newHabit.img = self.inputImage?.jpegData(compressionQuality: 1.0)
         
-    func minuteFromPicker()->Int {
-         let components = Calendar.current.dateComponents([.hour, .minute, .weekday], from: time)
-         return components.minute ?? 0
-    }
-     
-    func setManualNotification(title: String?, subtitle: String?) {
-         
-        let content = UNMutableNotificationContent()
-        if title == "" {
-        content.title = title ?? habitName
-        }
-        content.subtitle = subtitle ?? "Right now"
-        content.sound = UNNotificationSound.default
-        
-        let imageName = "logo"
-        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "jpg") else { return }
-        let attachment  = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
-        content.attachments = [attachment]
-         
-        switch typeOfNotification {
-        case 0:
-            //interval delay
-            if typeOfDelay == 0 {
-                guard let tempInterval = Double(delayInMinutes) else { return }
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: tempInterval * 60, repeats: isContinues)
-                let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-                UNUserNotificationCenter.current().add(request)
-            } else {
-                guard let tempInterval = Double(delayInHours) else { return }
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: tempInterval * 3600, repeats: isContinues)
-                let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-                UNUserNotificationCenter.current().add(request)
+        //ntfn
+        if self.isDefaultNotificationEnabled {
+            newHabit.ntfnEnabled = true
+            newHabit.typeOfNtfn = TypeOfNotifications.def.rawValue
+            newHabit.idForNtfn = self.id
+            if self.moc.hasChanges {
+                try? self.moc.save()
             }
-             
-        case 1:
-            //everyday time
-            if showDaysOfTheWeek == false {
-                var dateComponents = DateComponents()
-                dateComponents.hour = hourFromPicker()
-                dateComponents.minute = minuteFromPicker()
-            
-                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: isContinues)
-                let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-                    
-                UNUserNotificationCenter.current().add(request)
-            } else {
-                if !daysNotifyArray.isEmpty {
-                    for day in daysNotifyArray {
-                        var dateComponents = DateComponents()
-                        dateComponents.weekday = day
-                        dateComponents.hour = hourFromPicker()
-                        dateComponents.minute = minuteFromPicker()
-                        dateComponents.timeZone = .current
-                        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: isContinues)
-                        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-                        UNUserNotificationCenter.current().add(request)
-                    }
+        } else if self.isManualNotificationEnabled {
+            newHabit.ntfnEnabled = true
+            newHabit.typeOfNtfn = TypeOfNotifications.manual.rawValue
+            newHabit.idForNtfn = self.id
+            newHabit.isNtfnContinues = self.isContinues
+            if self.typeOfNotification == 0 {
+                newHabit.typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
+                if self.typeOfDelay == 0 {
+                    newHabit.delayInMinutes = "\(self.delayInMinutes) min"
                 } else {
-                    print("choose days please")
+                    newHabit.delayInHours = "\(self.delayInHours) h"
                 }
+            } else {
+                newHabit.typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue
+                newHabit.timeForNtfn = "\(self.hourFromPicker) : \(self.minuteFromPicker)"
+                if self.showDaysOfTheWeek {
+                    newHabit.daysForNtfn = self.selectedDaysArray.joined(separator: ", ")
+                    }
             }
-             
-        default:
-            print("Unknown type")
         }
-    
-        //test for delete notifications
-       // notificationsIDArray.append(id)
-       
-        daysNotifyArray = []
-        selectedButtonsArray = []
-         
-    }
-     
-    //local notifications
-    func setDefaultNotification(title: String?, subtitle: String?) {
-        guard notificationIsEnabled == true else { return }
-        let content = UNMutableNotificationContent()
-        content.title = habitName
-        content.subtitle = "Do it right now"
-        content.sound = UNNotificationSound.default
+            if self.moc.hasChanges {
+                try? self.moc.save()
+            }
+            self.selectedDaysArray = []
         
-        //logo for notification
-        let imageName = "logo"
-        guard let imageURL = Bundle.main.url(forResource: imageName, withExtension: "jpg") else { return }
-        let attachment  = try! UNNotificationAttachment(identifier: imageName, url: imageURL, options: .none)
-        content.attachments = [attachment]
-    
-        var dateComponents = DateComponents()
-        dateComponents.hour = 9
-        dateComponents.minute = 0
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request)
+        self.presentationMode.wrappedValue.dismiss()
     }
-    
-    //local notifications
-    func startNotification() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.badge,.sound]) { success, error in
-            if success {
-                print("All set!")
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    //local notifications
-    func deleteLocalNotification(identifier: String) {
-        let notifCenter = UNUserNotificationCenter.current()
-        notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
-    }
-    
-    //check lnf
-    func checkLocalNotifications() {
-        let notifcenter = UNUserNotificationCenter.current()
-        notifcenter.getPendingNotificationRequests { (notificationRequests) in
-            for notificationRequest: UNNotificationRequest in notificationRequests {
-                print(notificationRequest.identifier)
-            }
-        }
-    }
-  
     
     var body: some View {
         NavigationView {
@@ -244,124 +148,11 @@ struct HabitView: View {
                 }
                 
                 //local notifications
-                Toggle(isOn: $notificationIsEnabled.animation()) {
-                    Text("Set notification")
+                Button(action: {
+                    self.notificationIsEnabled = true
+                }) {
+                    Text("Set Notification")
                 }
-                    .onAppear(perform: startNotification)
-                if notificationIsEnabled {
-                    HStack {
-                        
-                        Button(action: {
-                            if self.isDefaultNotificationEnabled == false && self.isManualNotificationEnabled == false {
-                                self.setDefaultNotification(title: self.habitName, subtitle: nil)
-                                self.isDefaultNotificationEnabled = true
-                            } else {
-                                self.deleteLocalNotification(identifier: self.id)
-                                self.isDefaultNotificationEnabled = false
-                            }
-                        }) {
-                            Text("Set default notification at 9:00 everyday")
-                        }
-                            .background(isDefaultNotificationEnabled ? Color.red : Color.white)
-                            
-                    
-                        Button(action: {
-                            if self.isManualNotificationEnabled == false && self.isDefaultNotificationEnabled == false {
-                                self.isManualNotificationEnabled = true
-                            } else {
-                                self.deleteLocalNotification(identifier: self.id)
-                                self.isManualNotificationEnabled = false
-                            }
-                        }) {
-                        Text("Set manual notification")
-                        }
-                            .background(isManualNotificationEnabled ? Color.red : Color.white)
-                    }
-                        .buttonStyle(BorderlessButtonStyle())
-                    
-                    if isManualNotificationEnabled {
-                        VStack {
-                            Form {
-                                TextField("Enter title", text: $title)
-                                TextField("Enter subtitle", text: $subtitle)
-                                
-                                Picker("Notification type", selection: $typeOfNotification) {
-                                    ForEach(0..<typesOfNotifications.count) {
-                                        Text(self.typesOfNotifications[$0])
-                                    }
-                                }.pickerStyle(SegmentedPickerStyle())
-                                
-                    if typeOfNotification == 0 {
-                        Picker("Choose type of delay", selection: $typeOfDelay) {
-                            ForEach(0..<typesOfDelay.count) {
-                                Text(self.typesOfDelay[$0])
-                            }
-                        }.pickerStyle(SegmentedPickerStyle())
-                                    
-                    if typeOfDelay == 0 {
-                        TextField("Enter minutes for notification", text: $delayInMinutes)
-                            .keyboardType(.numberPad)
-                    } else {
-                        TextField("Enter hours for notification", text: $delayInHours)
-                            .keyboardType(.numberPad)
-                    }
-                                    
-                        Toggle("Is continues", isOn: $isContinues)
-                        
-                    } else if typeOfNotification == 1 {
-                        
-                        DatePicker("select time", selection: $time, displayedComponents: .hourAndMinute)
-                        Toggle("Is continues", isOn: $isContinues)
-                        Toggle("Days of the week", isOn: $showDaysOfTheWeek)
-                        if showDaysOfTheWeek {
-                            HStack {
-                                ForEach(0..<weekDaysArray.count, id: \.self) { day in
-                                    Button(action: {
-                                        if let index = self.selectedButtonsArray.firstIndex(of: day) {
-                                            self.daysNotifyArray.remove(at: index)
-                                            self.selectedButtonsArray.remove(at: index)
-                                            self.selectedDaysArray.remove(at: index)
-                                            print(self.daysNotifyArray)
-                                        } else {
-                                            self.daysNotifyArray.append(day + 1)
-                                            self.selectedButtonsArray.append(day)
-                                            self.selectedDaysArray.append(self.weekDaysArray[day])
-                                            print(self.selectedDaysArray)
-                                        }
-                                    }) {
-                                        Text(self.weekDaysArray[day])
-                                    }
-                                        .buttonStyle(PlainButtonStyle())
-                                        .background(self.selectedButtonsArray.contains(day) ? Color.red : Color.blue)
-                                }
-                            }
-                        }
-                    }
-                            
-                        Button(action: {
-                            self.setManualNotification(title: self.title, subtitle: self.subtitle)
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                            
-                                //manage notifications - for delete
-                        Button(action: {
-                            self.deleteLocalNotification(identifier: self.id)
-                        }){
-                            Text("Delete notif")
-                        }
-                    }
-                }
-                    .frame(height: 500)
-            }
-                    
-                    //check lnf
-                        Button(action: {
-                            self.checkLocalNotifications()
-                        }) {
-                            Text("Check")
-                        }
-                    }
                 
                 Section(header: Text("Type of action")) {
                 Picker("Choose type of action", selection: $habitType) {
@@ -413,64 +204,16 @@ struct HabitView: View {
                     }
                    
                 }
+                .sheet(isPresented: $notificationIsEnabled, content: { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
+                })
                 }
+                
             }
             
+                
             .navigationBarTitle("New habit", displayMode: .inline)
             .navigationBarItems(leading: Button("Save habit"){
-                //Core Data
-                let newHabit = Habit(context: self.moc)
-                newHabit.id = UUID()
-                newHabit.name = self.habitName
-                newHabit.descr = self.habitDescription
-                newHabit.goal = self.habitGoal
-                newHabit.typeOfAction = Int16(self.habitType)
-                //Image Picker + Core Data
-                newHabit.img = self.inputImage?.jpegData(compressionQuality: 1.0)
-                
-                //ntfn
-                if self.notificationIsEnabled {
-                    newHabit.ntfnEnabled = true
-                    if self.isDefaultNotificationEnabled {
-                        newHabit.typeOfNtfn = TypeOfNotifications.def.rawValue
-                        newHabit.idForNtfn = self.id
-                    } else {
-                        if self.isManualNotificationEnabled {
-                        
-                        newHabit.typeOfNtfn = TypeOfNotifications.manual.rawValue
-                        newHabit.idForNtfn = self.id
-                        newHabit.isNtfnContinues = self.isContinues
-                            
-                            if self.typeOfNotification == 0 {
-                                newHabit.typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
-                                        
-                                if self.typeOfDelay == 0 {
-                                    newHabit.delayInMinutes = "\(self.delayInMinutes) min"
-                                    print("\(self.delayInMinutes) min")
-                                        } else {
-                                    newHabit.delayInHours = "\(self.delayInHours) h"
-                                        }
-                            } else {
-                                    newHabit.typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue
-                                    newHabit.timeForNtfn = "\(self.hourFromPicker()) : \(self.minuteFromPicker())"
-                                    if self.showDaysOfTheWeek {
-                                        newHabit.daysForNtfn = self.selectedDaysArray.joined(separator: ", ")
-                                    }
-                                
-                                }
-                            }
-                            
-                            
-                        }
-                    }
-                
-            
-                if self.moc.hasChanges {
-                try? self.moc.save()
-                }
-                self.selectedDaysArray = []
-                
-                self.presentationMode.wrappedValue.dismiss()
+                self.saveToCoreData()
             })
             .sheet(isPresented: $showingImagePicker, onDismiss: loadSelectedImage) {
                 ImagePicker(image: self.$inputImage, typeOfSource: self.$source)

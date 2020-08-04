@@ -20,11 +20,18 @@ struct ContentView: View {
     
         @State private var habitViewOpen = false
         @Environment(\.presentationMode) var presentationMode
+    
+    func deleteLocalNotification(identifier: String) {
+        let notifCenter = UNUserNotificationCenter.current()
+        notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
         
         //Core Data
         func removeHabits(at offsets: IndexSet) {
         for offset in offsets {
             let habit = habits[offset]
+            let notifCenter = UNUserNotificationCenter.current()
+            deleteLocalNotification(identifier: habit.idForNtfn ?? "")
             moc.delete(habit)
         }
             try? moc.save()

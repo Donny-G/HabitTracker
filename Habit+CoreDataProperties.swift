@@ -80,5 +80,7 @@ extension Habit {
     @NSManaged public var isNtfnContinues: Bool
        
     @NSManaged public var idForNtfn: String?
+    @NSManaged public var isDeletedNtfn: Bool
+    
 
 }

@@ -9,6 +9,7 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="idForNtfn" optional="YES" attributeType="String"/>
         <attribute name="img" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="isDeletedNtfn" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isNtfnContinues" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="ntfnEnabled" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -20,6 +21,6 @@
         <attribute name="typeOfNtfn" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Habit" positionX="-63" positionY="-18" width="128" height="298"/>
+        <element name="Habit" positionX="-63" positionY="-18" width="128" height="313"/>
     </elements>
 </model>

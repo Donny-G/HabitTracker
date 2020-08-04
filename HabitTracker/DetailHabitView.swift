@@ -15,6 +15,7 @@ struct DetailHabitView: View {
     var habit: Habit
     @FetchRequest(entity: Habit.entity(), sortDescriptors: []) var habits: FetchedResults<Habit>
     @Environment(\.managedObjectContext) var moc
+    @Environment (\.presentationMode) var presentationMode
     
     //Core Data
     func updateValues(){
@@ -52,6 +53,7 @@ struct DetailHabitView: View {
     func deleteLocalNotification(identifier: String) {
         let notifCenter = UNUserNotificationCenter.current()
         notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+        ntfnIsDeleted = true
         habit.ntfnEnabled = false
         habit.daysForNtfn = nil
         habit.delayInHours = nil
@@ -60,9 +62,12 @@ struct DetailHabitView: View {
         habit.timeForNtfn = nil
         habit.typeOfManualNotification = nil
         habit.typeOfNtfn = nil
+        habit.isDeletedNtfn = true
+        habit.idForNtfn = nil
         if self.moc.hasChanges {
             try? self.moc.save()
         }
+        
     }
     
     //check lnf
@@ -74,6 +79,58 @@ struct DetailHabitView: View {
             }
         }
     }
+    
+    @State private var ntfnIsDeleted = false
+    @State private var showNotificationSetView = false
+    //binds
+    @State var id = UUID().uuidString
+    @State private var isDefaultNotificationEnabled = false
+    @State private var isManualNotificationEnabled = false
+    @State private var habitName = ""
+    @State private var typeOfNotification = 0
+    @State private var delayInMinutes = ""
+    @State private var delayInHours = ""
+    @State private var typeOfDelay = 0
+    @State private var isContinues = false
+    @State private var showDaysOfTheWeek = false
+    @State private var selectedDaysArray = [String]()
+    @State var hourFromPicker: Int = 9
+    @State var minuteFromPicker: Int = 0
+    
+    func updateCoreData() {
+        if self.isDefaultNotificationEnabled {
+            habit.ntfnEnabled = true
+            habit.typeOfNtfn = TypeOfNotifications.def.rawValue
+            habit.idForNtfn = self.id
+            if self.moc.hasChanges {
+                try? self.moc.save()
+            }
+        } else if self.isManualNotificationEnabled {
+            habit.ntfnEnabled = true
+            habit.typeOfNtfn = TypeOfNotifications.manual.rawValue
+            habit.idForNtfn = self.id
+            habit.isNtfnContinues = self.isContinues
+            if self.typeOfNotification == 0 {
+                habit.typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
+                if self.typeOfDelay == 0 {
+                    habit.delayInMinutes = "\(self.delayInMinutes) min"
+                } else {
+                    habit.delayInHours = "\(self.delayInHours) h"
+                }
+            } else {
+                habit.typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue
+                habit.timeForNtfn = "\(self.hourFromPicker) : \(self.minuteFromPicker)"
+                if self.showDaysOfTheWeek {
+                    habit.daysForNtfn = self.selectedDaysArray.joined(separator: ", ")
+                    }
+            }
+        }
+            if self.moc.hasChanges {
+                try? self.moc.save()
+            }
+            self.selectedDaysArray = []
+    }
+    
     
     var body: some View {
         ZStack {
@@ -204,6 +261,14 @@ struct DetailHabitView: View {
                 Text("Notification")
                 Image(systemName: "rectangle")
             }
+            if ntfnIsDeleted || habit.isDeletedNtfn || !habit.ntfnEnabled{
+                Button(action: {
+                    self.habitName = self.habit.name ?? "Do it"
+                    self.showNotificationSetView = true
+                }) {
+                    Text("Set new notification")
+                }
+            }
         }
             //Core Data
             Button(action: {
@@ -218,12 +283,13 @@ struct DetailHabitView: View {
                 .scaledToFit()
                     
                 .clipShape(Capsule())
-                    .frame(width: 300, height: 300)
+                .frame(width: 300, height: 300)
                 .shadow(color: .black, radius: 1, x: 5, y: 5)
             }
       
                
             }
+        }.sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
         }
          
         
