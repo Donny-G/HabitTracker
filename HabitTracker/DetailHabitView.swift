@@ -52,6 +52,17 @@ struct DetailHabitView: View {
     func deleteLocalNotification(identifier: String) {
         let notifCenter = UNUserNotificationCenter.current()
         notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+        habit.ntfnEnabled = false
+        habit.daysForNtfn = nil
+        habit.delayInHours = nil
+        habit.delayInMinutes = nil
+        habit.isNtfnContinues = false
+        habit.timeForNtfn = nil
+        habit.typeOfManualNotification = nil
+        habit.typeOfNtfn = nil
+        if self.moc.hasChanges {
+            try? self.moc.save()
+        }
     }
     
     //check lnf
@@ -63,8 +74,6 @@ struct DetailHabitView: View {
             }
         }
     }
-    
-    
     
     var body: some View {
         ZStack {
@@ -145,31 +154,46 @@ struct DetailHabitView: View {
         
         //ntfn
         if habit.ntfnEnabled == true {
+            //Default
             HStack {
                 Text("Notification")
                 Image(systemName: "checkmark.rectangle")
             }
+            
             HStack {
                 Text("Type of notification")
-                Image(systemName: habit.typeOfNtfn == "Default" ? "gear" : "hand.raised.fill")
+                Image(systemName: habit.typeOfNtfn == TypeOfNotifications.def.rawValue ? "gear" : "hand.raised.fill")
             }
-            if habit.typeOfNtfn != "Default" {
+        //manual
+            if habit.typeOfNtfn != TypeOfNotifications.def.rawValue {
                 HStack {
-                    Image(systemName: "alarm")
-                    Text(habit.wrappedTimeForNtfn)
-                    if habit.wrappedDaysForNtfn != nil {
-                       Image(systemName: "calendar")
+                    Image(systemName: habit.typeOfManualNotification == TypesOfManualNotifications.delay.rawValue ? "timer" : "alarm")
+                    if habit.delayInMinutes != nil || habit.delayInHours != nil {
+                        Text(habit.delayInMinutes != nil ? habit.wrappedDelayInMinutes : habit.wrappedDelayInHours)
+                    } else {
+                        Text(habit.wrappedTimeForNtfn)
+                    }
+                }
+                
+                if habit.daysForNtfn != nil {
+                    HStack {
+                        Image(systemName: "calendar")
                         Text(habit.wrappedDaysForNtfn)
                     }
+                }
+                
+                HStack {
                     Text("Is continues")
                     Image(systemName: habit.isNtfnContinues ? "checkmark.rectangle" : "rectangle")
                 }
             }
+            
             Button(action: {
                 self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
             }){
-            Text("Cancel notification")
+                Text("Cancel notification")
             }
+            
             Button(action: {
                 self.checkLocalNotifications()
             }) {
@@ -181,7 +205,6 @@ struct DetailHabitView: View {
                 Image(systemName: "rectangle")
             }
         }
-                
             //Core Data
             Button(action: {
                 self.habit.steps += 1

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C321825824D8397B00280C45 /* TypologyNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321825724D8397B00280C45 /* TypologyNotifications.swift */; };
 		C3219E7C24CF28FE001CEF12 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */; };
 		C3219E7E24CF4059001CEF12 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3219E7D24CF4059001CEF12 /* ProgressBar.swift */; };
 		C322F5B424C7830100FC116A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C322F5B324C7830100FC116A /* AppDelegate.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C321825724D8397B00280C45 /* TypologyNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypologyNotifications.swift; sourceTree = "<group>"; };
 		C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
 		C3219E7D24CF4059001CEF12 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		C322F5B024C7830100FC116A /* HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,6 +84,7 @@
 				C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */,
 				C3219E7D24CF4059001CEF12 /* ProgressBar.swift */,
 				C322F5CE24C7852400FC116A /* HabitView.swift */,
+				C321825724D8397B00280C45 /* TypologyNotifications.swift */,
 				C324166C24C8D32200984E30 /* ImagePicker.swift */,
 				C322F5D024C7858E00FC116A /* DetailHabitView.swift */,
 				C335028324D05838003FEEBE /* logo.jpg */,
@@ -181,6 +184,7 @@
 				C324166D24C8D32200984E30 /* ImagePicker.swift in Sources */,
 				C3219E7C24CF28FE001CEF12 /* ProgressCircle.swift in Sources */,
 				C322F5BB24C7830100FC116A /* ContentView.swift in Sources */,
+				C321825824D8397B00280C45 /* TypologyNotifications.swift in Sources */,
 				C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */,
 				C324166A24C88A1300984E30 /* Habit+CoreDataClass.swift in Sources */,
 				C322F5D124C7858E00FC116A /* DetailHabitView.swift in Sources */,
