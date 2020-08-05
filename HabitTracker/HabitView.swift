@@ -44,6 +44,7 @@ struct HabitView: View {
     
     //local notifications
     @State private var notificationIsEnabled = false
+    @State private var showNotificationSetView = false
     //binds
     @State var id = UUID().uuidString
     @State private var isDefaultNotificationEnabled = false
@@ -58,6 +59,14 @@ struct HabitView: View {
     @State private var selectedDaysArray = [String]()
     @State var hourFromPicker: Int = 9
     @State var minuteFromPicker: Int = 0
+    
+    @State private var defaultORManualTypeOfNotification = TypeOfNotifications.def.rawValue
+    @State private var typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
+    @State private var timeForNotification = ""
+    @State private var daysForNotification = ""
+    @State private var delayInMinutesFromNotificationView = ""
+    @State private var delayInHoursFromNotificationView = ""
+    @State private var showSetButton = false
     
     func saveToCoreData() {
         let newHabit = Habit(context: self.moc)
@@ -105,6 +114,49 @@ struct HabitView: View {
         self.presentationMode.wrappedValue.dismiss()
     }
     
+    func updateNotificationInfo() {
+        if isDefaultNotificationEnabled == true {
+            notificationIsEnabled = true
+            defaultORManualTypeOfNotification = TypeOfNotifications.def.rawValue
+        } else if isManualNotificationEnabled == true {
+            notificationIsEnabled = true
+            defaultORManualTypeOfNotification = TypeOfNotifications.manual.rawValue
+            if typeOfNotification == 0 {
+                typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
+                if self.typeOfDelay == 0 {
+                    delayInMinutesFromNotificationView = "\(self.delayInMinutes) min"
+                } else {
+                    delayInHoursFromNotificationView = "\(self.delayInHours) h"
+                }
+            } else {
+                typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue
+                timeForNotification = "\(self.hourFromPicker) : \(self.minuteFromPicker)"
+                if !selectedDaysArray.isEmpty {
+                    daysForNotification = self.selectedDaysArray.joined(separator: ", ")
+                }
+            }
+        }
+    }
+    
+    func deleteLocalNotification(identifier: String) {
+        let notifCenter = UNUserNotificationCenter.current()
+        notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+       // ntfnIsDeleted = true
+        notificationIsEnabled = false
+        isDefaultNotificationEnabled = false
+        isManualNotificationEnabled = false
+        delayInMinutesFromNotificationView = ""
+        delayInHoursFromNotificationView = ""
+        timeForNotification = ""
+        daysForNotification = ""
+        selectedDaysArray = []
+        delayInMinutes = ""
+        delayInHours = ""
+        
+        
+    }
+    
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -149,9 +201,21 @@ struct HabitView: View {
                 
                 //local notifications
                 Button(action: {
-                    self.notificationIsEnabled = true
+                    self.showNotificationSetView = true
                 }) {
                     Text("Set Notification")
+                }
+                VStack {
+                NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
+                   
+                }.frame(height: 200)
+                
+                if notificationIsEnabled {
+                    Button(action: {
+                    self.deleteLocalNotification(identifier: self.id)
+                }){
+                    Text("Cancel notification")
+                    }
                 }
                 
                 Section(header: Text("Type of action")) {
@@ -204,8 +268,8 @@ struct HabitView: View {
                     }
                    
                 }
-                .sheet(isPresented: $notificationIsEnabled, content: { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
-                })
+                .sheet(isPresented: $showNotificationSetView , onDismiss: updateNotificationInfo) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
+                }
                 }
                 
             }
