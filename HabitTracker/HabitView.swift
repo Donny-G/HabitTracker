@@ -70,6 +70,7 @@ struct HabitView: View {
     
     func saveToCoreData() {
         let newHabit = Habit(context: self.moc)
+        newHabit.active = true
         newHabit.id = UUID()
         newHabit.name = self.habitName
         newHabit.descr = self.habitDescription

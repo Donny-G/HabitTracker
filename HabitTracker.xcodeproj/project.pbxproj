@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C31F6B7C24D9524B00382B0B /* SetNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31F6B7B24D9524B00382B0B /* SetNotificationsView.swift */; };
 		C31F6B7E24D9F3C800382B0B /* NotificationsInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31F6B7D24D9F3C800382B0B /* NotificationsInfoView.swift */; };
+		C321146824DC1C3B00C45786 /* MainHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321146724DC1C3B00C45786 /* MainHabitView.swift */; };
 		C321825824D8397B00280C45 /* TypologyNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321825724D8397B00280C45 /* TypologyNotifications.swift */; };
 		C3219E7C24CF28FE001CEF12 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */; };
 		C3219E7E24CF4059001CEF12 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3219E7D24CF4059001CEF12 /* ProgressBar.swift */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		C31F6B7B24D9524B00382B0B /* SetNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationsView.swift; sourceTree = "<group>"; };
 		C31F6B7D24D9F3C800382B0B /* NotificationsInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsInfoView.swift; sourceTree = "<group>"; };
+		C321146724DC1C3B00C45786 /* MainHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHabitView.swift; sourceTree = "<group>"; };
 		C321825724D8397B00280C45 /* TypologyNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypologyNotifications.swift; sourceTree = "<group>"; };
 		C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
 		C3219E7D24CF4059001CEF12 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				C321825724D8397B00280C45 /* TypologyNotifications.swift */,
 				C324166C24C8D32200984E30 /* ImagePicker.swift */,
 				C322F5D024C7858E00FC116A /* DetailHabitView.swift */,
+				C321146724DC1C3B00C45786 /* MainHabitView.swift */,
 				C31F6B7B24D9524B00382B0B /* SetNotificationsView.swift */,
 				C31F6B7D24D9F3C800382B0B /* NotificationsInfoView.swift */,
 				C335028324D05838003FEEBE /* logo.jpg */,
@@ -193,6 +196,7 @@
 				C322F5BB24C7830100FC116A /* ContentView.swift in Sources */,
 				C31F6B7C24D9524B00382B0B /* SetNotificationsView.swift in Sources */,
 				C321825824D8397B00280C45 /* TypologyNotifications.swift in Sources */,
+				C321146824DC1C3B00C45786 /* MainHabitView.swift in Sources */,
 				C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */,
 				C324166A24C88A1300984E30 /* Habit+CoreDataClass.swift in Sources */,
 				C322F5D124C7858E00FC116A /* DetailHabitView.swift in Sources */,
