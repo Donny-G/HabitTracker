@@ -64,6 +64,12 @@ struct MainHabitView: View {
         return imageToLoad ?? UIImage(systemName: "xmark") as! UIImage
     }
     
+    func simpleSuccess() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+    
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -99,6 +105,7 @@ struct MainHabitView: View {
                                                 }
                                             }
                                             try? self.moc.save()
+                                            self.simpleSuccess()
                                         }) {
                                             Image(systemName: "plus")
                                         }

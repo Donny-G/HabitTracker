@@ -112,8 +112,9 @@ struct SetNotificationsView: View {
                print("Unknown type")
         }
         
-           daysNotifyArray = []
-           selectedButtonsArray = []
+            daysNotifyArray = []
+            selectedButtonsArray = []
+            simpleSuccess()
     }
         
        //local notifications
@@ -136,6 +137,7 @@ struct SetNotificationsView: View {
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
+        simpleSuccess()
     }
        //local notifications
     func startNotification() {
@@ -161,6 +163,19 @@ struct SetNotificationsView: View {
                 print(notificationRequest.identifier)
             }
         }
+    }
+    
+    func simpleSuccess() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+    
+    var validData: Bool {
+        if delayInHours.isEmpty && delayInMinutes.isEmpty {
+            
+            return false
+        }
+        return true
     }
     
     var body: some View {
@@ -278,6 +293,7 @@ struct SetNotificationsView: View {
                         }) {
                             Image(systemName: "plus")
                         }
+                        .disabled(validData == false)
                         
                         //check lnf
                         Button(action: {

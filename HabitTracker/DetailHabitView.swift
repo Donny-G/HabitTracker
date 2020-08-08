@@ -74,6 +74,7 @@ struct DetailHabitView: View {
         delayInMinutes = ""
         delayInHours = ""
         showSetButton = true
+        simpleSuccess()
     }
     
     //check lnf
@@ -175,6 +176,10 @@ struct DetailHabitView: View {
         }
     }
     
+    public func simpleSuccess() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
     
     var body: some View {
         ZStack {
@@ -254,7 +259,7 @@ struct DetailHabitView: View {
                     .frame(height: 300)
                 }
                 //solution
-                if notificationIsEnabled {
+                if notificationIsEnabled && habit.active {
                     Button(action: {
                         self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
                     }){
@@ -262,48 +267,39 @@ struct DetailHabitView: View {
                     }
                 }
             
-              //  if habit.active {
+                if habit.active {
                 
                 Button(action: {
-                     
-                    
                      self.habit.steps += 1
                      self.habit.percentCompletion = self.percentOfGoal
-                    if self.habit.steps == self.habit.wrappedGoal {
-                       self.habit.active = false
-                        if self.notificationIsEnabled {
-                            self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
-                            
-                          } else {
-                            //solution
-                            self.notificationIsEnabled = true
-                            
+                        if self.habit.steps == self.habit.wrappedGoal {
+                            self.habit.active = false
+                            if self.notificationIsEnabled {
+                                self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                            } else {
+                                //solution
+                                self.notificationIsEnabled = true
+                            }
                         }
+                        if self.moc.hasChanges {
+                            try? self.moc.save()
+                        }
+                    self.simpleSuccess()
+                    }) {
+                        Image("push")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .clipShape(Capsule())
+                            .frame(width: 300, height: 300)
+                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                        }
+                    } else {
+                        Image("6")
+                        Text("completed")
                     }
-                   
-                   
-                   
-                    if self.moc.hasChanges {
-                        try? self.moc.save()
-                    }
-                       //
-                   // }
-                    
-                    
-                }) {
-                    Image("push")
-                        .renderingMode(.original)
-                        .resizable()
-                        .scaledToFit()
-                        .clipShape(Capsule())
-                        .frame(width: 300, height: 300)
-                        .shadow(color: .black, radius: 1, x: 5, y: 5)
                 }
-              // } else {
-              //      Text("completed")
-             //   }
-            }
-        }.sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
+            }.sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
         }
     }
 }

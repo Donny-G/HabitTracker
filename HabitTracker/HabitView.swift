@@ -113,6 +113,7 @@ struct HabitView: View {
             self.selectedDaysArray = []
         
         self.presentationMode.wrappedValue.dismiss()
+        simpleSuccess()
     }
     
     func updateNotificationInfo() {
@@ -155,6 +156,11 @@ struct HabitView: View {
         delayInHours = ""
         
         
+    }
+    
+    func simpleSuccess() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
     }
     
     
@@ -206,6 +212,7 @@ struct HabitView: View {
                 }) {
                     Text("Set Notification")
                 }
+                .disabled(validData == false)
                 VStack {
                 NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
                    
@@ -226,15 +233,14 @@ struct HabitView: View {
                     //    VStack {
                      //   Text("Action is \($0)")
                             Image("\($0)")
-                        .resizable()
+                                .resizable()
                                 .frame(width: 50, height: 50)
-                        .scaledToFit()
+                                .scaledToFit()
                                 
                         
                     }
-                }.disabled(validData == false)
-                .pickerStyle(SegmentedPickerStyle())
-                    
+                }   .disabled(validData == false)
+                    .pickerStyle(SegmentedPickerStyle())
                     .cornerRadius(5)
                     .shadow(color: .black, radius: 1, x: 5, y: 5)
                     
@@ -251,6 +257,8 @@ struct HabitView: View {
                         }) { Image(systemName: "photo")
                         }
                     }
+                        .disabled(validData == false)
+                        .buttonStyle(BorderlessButtonStyle())
                     
                     //Image Picker
                     if selectedImage == nil || habitType != 11 {
@@ -270,22 +278,24 @@ struct HabitView: View {
                    
                 }
                 .sheet(isPresented: $showNotificationSetView , onDismiss: updateNotificationInfo) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
-                }
+                    }
                 }
                 
             }
             
                 
             .navigationBarTitle("New habit", displayMode: .inline)
-            .navigationBarItems(leading: Button("Save habit"){
-                self.saveToCoreData()
-            })
+            .navigationBarItems(leading:
+                Button("Save habit"){
+                    self.saveToCoreData()
+                }
+                .disabled(validData == false)
+            )
+                
             .sheet(isPresented: $showingImagePicker, onDismiss: loadSelectedImage) {
                 ImagePicker(image: self.$inputImage, typeOfSource: self.$source)
             }
-            
         }
-    
     }
 }
 
