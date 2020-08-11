@@ -111,7 +111,7 @@ struct SetNotificationsView: View {
            default:
                print("Unknown type")
         }
-        
+            
             daysNotifyArray = []
             selectedButtonsArray = []
             simpleSuccess()
@@ -170,13 +170,14 @@ struct SetNotificationsView: View {
         generator.notificationOccurred(.success)
     }
     
-    var validData: Bool {
-        if delayInHours.isEmpty && delayInMinutes.isEmpty {
+    func checking() {
+        if delayInMinutes.isEmpty && delayInHours.isEmpty{
+            print("empty")
+        } else {
             
-            return false
         }
-        return true
     }
+    
     
     var body: some View {
         Form {
@@ -227,93 +228,96 @@ struct SetNotificationsView: View {
                 }
             }
             
-                           
-            if isManualNotificationEnabled {
-                VStack {
-                    Form {
-                        TextField("Enter title", text: $title)
-                        TextField("Enter subtitle", text: $subtitle)
-                        Picker("Notification type", selection: $typeOfNotification) {
-                            ForEach(0..<typesOfNotifications.count) {
-                                Text(self.typesOfNotifications[$0])
-                            }
-                        }   .pickerStyle(SegmentedPickerStyle())
-                                       
-                        if typeOfNotification == 0 {
-                            Picker("Choose type of delay", selection: $typeOfDelay) {
-                                ForEach(0..<typesOfDelay.count) {
-                                    Text(self.typesOfDelay[$0])
+            VStack {
+                if isManualNotificationEnabled {
+                        Form {
+                            TextField("Enter title", text: $title)
+                            TextField("Enter subtitle", text: $subtitle)
+                            Picker("Notification type", selection: $typeOfNotification) {
+                                ForEach(0..<typesOfNotifications.count) {
+                                    Text(self.typesOfNotifications[$0])
                                 }
                             }   .pickerStyle(SegmentedPickerStyle())
+                                       
+                            if typeOfNotification == 0 {
+                                Picker("Choose type of delay", selection: $typeOfDelay) {
+                                    ForEach(0..<typesOfDelay.count) {
+                                        Text(self.typesOfDelay[$0])
+                                    }
+                                }   .pickerStyle(SegmentedPickerStyle())
                                            
-                            if typeOfDelay == 0 {
-                                TextField("Enter minutes for notification", text: $delayInMinutes)
-                                    .keyboardType(.numberPad)
-                            } else {
-                                TextField("Enter hours for notification", text: $delayInHours)
-                                    .keyboardType(.numberPad)
-                            }
+                                if typeOfDelay == 0 {
+                                    TextField("Enter minutes for notification", text: $delayInMinutes)
+                                        .keyboardType(.numberPad)
+                                } else {
+                                    TextField("Enter hours for notification", text: $delayInHours)
+                                        .keyboardType(.numberPad)
+                                }
                                         
                                 Toggle("Is continues", isOn: $isContinues)
                                
-                           } else if typeOfNotification == 1 {
+                            } else if typeOfNotification == 1 {
                                
                                 DatePicker("select time", selection: $time, displayedComponents: .hourAndMinute)
                                 Toggle("Is continues", isOn: $isContinues)
                                 Toggle("Days of the week", isOn: $showDaysOfTheWeek)
                             
-                                    if showDaysOfTheWeek {
-                                        HStack {
-                                            ForEach(0..<weekDaysArray.count, id: \.self) { day in
-                                                Button(action: {
-                                                    if let index = self.selectedButtonsArray.firstIndex(of: day) {
-                                                        self.daysNotifyArray.remove(at: index)
-                                                        self.selectedButtonsArray.remove(at: index)
-                                                        self.selectedDaysArray.remove(at: index)
-                                                        print(self.daysNotifyArray)
-                                               } else {
-                                                        self.daysNotifyArray.append(day + 1)
-                                                        self.selectedButtonsArray.append(day)
-                                                        self.selectedDaysArray.append(self.weekDaysArray[day])
-                                                        print(self.selectedDaysArray)
-                                               }
+                                if showDaysOfTheWeek {
+                                    HStack {
+                                        ForEach(0..<weekDaysArray.count, id: \.self) { day in
+                                            Button(action: {
+                                                if let index = self.selectedButtonsArray.firstIndex(of: day) {
+                                                    self.daysNotifyArray.remove(at: index)
+                                                    self.selectedButtonsArray.remove(at: index)
+                                                    self.selectedDaysArray.remove(at: index)
+                                                    print(self.daysNotifyArray)
+                                                } else {
+                                                    self.daysNotifyArray.append(day + 1)
+                                                    self.selectedButtonsArray.append(day)
+                                                    self.selectedDaysArray.append(self.weekDaysArray[day])
+                                                    print(self.selectedDaysArray)
+                                                }
                                             }) {
                                                 Text(self.weekDaysArray[day])
                                             }
-                                                .buttonStyle(PlainButtonStyle())
-                                                .background(self.selectedButtonsArray.contains(day) ? Color.red : Color.blue)
-                                       }
-                                   }
-                               }
-                           }
+                                            .buttonStyle(PlainButtonStyle())
+                                            .background(self.selectedButtonsArray.contains(day) ? Color.red : Color.blue)
+                                        }
+                                    }
+                                }
+                            }
                                    
-                        Button(action: {
-                            self.setManualNotification(title: self.title, subtitle: self.subtitle)
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                        .disabled(validData == false)
+                            Button(action: {
+                                //add alert
+                                if self.delayInMinutes.isEmpty && self.delayInHours.isEmpty{
+                                    print("empty")
+                                } else {
+                                    self.setManualNotification(title: self.title, subtitle: self.subtitle)
+                                    self.presentationMode.wrappedValue.dismiss()
+                                }
+                            }) {
+                                Image(systemName: "plus")
+                            }
                         
-                        //check lnf
-                        Button(action: {
-                            self.checkLocalNotifications()
-                        }) {
-                            Text("Check")
-                        }
+                            //check lnf
+                            Button(action: {
+                                self.checkLocalNotifications()
+                            }) {
+                                Text("Check")
+                            }
                                    
                         //manage notifications - for delete
-                        Button(action: {
-                            self.deleteLocalNotification(identifier: self.id)
-                        }){
-                            Text("Delete notif")
+                            Button(action: {
+                                self.deleteLocalNotification(identifier: self.id)
+                            }){
+                                Text("Delete notif")
+                            }
                         }
-                        
-                    }
                         .frame(height: 400)
                 }
             }
         }
     }
 }
+
 
