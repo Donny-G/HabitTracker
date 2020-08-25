@@ -36,7 +36,7 @@ struct SetNotificationsView: View {
         
     let typesOfNotifications = ["Time delay", "Time + days"]
     let typesOfDelay = ["Minutes", "Hours"]
-    let weekDaysArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    let weekDaysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
     func hourFromPicker()->Int {
         let components = Calendar.current.dateComponents([.hour, .minute, .weekday], from: time)
@@ -169,16 +169,7 @@ struct SetNotificationsView: View {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
     }
-    
-    func checking() {
-        if delayInMinutes.isEmpty && delayInHours.isEmpty{
-            print("empty")
-        } else {
-            
-        }
-    }
-    
-    
+
     var body: some View {
         Form {
             HStack {
@@ -193,6 +184,10 @@ struct SetNotificationsView: View {
                         self.defaultIsTapped = false
                     }
                 }) {
+                    Image("auto")
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
                     Text("Set default notification at 9:00 everyday")
                 }
                     .onAppear(perform: startNotification)
@@ -206,6 +201,10 @@ struct SetNotificationsView: View {
                         self.isManualNotificationEnabled = false
                     }
                 }) {
+                    Image("manual")
+                        .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
                     Text("Set manual notification")
                 }
                     .background(isManualNotificationEnabled ? Color.red : Color.white)
@@ -224,6 +223,10 @@ struct SetNotificationsView: View {
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
                 }) {
+                    Image("setNotificationOn")
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
                     Text("Set and Back")
                 }
             }
@@ -286,34 +289,22 @@ struct SetNotificationsView: View {
                                     }
                                 }
                             }
-                                   
                             Button(action: {
                                 //add alert
-                                if self.delayInMinutes.isEmpty && self.delayInHours.isEmpty{
+                                if self.delayInMinutes.isEmpty && self.delayInHours.isEmpty && self.typeOfNotification == 0{
                                     print("empty")
                                 } else {
                                     self.setManualNotification(title: self.title, subtitle: self.subtitle)
                                     self.presentationMode.wrappedValue.dismiss()
                                 }
                             }) {
-                                Image(systemName: "plus")
-                            }
-                        
-                            //check lnf
-                            Button(action: {
-                                self.checkLocalNotifications()
-                            }) {
-                                Text("Check")
-                            }
-                                   
-                        //manage notifications - for delete
-                            Button(action: {
-                                self.deleteLocalNotification(identifier: self.id)
-                            }){
-                                Text("Delete notif")
+                                Image("setNotificationOn")
+                                .renderingMode(.original)
+                                .resizable()
+                                .frame(width: 80, height: 80, alignment: .center)
                             }
                         }
-                        .frame(height: 400)
+                        .frame(height: 500)
                 }
             }
         }

@@ -75,72 +75,85 @@ struct MainHabitView: View {
             ZStack {
                 Color(red: 0.942, green: 0.993, blue: 0.716)
                     .edgesIgnoringSafeArea(.all)
-                List {
-                    ForEach(fetchRequest.wrappedValue, id: \.id) {
-                        habit in
-                        NavigationLink(destination: DetailHabitView(habit: habit)) {
-                            HStack(alignment: .center, spacing: 20) {
-                                Text(habit.wrappedName)
-                                    .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
-                                    .foregroundColor(.orange)
-                                    .contextMenu {
-                                        Button(action: {
-                                            habit.steps += 1
-                                            if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
-                                                habit.percentCompletion = Float((100 * habit.wrappedSteps) / habit.wrappedGoal)
-                                            }
-                                            if habit.wrappedGoal == habit.wrappedSteps {
-                                                habit.active = false
-                                                if habit.ntfnEnabled {
-                                                    self.deleteLocalNotification(identifier: habit.idForNtfn!)
-                                                    habit.ntfnEnabled = false
-                                                    habit.daysForNtfn = nil
-                                                    habit.delayInHours = nil
-                                                    habit.delayInMinutes = nil
-                                                    habit.isNtfnContinues = false
-                                                    habit.timeForNtfn = nil
-                                                    habit.typeOfManualNotification = nil
-                                                    habit.typeOfNtfn = nil
-                                                    habit.idForNtfn = nil
+                VStack {
+                    List {
+                        ForEach(fetchRequest.wrappedValue, id: \.id) {
+                            habit in
+                            NavigationLink(destination: DetailHabitView(habit: habit)) {
+                                HStack(alignment: .center, spacing: 20) {
+                                    Text(habit.wrappedName)
+                                        .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
+                                        .foregroundColor(.orange)
+                                        .contextMenu {
+                                            Button(action: {
+                                                habit.steps += 1
+                                                if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
+                                                    habit.percentCompletion = Float((100 * habit.wrappedSteps) / habit.wrappedGoal)
+                                                }
+                                                if habit.wrappedGoal == habit.wrappedSteps {
+                                                    habit.active = false
+                                                    if habit.ntfnEnabled {
+                                                        self.deleteLocalNotification(identifier: habit.idForNtfn!)
+                                                        habit.ntfnEnabled = false
+                                                        habit.daysForNtfn = nil
+                                                        habit.delayInHours = nil
+                                                        habit.delayInMinutes = nil
+                                                        habit.isNtfnContinues = false
+                                                        habit.timeForNtfn = nil
+                                                        habit.typeOfManualNotification = nil
+                                                        habit.typeOfNtfn = nil
+                                                        habit.idForNtfn = nil
+                                                    }
+                                                }
+                                                try? self.moc.save()
+                                                self.simpleSuccess()
+                                            }) {
+                                                HStack {
+                                                    Text("tap")
+                                                    Image("tap")
                                                 }
                                             }
-                                            try? self.moc.save()
-                                            self.simpleSuccess()
-                                        }) {
-                                            Image(systemName: "plus")
                                         }
-                                    }
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text("Goal: \(habit.wrappedGoal)")
-                                        .font(.system(size: 15, weight: .black, design: .rounded))
-                                        .foregroundColor(.purple)
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text("Goal: \(habit.wrappedGoal)")
+                                            .font(.system(size: 15, weight: .black, design: .rounded))
+                                            .foregroundColor(.purple)
 
-                                    Text("Streaks: \(habit.wrappedSteps)")
-                                        .font(.system(size: 17, weight: Font.Weight.black, design: Font.Design.rounded))
-                                        .foregroundColor(.gray)
-                                
-                                    Text("Progress:")
-                                        .font(.system(size: 15, weight: .black, design: .rounded))
-                                        .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
-                                    ProgressBar(percent: CGFloat(habit.percentCompletion))
+                                        Text("Streaks: \(habit.wrappedSteps)")
+                                            .font(.system(size: 17, weight: Font.Weight.black, design: Font.Design.rounded))
+                                            .foregroundColor(.gray)
+                            
+                                        Text("Progress:")
+                                            .font(.system(size: 15, weight: .black, design: .rounded))
+                                            .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
+                                        ProgressBar(percent: CGFloat(habit.percentCompletion))
                                     
-                                }   //Core Data + image from ImagePicker
-                                if habit.typeOfAction != 11 {
-                                    Image("\(habit.typeOfAction)")
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .scaledToFit()
-                                        .shadow(color: .black, radius: 1, x: 5, y: 5)
-                                } else {
-                                    Image(uiImage: self.imageFromCoreData(habit: habit))
-                                        .resizable()
-                                        .frame(width: 80, height: 80)
-                                        .scaledToFit()
+                                    }   //Core Data + image from ImagePicker
+                                    if habit.typeOfAction != 11 {
+                                        Image("\(habit.typeOfAction)")
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                            .scaledToFit()
+                                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                                    } else {
+                                        Image(uiImage: self.imageFromCoreData(habit: habit))
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                            .scaledToFit()
+                                    }
                                 }
+                                //окончание navlink
                             }
-                            //окончание navlink
-                        }
-                    }.onDelete(perform: removeHabits)
+                        }.onDelete(perform: removeHabits)
+                    }
+                    Button(action: {
+                    self.habitViewOpen.toggle()
+                    }) {
+                        Image("add1")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                    }
                 }
             }
                 .navigationBarTitle("Habit tracker", displayMode: .inline)
@@ -149,9 +162,9 @@ struct MainHabitView: View {
                             EditButton()
                         },  trailing: HStack {
                             Button(action: {
-                                self.habitViewOpen.toggle()
+                                //for info view
                             }) {
-                                Image(systemName: "plus")
+                                Image(systemName: "info")
                             }
                                                                                 //Core Data
                 }) .sheet(isPresented: $habitViewOpen) { HabitView().environment(\.managedObjectContext, self.moc)

@@ -185,7 +185,7 @@ struct DetailHabitView: View {
         ZStack {
             Color(red: 0.942, green: 0.993, blue: 0.716)
                 .edgesIgnoringSafeArea(.all)
-            ScrollView {
+            Form {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text("Habit name:")
@@ -254,7 +254,9 @@ struct DetailHabitView: View {
                         ProgressCircle(percent: CGFloat(habit.percentCompletion))
                     }
                 }
+                VStack(alignment: .leading) {
                 if habit.active {
+                    
                 NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
                     .frame(height: 300)
                 }
@@ -263,8 +265,13 @@ struct DetailHabitView: View {
                     Button(action: {
                         self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
                     }){
+                        Image("setNotificationOff")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 100, height: 100, alignment: .center)
                         Text("Cancel notification")
                     }
+                }
                 }
             
                 if habit.active {
@@ -286,7 +293,7 @@ struct DetailHabitView: View {
                         }
                     self.simpleSuccess()
                     }) {
-                        Image("push")
+                        Image("tapButton")
                             .renderingMode(.original)
                             .resizable()
                             .scaledToFit()
@@ -295,9 +302,22 @@ struct DetailHabitView: View {
                             .shadow(color: .black, radius: 1, x: 5, y: 5)
                         }
                     } else {
-                        Image("6")
+                        Image("done")
                         Text("completed")
                     }
+                Button(action: {
+                    if self.notificationIsEnabled {
+                        self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                    }
+                    self.moc.delete(self.habit)
+                    try? self.moc.save()
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image("delete")
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                }
                 }
             }.sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
         }

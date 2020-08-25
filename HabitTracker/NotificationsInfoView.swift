@@ -23,56 +23,64 @@ struct NotificationsInfoView: View {
     
 
     var body: some View {
-        Form {
-            if notificationIsEnabled == true {
-            //Default
-                HStack {
-                Text("Notification")
-                Image(systemName: "checkmark.rectangle")
-                }
+        VStack(alignment: .leading) {
+            HStack {
+                if notificationIsEnabled == true {
+                    //Default
+                    Image("notificationIsOn")
+                        .resizable()
+                        .frame(width: 50, height: 50, alignment: .center)
             
-                HStack {
-                    Text("Type of notification")
-                    Image(systemName: typeOfNotification == TypeOfNotifications.def.rawValue ? "gear" : "hand.raised.fill")
-                }
-        //manual
-                if typeOfNotification != TypeOfNotifications.def.rawValue {
-                    HStack {
-                        Image(systemName: typeOfManualNotification == TypesOfManualNotifications.delay.rawValue ? "timer" : "alarm")
-                        if delayInMinutes != "" || delayInHours != "" {
-                            Text(delayInMinutes != "" ? delayInMinutes : delayInHours)
-                        } else {
-                            Text(timeForNtfn)
+                    Image(typeOfNotification == TypeOfNotifications.def.rawValue ? "auto" : "manual")
+                        .resizable()
+                        .frame(width: 50, height: 50, alignment: .center)
+                    //manual
+                    if typeOfNotification != TypeOfNotifications.def.rawValue {
+                        VStack {
+                            Image(typeOfManualNotification == TypesOfManualNotifications.delay.rawValue ? "timer2" : "alarm")
+                                .resizable()
+                                .frame(width: 50, height: 50, alignment: .center)
+                            if delayInMinutes != "" || delayInHours != "" {
+                                Text(delayInMinutes != "" ? delayInMinutes : delayInHours)
+                            } else {
+                                Text(timeForNtfn)
+                            }
                         }
-                    }
                 
-                    if daysForNtfn != "" {
-                        HStack {
-                            Image(systemName: "calendar")
-                            Text(daysForNtfn)
+                        if daysForNtfn != "" {
+                            VStack {
+                                Image("daysweek")
+                                    .resizable()
+                                    .frame(width: 50, height: 50, alignment: .center)
+                                Text(daysForNtfn)
+                            }
                         }
+                            Image(isNtfnContinues ? "continues" : "notContinues")
+                                .resizable()
+                                .frame(width: 50, height: 50, alignment: .center)
                     }
-                
-                    HStack {
-                        Text("Is continues")
-                        Image(systemName: isNtfnContinues ? "checkmark.rectangle" : "rectangle")
-                    }
-                }
-            } else {
-                HStack {
-                    Text("Notification")
-                    Image(systemName: "rectangle")
-                }
+                } else {
+                        Image("notificationIsOff")
+                            .resizable()
+                            .frame(width: 50, height: 50, alignment: .center)
            
-                if notificationIsEnabled == false && showSetButton == true {
-                    Button(action: {
-                        self.showNotificationSetView = true
-                    }) {
-                        Text("Set new notification")
-                    }
+                
+                
+            }
+        }
+            if notificationIsEnabled == false && showSetButton == true {
+                Button(action: {
+                    self.showNotificationSetView = true
+                }) {
+                    Image("setNotificationOn")
+                    .renderingMode(.original)
+                    .resizable()
+                    .frame(width: 80, height: 80, alignment: .center)
+                    Text("Set new notification")
                 }
             }
         }
+        
     }
 }
 

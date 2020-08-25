@@ -15,7 +15,7 @@ import UserNotifications
 struct HabitView: View {
     @State private var habitGoal: Int16 = 0
     @State private var habitDescription = ""
-    @State private var habitType = 11
+    @State private var habitType = 12
     
     //Image Picker
     @State private var selectedImage: Image?
@@ -25,7 +25,7 @@ struct HabitView: View {
     func loadSelectedImage() {
         guard let inputImage = inputImage else { return }
         selectedImage = Image(uiImage: inputImage)
-        habitType = 11
+        habitType = 12
     }
     
     //Core Data
@@ -207,12 +207,7 @@ struct HabitView: View {
                 }
                 
                 //local notifications
-                Button(action: {
-                    self.showNotificationSetView = true
-                }) {
-                    Text("Set Notification")
-                }
-                .disabled(validData == false)
+                
                 VStack {
                 NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
                    
@@ -222,13 +217,28 @@ struct HabitView: View {
                     Button(action: {
                     self.deleteLocalNotification(identifier: self.id)
                 }){
+                    Image("setNotificationOff")
+                        .renderingMode(.original)
+                        .resizable()
+                        .frame(width: 100, height: 100, alignment: .center)
                     Text("Cancel notification")
                     }
+                } else {
+                    Button(action: {
+                        self.showNotificationSetView = true
+                    }) {
+                        Image("setNotificationOn")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 100, height: 100, alignment: .center)
+                        Text("Set Notification")
+                    }
+                    .disabled(validData == false)
                 }
                 
                 Section(header: Text("Type of action")) {
                 Picker("Choose type of action", selection: $habitType) {
-                    ForEach(0..<11) {
+                    ForEach(0..<12) {
                         
                     //    VStack {
                      //   Text("Action is \($0)")
@@ -249,19 +259,25 @@ struct HabitView: View {
                         Button(action: {
                             self.showingImagePicker = true
                             self.source = 0
-                        }) { Image(systemName: "camera")
+                        }) { Image("photo")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 80, height: 80, alignment: .center)
                         }
                         Button(action: {
                             self.showingImagePicker = true
                             self.source = 1
-                        }) { Image(systemName: "photo")
+                        }) { Image("gallery")
+                            .renderingMode(.original)
+                            .resizable()
+                            .frame(width: 80, height: 80, alignment: .center)
                         }
                     }
                         .disabled(validData == false)
                         .buttonStyle(BorderlessButtonStyle())
                     
                     //Image Picker
-                    if selectedImage == nil || habitType != 11 {
+                    if selectedImage == nil || habitType != 12 {
                         Image("\(habitType)")
                             .resizable()
                             .scaledToFit()

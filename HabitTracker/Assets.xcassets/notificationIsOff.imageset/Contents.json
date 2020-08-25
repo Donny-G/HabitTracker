@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "notificationIsOff~universal@1x.png"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "notificationIsOff~universal@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "notificationIsOff~universal@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

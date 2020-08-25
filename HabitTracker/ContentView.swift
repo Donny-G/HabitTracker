@@ -13,13 +13,13 @@ struct ContentView: View {
             TabView {
                 MainHabitView(predicateType: .active)
                     .tabItem {
-                        Image(systemName: "star")
+                        Image("active5")
                         Text("Active")
                 }
                 
                 MainHabitView(predicateType: .completed)
                     .tabItem {
-                        Image(systemName: "triangle")
+                        Image("completed2")
                         Text("Completed")
                 }
             }
