@@ -7,6 +7,13 @@
 //
 
 import SwiftUI
+//hide keyboard
+extension View {
+    func endEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
 
 struct SetNotificationsView: View {
     @Binding var id: String
@@ -252,9 +259,15 @@ struct SetNotificationsView: View {
                                 if typeOfDelay == 0 {
                                     TextField("Enter minutes for notification", text: $delayInMinutes)
                                         .keyboardType(.numberPad)
+                                        //hide keyboard
+                                        .onTapGesture {}
+                                        .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
                                 } else {
                                     TextField("Enter hours for notification", text: $delayInHours)
                                         .keyboardType(.numberPad)
+                                        //hide keyboard
+                                        .onTapGesture {}
+                                        .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
                                 }
                                         
                                 Toggle("Is continues", isOn: $isContinues)

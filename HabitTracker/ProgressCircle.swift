@@ -23,7 +23,7 @@ struct ProgressCircle: View {
                         .stroke(style: StrokeStyle(lineWidth: 20, lineCap: .round, lineJoin: .round))
                         .fill(AngularGradient(gradient: .init(colors: colors), center: .center, startAngle: .zero, endAngle: .init(degrees: 360)))
             ).animation(.spring(response: 1.0, dampingFraction: 1.0, blendDuration: 1.0))
-            Text(String(format: "%.1f", percent) + "%").font(.system(size: 20)).fontWeight(.heavy)
+            Text(String(format: "%.0f", percent) + "%").font(.system(size: 20)).fontWeight(.heavy)
                 
         }
     }

@@ -25,7 +25,7 @@ struct ProgressBar: View {
                         .fill(LinearGradient(gradient: .init(colors: colors), startPoint: .leading, endPoint: .trailing))
                 ).animation(.spring(response: 1.0, dampingFraction: 1.0, blendDuration: 1.0))
             
-            Text(String(format: "%.1f", percent) + "%").font(.system(size: 20)).fontWeight(.heavy)
+           // Text(String(format: "%.0f", percent) + "%").font(.system(size: 20)).fontWeight(.heavy)
         }
     }
 }

@@ -36,6 +36,7 @@ struct MainHabitView: View {
     @Environment(\.managedObjectContext) var moc
     @State private var habitViewOpen = false
     @Environment(\.presentationMode) var presentationMode
+    @State private var showInfo = false
        
     func deleteLocalNotification(identifier: String) {
         let notifCenter = UNUserNotificationCenter.current()
@@ -55,13 +56,13 @@ struct MainHabitView: View {
     }
     //load image object from Core Data
     func imageFromCoreData(habit: Habit) -> UIImage {
-        var imageToLoad = UIImage(systemName: "xmark")
+        var imageToLoad = UIImage(named: "12")
         if let data = habit.img {
             if let image = UIImage(data: data) {
                 imageToLoad = image
             }
         }
-        return imageToLoad ?? UIImage(systemName: "xmark") as! UIImage
+        return imageToLoad ?? UIImage(named: "12") as! UIImage
     }
     
     func simpleSuccess() {
@@ -129,7 +130,7 @@ struct MainHabitView: View {
                                         ProgressBar(percent: CGFloat(habit.percentCompletion))
                                     
                                     }   //Core Data + image from ImagePicker
-                                    if habit.typeOfAction != 11 {
+                                    if habit.typeOfAction != 12 {
                                         Image("\(habit.typeOfAction)")
                                             .resizable()
                                             .frame(width: 80, height: 80)
@@ -162,13 +163,15 @@ struct MainHabitView: View {
                             EditButton()
                         },  trailing: HStack {
                             Button(action: {
-                                //for info view
+                                self.showInfo.toggle()
                             }) {
                                 Image(systemName: "info")
                             }
-                                                                                //Core Data
-                }) .sheet(isPresented: $habitViewOpen) { HabitView().environment(\.managedObjectContext, self.moc)
+                })
+                .sheet(isPresented: $habitViewOpen) { HabitView().environment(\.managedObjectContext, self.moc)
             }
+        }
+        .sheet(isPresented: $showInfo) { InfoView()
         }
     }
 }

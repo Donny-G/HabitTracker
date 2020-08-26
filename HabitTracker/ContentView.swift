@@ -22,8 +22,14 @@ struct ContentView: View {
                         Image("completed2")
                         Text("Completed")
                 }
-            }
-        }
+                
+                StatsView()
+                    .tabItem {
+                        Image("graph")
+                        Text("Stats")
+                }
+            }.navigationViewStyle(StackNavigationViewStyle())
+    }
     }
 
 struct ContentView_Previews: PreviewProvider {

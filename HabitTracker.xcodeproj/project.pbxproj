@@ -26,6 +26,9 @@
 		C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */; };
 		C324166D24C8D32200984E30 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166C24C8D32200984E30 /* ImagePicker.swift */; };
 		C335028424D05838003FEEBE /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C335028324D05838003FEEBE /* logo.jpg */; };
+		C3B43E2824F516ED009380BA /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2724F516ED009380BA /* StatsView.swift */; };
+		C3B43E2A24F518D7009380BA /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2924F518D7009380BA /* InfoView.swift */; };
+		C3B43E2C24F51C60009380BA /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2B24F51C60009380BA /* BarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +53,9 @@
 		C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		C324166C24C8D32200984E30 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C335028324D05838003FEEBE /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		C3B43E2724F516ED009380BA /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		C3B43E2924F518D7009380BA /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		C3B43E2B24F51C60009380BA /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +93,8 @@
 				C322F5B324C7830100FC116A /* AppDelegate.swift */,
 				C322F5B524C7830100FC116A /* SceneDelegate.swift */,
 				C322F5BA24C7830100FC116A /* ContentView.swift */,
+				C3B43E2724F516ED009380BA /* StatsView.swift */,
+				C3B43E2924F518D7009380BA /* InfoView.swift */,
 				C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */,
 				C3219E7D24CF4059001CEF12 /* ProgressBar.swift */,
 				C322F5CE24C7852400FC116A /* HabitView.swift */,
@@ -94,6 +102,7 @@
 				C324166C24C8D32200984E30 /* ImagePicker.swift */,
 				C322F5D024C7858E00FC116A /* DetailHabitView.swift */,
 				C321146724DC1C3B00C45786 /* MainHabitView.swift */,
+				C3B43E2B24F51C60009380BA /* BarView.swift */,
 				C31F6B7B24D9524B00382B0B /* SetNotificationsView.swift */,
 				C31F6B7D24D9F3C800382B0B /* NotificationsInfoView.swift */,
 				C335028324D05838003FEEBE /* logo.jpg */,
@@ -186,10 +195,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3B43E2C24F51C60009380BA /* BarView.swift in Sources */,
 				C322F5B424C7830100FC116A /* AppDelegate.swift in Sources */,
 				C31F6B7E24D9F3C800382B0B /* NotificationsInfoView.swift in Sources */,
 				C3219E7E24CF4059001CEF12 /* ProgressBar.swift in Sources */,
 				C322F5B624C7830100FC116A /* SceneDelegate.swift in Sources */,
+				C3B43E2A24F518D7009380BA /* InfoView.swift in Sources */,
+				C3B43E2824F516ED009380BA /* StatsView.swift in Sources */,
 				C322F5CF24C7852400FC116A /* HabitView.swift in Sources */,
 				C324166D24C8D32200984E30 /* ImagePicker.swift in Sources */,
 				C3219E7C24CF28FE001CEF12 /* ProgressCircle.swift in Sources */,

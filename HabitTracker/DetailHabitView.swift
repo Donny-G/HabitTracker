@@ -207,7 +207,7 @@ struct DetailHabitView: View {
                 }
                 
         //Core Data + Image Picker
-                if habit.typeOfAction != 11 {
+                if  habit.img == nil {
                     Image("\(self.habit.typeOfAction)")
                         .resizable()
                         .scaledToFit()
