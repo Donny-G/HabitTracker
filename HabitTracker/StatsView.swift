@@ -23,7 +23,8 @@ struct StatsView: View {
     
     
     var body: some View {
-        
+        ZStack {
+    
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(habits, id: \.id) {
@@ -50,6 +51,7 @@ struct StatsView: View {
                 }
             }
         }
+    }
     }
 }
 

@@ -26,6 +26,7 @@
 		C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */; };
 		C324166D24C8D32200984E30 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166C24C8D32200984E30 /* ImagePicker.swift */; };
 		C335028424D05838003FEEBE /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C335028324D05838003FEEBE /* logo.jpg */; };
+		C3509A1E24F9378D00DD94F5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3509A1D24F9378D00DD94F5 /* Colors.swift */; };
 		C3B43E2824F516ED009380BA /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2724F516ED009380BA /* StatsView.swift */; };
 		C3B43E2A24F518D7009380BA /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2924F518D7009380BA /* InfoView.swift */; };
 		C3B43E2C24F51C60009380BA /* BarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2B24F51C60009380BA /* BarView.swift */; };
@@ -53,6 +54,7 @@
 		C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		C324166C24C8D32200984E30 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C335028324D05838003FEEBE /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		C3509A1D24F9378D00DD94F5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		C3B43E2724F516ED009380BA /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		C3B43E2924F518D7009380BA /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		C3B43E2B24F51C60009380BA /* BarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarView.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				C322F5B524C7830100FC116A /* SceneDelegate.swift */,
 				C322F5BA24C7830100FC116A /* ContentView.swift */,
 				C3B43E2724F516ED009380BA /* StatsView.swift */,
+				C3509A1D24F9378D00DD94F5 /* Colors.swift */,
 				C3B43E2924F518D7009380BA /* InfoView.swift */,
 				C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */,
 				C3219E7D24CF4059001CEF12 /* ProgressBar.swift */,
@@ -207,6 +210,7 @@
 				C3219E7C24CF28FE001CEF12 /* ProgressCircle.swift in Sources */,
 				C322F5BB24C7830100FC116A /* ContentView.swift in Sources */,
 				C31F6B7C24D9524B00382B0B /* SetNotificationsView.swift in Sources */,
+				C3509A1E24F9378D00DD94F5 /* Colors.swift in Sources */,
 				C321825824D8397B00280C45 /* TypologyNotifications.swift in Sources */,
 				C321146824DC1C3B00C45786 /* MainHabitView.swift in Sources */,
 				C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */,

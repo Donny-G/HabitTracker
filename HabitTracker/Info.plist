@@ -51,8 +51,6 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Would you like to use camera for habit image samples</string>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

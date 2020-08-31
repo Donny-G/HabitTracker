@@ -9,28 +9,44 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
+
+   // init() {
+    //    UITabBar.appearance().barTintColor = UIColor(named: "tabBarColor")
+     //   UITabBar.appearance().unselectedItemTintColor = UIColor(named: "tabBarColor")
+     //   UINavigationBar.appearance().barTintColor = UIColor(named: "tabBarColor")
+        
+      
+        //UITabBar.appearance().tintColor = .red
+   // }
+    
+    
         var body: some View {
             TabView {
                 MainHabitView(predicateType: .active)
                     .tabItem {
                         Image("active5")
-                        Text("Active")
+                        Text("Active habits")
                 }
                 
                 MainHabitView(predicateType: .completed)
                     .tabItem {
                         Image("completed2")
-                        Text("Completed")
+                        Text("Completed habits")
                 }
                 
                 StatsView()
                     .tabItem {
                         Image("graph")
-                        Text("Stats")
+                        Text("Statistics")
                 }
             }.navigationViewStyle(StackNavigationViewStyle())
+             //   .accentColor(colorScheme == .light ? tabBarTextSecondaryLightColor  : tabBarTextSecondaryDarkColor)
+             //   .foregroundColor(.red)
+            
+            
     }
-    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
