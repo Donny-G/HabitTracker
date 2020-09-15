@@ -8,9 +8,18 @@
 
 import SwiftUI
 
+struct ImageModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 80, height: 80)
+            .scaledToFit()
+            .shadow(color: .black, radius: 1, x: 3, y: 3)
+    }
+}
+
 struct StatsView: View {
     @FetchRequest(entity: Habit.entity(), sortDescriptors: [])var habits: FetchedResults<Habit>
- 
+    @Environment(\.colorScheme) var colorScheme
     func imageFromCoreData(habit: Habit) -> UIImage {
         var imageToLoad = UIImage(named: "12")
         if let data = habit.img {
@@ -18,40 +27,41 @@ struct StatsView: View {
                 imageToLoad = image
             }
         }
-        return imageToLoad ?? UIImage(named: "12") as! UIImage
+        return imageToLoad ?? UIImage(named: "12")!
     }
     
     
     var body: some View {
-        ZStack {
-    
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                ForEach(habits, id: \.id) {
-                    
-                    
-                    habit in
-                    
-                    VStack {
-                        BarView(value: CGFloat(habit.percentCompletion))
-                        if habit.typeOfAction != 12 {
-                            Image("\(habit.typeOfAction)")
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .scaledToFit()
-                                .shadow(color: .black, radius: 1, x: 5, y: 5)
-                        } else {
-                            Image(uiImage: self.imageFromCoreData(habit: habit))
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .scaledToFit()
+        NavigationView {
+            ZStack {
+                self.colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(habits, id: \.id) {
+                            habit in
+                            VStack {
+                                BarView(value: CGFloat(habit.percentCompletion))
+                                if habit.typeOfAction != 12 {
+                                    Image("\(habit.typeOfAction)")
+                                        .resizable()
+                                        .modifier(ImageModifier())
+                                } else {
+                                    Image(uiImage: self.imageFromCoreData(habit: habit))
+                                        .resizable()
+                                        .cornerRadius(20)
+                                        .modifier(ImageModifier())
+                                }
+                                Text(habit.wrappedName)
+                                    .font(.system(size: 20, weight: .black, design: .rounded))
+                                    .foregroundColor(self.colorScheme == .light ? firstTextColorLight : firstTextColorDark)
+                                   
+                            }
                         }
-                        Text(habit.wrappedName)
                     }
                 }
-            }
+            }.navigationBarTitle("Progress", displayMode: .inline)
         }
-    }
+        
     }
 }
 

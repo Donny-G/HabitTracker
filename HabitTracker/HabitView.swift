@@ -12,11 +12,64 @@ import UIKit
 
 import UserNotifications
 
+struct SectionTextModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    func body(content: Content) -> some View {
+        content
+        .font(.system(size: 14, weight: .black, design: .rounded))
+        //.fixedSize(horizontal: false, vertical: true)
+        .foregroundColor(colorScheme == .light ? thirdTextColorLight : thirdTextColorDark)
+       // .shadow(color: .black, radius: 1, x: 1, y: 1)
+    }
+}
+
+struct TextFieldModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    var size: CGFloat
+    func body(content: Content) -> some View {
+        content
+        .font(.system(size: size, weight: Font.Weight.heavy, design: Font.Design.rounded))
+        .foregroundColor(colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
+        .padding(10)
+        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(colorScheme == .light ? blue : firstTextColorLight)
+        .shadow(color: .black, radius: 1, x: 5, y: 5))
+    }
+}
+
+struct CurrentImageModifier: ViewModifier {
+    var width: CGFloat
+    var height: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .scaledToFit()
+            .frame(width: width, height: height)
+            .shadow(color: .black, radius: 1, x: 5, y: 5)
+    }
+}
+
+struct NotificationAndSaveButtonTextModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    var size: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: size, weight: .black, design: .rounded))
+            .foregroundColor(colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
+    }
+}
+
 struct HabitView: View {
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "colorSet1")
+        
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: tabBarTextSecondaryLight], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "tabBarColor")], for: .selected)
+
+    }
+    
     @State private var habitGoal: Int16 = 0
     @State private var habitDescription = ""
     @State private var habitType = 12
-    
+    @Environment(\.colorScheme) var colorScheme
     //Image Picker
     @State private var selectedImage: Image?
     @State private var showingImagePicker = false
@@ -167,149 +220,177 @@ struct HabitView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.942, green: 0.993, blue: 0.716)
-                .edgesIgnoringSafeArea(.all)
-            Form {
-                Section(header: Text("Habit name")){
-                TextField("Enter your habit name, please", text: $habitName)
-                .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
-                .foregroundColor(.orange)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .cornerRadius(5)
-                    .shadow(color: .black, radius: 1, x: 5, y: 5)
-                }
-                
-                Section(header: Text("Goal settings")) {
-                Stepper("Set your goal for habit \(habitGoal)", value: $habitGoal, in: 1...100)
-                .font(.system(size: 15, weight: .black, design: .rounded))
-                    .foregroundColor(.purple)
-                    .accentColor(.purple)
-                
-                Picker("Goal", selection: $habitGoal) {
-                    ForEach(goalExamples, id: \.self) {
-                        Text(String($0))
+                colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
+                Form {
+                    Section(header: Text("Habit name").modifier(SectionTextModifier())) {
+                        TextField("Enter your habit name, please", text: $habitName)
+                            .modifier(TextFieldModifier(size: 20))
                     }
-                }.pickerStyle(SegmentedPickerStyle())
-                .colorMultiply(.orange)
-                .background(Color.purple)
-                .cornerRadius(5)
-                .shadow(color: .black, radius: 1, x: 5, y: 5)
-                }
                 
-                Section(header: Text("Habit description")) {
-                TextField("Enter your habit description", text: $habitDescription)
-                    .disabled(validData == false)
-                    .font(.system(size: 20, weight: Font.Weight.bold, design: Font.Design.rounded))
-                        .foregroundColor(.gray)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .cornerRadius(5)
-                        .shadow(color: .black, radius: 1, x: 5, y: 5)
-                }
-                
-                //local notifications
-                
-                VStack {
-                NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
-                   
-                }.frame(height: 200)
-                
-                if notificationIsEnabled {
-                    Button(action: {
-                    self.deleteLocalNotification(identifier: self.id)
-                }){
-                    Image("setNotificationOff")
-                        .renderingMode(.original)
-                        .resizable()
-                        .frame(width: 100, height: 100, alignment: .center)
-                    Text("Cancel notification")
+                    Section(header: Text("Goal settings").modifier(SectionTextModifier())) {
+                        
+                        HStack {
+                            Text("Set your goal for habit \(habitGoal)")
+                                .font(.system(size: 15, weight: .black, design: .rounded))
+                                .foregroundColor(colorScheme == .light ? red : secondTextColorDark)
+                            Spacer()
+                            Button(action: {
+                                if self.habitGoal != 0 {
+                                    self.habitGoal -= 1
+                                }
+                            }) {
+                                Image("minus")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 70, height: 70))
+                            }
+                            Button(action: {
+                                self.habitGoal += 1
+                            }) {
+                                Image("plus")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 70, height: 70))
+                            }
+                        }
+                            .buttonStyle(PlainButtonStyle())
+                        
+                        Picker("Goal", selection: $habitGoal) {
+                            ForEach(goalExamples, id: \.self) {
+                                Text(String($0))
+                            }
+                        }   .pickerStyle(SegmentedPickerStyle())
+                            .padding()
+                            .background(colorScheme == .light ? barColorLight : blue)
+                            .cornerRadius(20)
+                            .shadow(color: .black, radius: 1, x: 5, y: 5)
                     }
-                } else {
-                    Button(action: {
-                        self.showNotificationSetView = true
+                
+                    Section(header: Text("Habit description").modifier(SectionTextModifier())) {
+                        TextField("Enter your habit description", text: $habitDescription)
+                            .disabled(validData == false)
+                            .modifier(TextFieldModifier(size: 15))
+                    }
+                
+                    //local notifications
+                    Section(header:
+                        HStack {
+                            Text("Notification").modifier(SectionTextModifier())
+                            Spacer()
+                            if notificationIsEnabled {
+                                Button(action: {
+                                    self.deleteLocalNotification(identifier: self.id)
+                                }){
+                                    HStack {
+                                        Image("setNotificationOff")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .modifier(CurrentImageModifier(width: 50, height: 50))
+                                        Text("Cancel notification")
+                                            .modifier(NotificationAndSaveButtonTextModifier(size: 12))
+                                    }
+                                        .padding(.trailing, 10)
+                                        .modifier(ButtonBorderModifier())
+                                }
+                            } else {
+                                Button(action: {
+                                    self.showNotificationSetView = true
+                                }) {
+                                    HStack {
+                                        Image("setNotificationOn")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .modifier(CurrentImageModifier(width: 50, height: 50))
+                                        Text("Set Notification")
+                                            .modifier(NotificationAndSaveButtonTextModifier(size: 12))
+                                    }
+                                        .padding(.trailing, 10)
+                                        .modifier(ButtonBorderModifier())
+                                }
+                                .opacity(validData ? 1 : 0)
+                                .disabled(validData == false)
+                            }
                     }) {
-                        Image("setNotificationOn")
-                            .renderingMode(.original)
-                            .resizable()
-                            .frame(width: 100, height: 100, alignment: .center)
-                        Text("Set Notification")
+                        NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
                     }
-                    .disabled(validData == false)
-                }
-                
-                Section(header: Text("Type of action")) {
-                Picker("Choose type of action", selection: $habitType) {
-                    ForEach(0..<12) {
-                        
-                    //    VStack {
-                     //   Text("Action is \($0)")
-                            Image("\($0)")
+                    Section(header:
+                        HStack{
+                            Text("Type of action").modifier(SectionTextModifier())
+                            Spacer()
+                            Button(action: {
+                                self.showingImagePicker = true
+                                self.source = 0
+                            }) { Image("photo")
+                                .renderingMode(.original)
                                 .resizable()
-                                .frame(width: 50, height: 50)
-                                .scaledToFit()
+                                .padding(.all, 7)
+                                .modifier(ButtonBorderModifier())
+                                .opacity(validData ? 1 : 0)
+                                .modifier(CurrentImageModifier(width: 50, height: 50))
+                                .padding(.trailing, 10)
                                 
-                        
-                    }
-                }   .disabled(validData == false)
-                    .pickerStyle(SegmentedPickerStyle())
-                    .cornerRadius(5)
-                    .shadow(color: .black, radius: 1, x: 5, y: 5)
-                    
-                    //Image Picker
-                    HStack {
-                        Button(action: {
-                            self.showingImagePicker = true
-                            self.source = 0
-                        }) { Image("photo")
-                            .renderingMode(.original)
-                            .resizable()
-                            .frame(width: 80, height: 80, alignment: .center)
-                        }
-                        Button(action: {
-                            self.showingImagePicker = true
-                            self.source = 1
-                        }) { Image("gallery")
-                            .renderingMode(.original)
-                            .resizable()
-                            .frame(width: 80, height: 80, alignment: .center)
-                        }
+                            }
+                            Button(action: {
+                                self.showingImagePicker = true
+                                self.source = 1
+                            }) { Image("gallery")
+                                .renderingMode(.original)
+                                .resizable()
+                                .padding(.all, 7)
+                                .modifier(ButtonBorderModifier())
+                                .opacity(validData ? 1 : 0)
+                                .modifier(CurrentImageModifier(width: 50, height: 50))
+                            }
                     }
                         .disabled(validData == false)
+                            
                         .buttonStyle(BorderlessButtonStyle())
-                    
-                    //Image Picker
-                    if selectedImage == nil || habitType != 12 {
-                        Image("\(habitType)")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 250, height: 250, alignment: .center)
-                            .shadow(color: .black, radius: 1, x: 5, y: 5)
-                    } else if selectedImage != nil {
-                        selectedImage?
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 250, height: 250, alignment: .center)
-                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                    ) {
+                        Picker("Choose type of action", selection: $habitType) {
+                            ForEach(0..<12) {
+                                //    VStack {
+                                //   Text("Action is \($0)")
+                                Image("\($0)")
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 50, height: 50))
+                            }
+                        }   .disabled(validData == false)
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding()
+                            .background(colorScheme == .light ? barColorLight : blue)
                             .cornerRadius(20)
+                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                        //Image Picker
+                        HStack(alignment: .center) {
+                            Spacer()
+                            if selectedImage == nil || habitType != 12 {
+                                Image("\(habitType)")
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 250, height: 250))
+                            } else if selectedImage != nil {
+                                selectedImage?
+                                    .resizable()
+                                    .cornerRadius(20)
+                                    .modifier(CurrentImageModifier(width: 250, height: 250))
+                            }
+                            Spacer()
+                        }
                     }
-                   
-                }
-                .sheet(isPresented: $showNotificationSetView , onDismiss: updateNotificationInfo) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
+                    .sheet(isPresented: $showNotificationSetView , onDismiss: updateNotificationInfo) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
                     }
                 }
-                
-            }
-            
-                
-            .navigationBarTitle("New habit", displayMode: .inline)
-            .navigationBarItems(leading:
-                Button("Save habit"){
-                    self.saveToCoreData()
-                }
-                .disabled(validData == false)
+            }   .edgesIgnoringSafeArea(.bottom)
+                .navigationBarTitle("New habit", displayMode: .inline)
+                .navigationBarItems(leading:
+                    Button("Save habit"){
+                        self.saveToCoreData()
+                    }
+                    .modifier(NotificationAndSaveButtonTextModifier(size: 20))
+                    .opacity(validData ? 1 : 0)
+                    .disabled(validData == false)
             )
-                
-            .sheet(isPresented: $showingImagePicker, onDismiss: loadSelectedImage) {
-                ImagePicker(image: self.$inputImage, typeOfSource: self.$source)
+                .sheet(isPresented: $showingImagePicker, onDismiss: loadSelectedImage) {
+                    ImagePicker(image: self.$inputImage, typeOfSource: self.$source)
             }
         }
     }
@@ -317,3 +398,9 @@ struct HabitView: View {
 
 
 
+
+struct HabitView_Previews: PreviewProvider {
+    static var previews: some View {
+        HabitView()
+    }
+}

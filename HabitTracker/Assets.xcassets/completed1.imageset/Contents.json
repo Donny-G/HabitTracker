@@ -1,14 +1,14 @@
 {
   "images" : [
     {
-      "scale" : "1x",
       "filename" : "completed1~universal@1x.png",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "scale" : "1x"
     },
     {
+      "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "completed1~universal@2x.png",
-      "idiom" : "universal"
+      "filename" : "completed1~universal@2x.png"
     },
     {
       "filename" : "completed1~universal@3x.png",

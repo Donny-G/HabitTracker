@@ -8,185 +8,232 @@
 
 import SwiftUI
 
+struct ImageInfoModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 80, height: 80)
+            .scaledToFit()
+            .shadow(color: .black, radius: 1, x: 3, y: 3)
+            .padding(.leading, 10)
+    }
+}
+
+struct TextHeadLineModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 30, weight: .black, design: .rounded))
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+            .foregroundColor(colorScheme == .light ? firstTextColorLight : firstTextColorDark)
+            .shadow(color: .black, radius: 1, x: 2, y: 2)
+    }
+}
+
+struct TextDefModifier: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 20, weight: .black, design: .rounded))
+            .fixedSize(horizontal: false, vertical: true)
+            .foregroundColor(colorScheme == .light ? thirdTextColorLight : thirdTextColorDark)
+            .shadow(color: .black, radius: 1, x: 1, y: 1)
+    }
+}
+
 struct InfoView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment (\.presentationMode) var presentationMode
+    
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            Text("Main View & Habit View")
+        NavigationView {
+            ZStack {
+                self.colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 15) {
+                        
+                        Text("Main View & Habit View")
+                            .modifier(TextHeadLineModifier())
+                    
+                        Group {
+                            HStack {
+                                Image("add2")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Press button to add new habit")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("activeForInfo")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Active habits")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("completedForInfo")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Completed habits")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("statsForInfo")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Statistics info")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("tap")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("By long tapping on habit you can add one step to your progress")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("tapButton")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Press button to mark new step")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("delete")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Delete current habit")
+                                    .modifier(TextDefModifier())
+                            }
+                        }
             
+                        Spacer()
             
-            VStack(alignment: .leading) {
-                HStack {
-                    Image("add1")
-                        .resizable()
-                        .scaledToFit()
-                    Text("Press button to add new habit")
-                }
-                HStack {
-                    Image("activeForInfo")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Active habits")
-                }
-                
-                HStack {
-                    Image("completedForInfo")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Completed habits")
-                }
-                HStack {
-                    Image("statsForInfo")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Statistics info")
-                }
-                HStack {
-                    Image("tap")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("By long tapping on habit you can add one step to your progress")
-                }
-                
-                HStack {
-                    Image("tapButton")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Press button to mark new step")
-                }
-                HStack {
-                    Image("delete")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Delete current habit")
-                }
-            }
+                        Text("New habit")
+                            .modifier(TextHeadLineModifier())
             
-            Spacer()
+                        Group {
+                            HStack {
+                                Image("setNotificationOn")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Enable current notification")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("setNotificationOff")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Disable current notification")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("typesForInfo")
+                                    .resizable()
+                                    .frame(width: 80, height: 20)
+                                    .scaledToFit()
+                                    .shadow(color: .black, radius: 1, x: 3, y: 3)
+                                    .padding(.leading, 10)
+                            
+                                Text("Choose type of activity")
+                                    .modifier(TextDefModifier())
+                                   
+                            }
+                            HStack {
+                                Image("gallery")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("You can choose picture for habit from gallery")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("photo")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("You can take picture for habit from camera")
+                                    .modifier(TextDefModifier())
+                            }
+                        }
             
-            Text("New habit")
+                        Spacer()
             
-            VStack(alignment: .leading) {
+                        Text("Notifications")
+                            .modifier(TextHeadLineModifier())
                 
-                HStack {
-                    Image("setNotificationOn")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Enable current notification")
+                        Group {
+                            HStack() {
+                                Image("notificationIsOn")
+                                  .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Notification is enabled")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("notificationIsOff")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Notification is disabled")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("auto")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("You set default notification at 9:00 everyday")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("manual")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("You set manual notification")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("timer2")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Timer countdown")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("alarm")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Time for notification")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("continues")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Continues notification")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("notContinues")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Not continues notification")
+                                    .modifier(TextDefModifier())
+                            }
+                            HStack {
+                                Image("daysweek")
+                                    .resizable()
+                                    .modifier(ImageInfoModifier())
+                                Text("Notification on days of week")
+                                    .modifier(TextDefModifier())
+                            }
+                        }
+                    }
                 }
-                HStack {
-                    Image("setNotificationOff")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Disable current notification")
-                }
-                HStack {
-                    Image("typesForInfo")
-                        .resizable()
-                        .scaledToFit()
-                    Text("Choose type of activity")
-                }
-                HStack {
-                    Image("gallery")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("You can choose picture for habit from gallery")
-                }
-                HStack {
-                    Image("photo")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("You can take picture for habit from camera")
-                }
-            }
-            
-            Spacer()
-            
-            Text("Notifications")
-                
-            VStack(alignment: .leading) {
-                
-                HStack {
-                    Image("notificationIsOn")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .scaledToFit()
-                    Text("Notification is enabled")
-                }
-            
-                HStack {
-                    Image("notificationIsOff")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Notification is disabled")
-                }
-                
-                HStack {
-                    Image("auto")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("You set default notification at 9:00 everyday")
-                }
-                
-                HStack {
-                    Image("manual")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("You set manual notification")
-                }
-                
-                HStack {
-                    Image("timer2")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Timer countdown")
-                }
-                
-                HStack {
-                    Image("alarm")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Time for notification")
-                }
-                
-                HStack {
-                    Image("continues")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Continues notification")
-                }
-                
-                HStack {
-                    Image("notContinues")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Not continues notification")
-                }
-                
-                HStack {
-                    Image("daysweek")
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .scaledToFit()
-                    Text("Notification on days of week")
-                }
-            }
+            }   .navigationBarTitle("i", displayMode: .inline)
+                .edgesIgnoringSafeArea(.bottom)
+                .navigationBarItems(leading: Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(self.colorScheme == .light ? tabBarTextPrimaryLightColor  : tabBarTextPrimaryDarkColor)
+                })
         }
     }
 }

@@ -10,27 +10,29 @@ import SwiftUI
 
 struct BarView: View {
     var value: CGFloat
-    
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         VStack {
             ZStack {
                 Circle()
-                    .frame(width: 50, height: 50, alignment: .center)
+                .frame(width: 78, height: 78, alignment: .center)
+                    .foregroundColor(colorScheme == .light ? firstTextColorLight : .black)
+                Circle()
+                    .frame(width: 70, height: 70, alignment: .center)
+                    .foregroundColor(blue)
                 Text("\(value, specifier: "%.0f")%")
-                    .foregroundColor(.red)
+                    .foregroundColor(red)
             }
-            .padding(.bottom,-20)
+                .padding(.bottom,-12)
             
             ZStack(alignment: .bottom) {
-                RoundedRectangle(cornerRadius: 20)
-                    .frame(width: 30, height: 400)
-                    .foregroundColor(.black)
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(LinearGradient(gradient: Gradient(colors: [.purple, .red, .blue]), startPoint: .top, endPoint: .bottom))
+                RoundedRectangle(cornerRadius: 5)
+                    .frame(width: 40, height: 400)
+                    .foregroundColor(colorScheme == .light ? firstTextColorLight : .black)
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(LinearGradient(gradient: Gradient(colors: [blue, yellow, orange, red ]), startPoint: .top, endPoint: .bottom))
                     .frame(width: 30, height: value * 4)
-                    .foregroundColor(.green)
             }
-            //.padding(.bottom, 8)
         }
     }
 }

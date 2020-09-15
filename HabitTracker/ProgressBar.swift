@@ -9,23 +9,21 @@
 import SwiftUI
 
 struct ProgressBar: View {
-    var percent: CGFloat = 50
-       var colors: [Color] = [.red, .orange, .yellow, .green, .purple, .blue]
-    
+    var percent: CGFloat = 70
+    var colors: [Color] = [red, orange, yellow, blue]
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
-        HStack {
-            Rectangle()
-                .fill(Color.white)
-                .frame(width: 100, height: 10)
-                .overlay(
-                    Rectangle()
-                        .trim(from: 0, to: percent * 0.003)
-                        .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
-                        
-                        .fill(LinearGradient(gradient: .init(colors: colors), startPoint: .leading, endPoint: .trailing))
-                ).animation(.spring(response: 1.0, dampingFraction: 1.0, blendDuration: 1.0))
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(colorScheme == .light ? firstTextColorLight : .black)
+                .frame(width: 110, height: 25)
             
-           // Text(String(format: "%.0f", percent) + "%").font(.system(size: 20)).fontWeight(.heavy)
+            RoundedRectangle(cornerRadius: 5)
+                .fill(LinearGradient(gradient: .init(colors: colors), startPoint: .leading, endPoint: .trailing))
+                .frame(width: percent, height: 20)
+                .padding(.leading, 5)
+                .animation(.spring(response: 1.0, dampingFraction: 1.0, blendDuration: 1.0))
+        // Text(String(format: "%.0f", percent) + "%").font(.system(size: 20)).fontWeight(.heavy)
         }
     }
 }

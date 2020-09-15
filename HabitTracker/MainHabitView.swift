@@ -8,6 +8,13 @@
 
 import SwiftUI
 
+struct MainViewSubTextModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 15, weight: .black, design: .rounded))
+    }
+}
+
 struct MainHabitView: View {
     
     enum PredicateType {
@@ -34,10 +41,11 @@ struct MainHabitView: View {
     }
     //Core Data
     @Environment(\.managedObjectContext) var moc
-    @State private var habitViewOpen = false
+    //resize during edit mode
+    @State var isEditMode: EditMode = .inactive
     @Environment(\.presentationMode) var presentationMode
     @State private var showInfo = false
-       
+    @Environment(\.colorScheme) var colorScheme
     func deleteLocalNotification(identifier: String) {
         let notifCenter = UNUserNotificationCenter.current()
         notifCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
@@ -62,7 +70,7 @@ struct MainHabitView: View {
                 imageToLoad = image
             }
         }
-        return imageToLoad ?? UIImage(named: "12") as! UIImage
+        return imageToLoad ?? UIImage(named: "12")!
     }
     
     func simpleSuccess() {
@@ -74,17 +82,20 @@ struct MainHabitView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(red: 0.942, green: 0.993, blue: 0.716)
-                    .edgesIgnoringSafeArea(.all)
+                self.colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark 
                 VStack {
                     List {
                         ForEach(fetchRequest.wrappedValue, id: \.id) {
                             habit in
                             NavigationLink(destination: DetailHabitView(habit: habit)) {
-                                HStack(alignment: .center, spacing: 20) {
+                                HStack(alignment: .center, spacing: 5) {
                                     Text(habit.wrappedName)
-                                        .font(.system(size: 25, weight: Font.Weight.heavy, design: Font.Design.rounded))
-                                        .foregroundColor(.orange)
+                                        .font(.system(size: self.isEditMode == .active ? 10 : 23, weight: .black, design: .rounded))
+                                        .foregroundColor(self.colorScheme == .light ?  firstTextColorLight: firstTextColorDark)
+                                       
+                                        //firstTextColorLight firstTextColorDark
+                                        //                     thirdTextColorDark
+                                        .fixedSize(horizontal: false, vertical: true)
                                         .contextMenu {
                                             Button(action: {
                                                 habit.steps += 1
@@ -110,53 +121,50 @@ struct MainHabitView: View {
                                                 self.simpleSuccess()
                                             }) {
                                                 HStack {
-                                                    Text("tap")
+                                                    Text("Tap to add progress")
                                                     Image("tap")
                                                 }
                                             }
                                         }
                                     VStack(alignment: .leading, spacing: 5) {
                                         Text("Goal: \(habit.wrappedGoal)")
-                                            .font(.system(size: 15, weight: .black, design: .rounded))
-                                            .foregroundColor(.purple)
+                                            .modifier(MainViewSubTextModifier())
+                                            .foregroundColor(self.colorScheme == .light ?  mint: secondTextColorDark)
 
                                         Text("Streaks: \(habit.wrappedSteps)")
-                                            .font(.system(size: 17, weight: Font.Weight.black, design: Font.Design.rounded))
-                                            .foregroundColor(.gray)
+                                            .modifier(MainViewSubTextModifier())
+                                            .foregroundColor(self.colorScheme == .light ?  fourthTextColorDark: fourthTextColorDark)
                             
                                         Text("Progress:")
-                                            .font(.system(size: 15, weight: .black, design: .rounded))
-                                            .foregroundColor(Color.init(red: 1, green: 0.247, blue: 0.357))
+                                            .modifier(MainViewSubTextModifier())
+                                            .foregroundColor(self.colorScheme == .light ?  orange: thirdTextColorDark)
                                         ProgressBar(percent: CGFloat(habit.percentCompletion))
                                     
-                                    }   //Core Data + image from ImagePicker
+                                    }
+                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .trailing)
+                                    
+                                    //Core Data + image from ImagePicker
                                     if habit.typeOfAction != 12 {
                                         Image("\(habit.typeOfAction)")
                                             .resizable()
-                                            .frame(width: 80, height: 80)
-                                            .scaledToFit()
-                                            .shadow(color: .black, radius: 1, x: 5, y: 5)
+                                            .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : 100, height: self.isEditMode == .active ? 50 : 100))
                                     } else {
                                         Image(uiImage: self.imageFromCoreData(habit: habit))
                                             .resizable()
-                                            .frame(width: 80, height: 80)
-                                            .scaledToFit()
+                                            .cornerRadius(20)
+                                            .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : 100, height: self.isEditMode == .active ? 50 : 100))
                                     }
                                 }
+                                    .padding()
+                                    .modifier(ButtonBorderModifier())
+                                
                                 //окончание navlink
                             }
                         }.onDelete(perform: removeHabits)
                     }
-                    Button(action: {
-                    self.habitViewOpen.toggle()
-                    }) {
-                        Image("add1")
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
-                    }
                 }
             }
+            
                 .navigationBarTitle("Habit tracker", displayMode: .inline)
                 .navigationBarItems(leading:
                         HStack {
@@ -168,10 +176,9 @@ struct MainHabitView: View {
                                 Image(systemName: "info")
                             }
                 })
-                .sheet(isPresented: $habitViewOpen) { HabitView().environment(\.managedObjectContext, self.moc)
-            }
-        }
-        .sheet(isPresented: $showInfo) { InfoView()
+                .environment(\.editMode, self.$isEditMode)
+                .sheet(isPresented: $showInfo) { InfoView()
+                }
         }
     }
 }

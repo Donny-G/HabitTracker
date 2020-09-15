@@ -20,30 +20,35 @@ struct NotificationsInfoView: View {
     @Binding var idForNtfn: String
     @Binding var showSetButton: Bool
     @Binding var showNotificationSetView: Bool
-    
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        VStack(alignment: .leading) {
+        ZStack {
+            colorScheme == .light ? barColorLight : blue
             HStack {
                 if notificationIsEnabled == true {
                     //Default
                     Image("notificationIsOn")
                         .resizable()
-                        .frame(width: 50, height: 50, alignment: .center)
+                        .modifier(CurrentImageModifier(width: 50, height: 50))
             
                     Image(typeOfNotification == TypeOfNotifications.def.rawValue ? "auto" : "manual")
                         .resizable()
-                        .frame(width: 50, height: 50, alignment: .center)
+                        .modifier(CurrentImageModifier(width: 50, height: 50))
                     //manual
                     if typeOfNotification != TypeOfNotifications.def.rawValue {
                         VStack {
                             Image(typeOfManualNotification == TypesOfManualNotifications.delay.rawValue ? "timer2" : "alarm")
                                 .resizable()
-                                .frame(width: 50, height: 50, alignment: .center)
+                                .modifier(CurrentImageModifier(width: 50, height: 50))
                             if delayInMinutes != "" || delayInHours != "" {
                                 Text(delayInMinutes != "" ? delayInMinutes : delayInHours)
+                                    .modifier(MainTextNotificationViewModifier(size: 15))
+                                    .foregroundColor(colorScheme == .light ? orange : firstTextColorLight)
                             } else {
                                 Text(timeForNtfn)
+                                    .modifier(MainTextNotificationViewModifier(size: 15))
+                                    .foregroundColor(colorScheme == .light ? orange : firstTextColorLight)
                             }
                         }
                 
@@ -51,36 +56,27 @@ struct NotificationsInfoView: View {
                             VStack {
                                 Image("daysweek")
                                     .resizable()
-                                    .frame(width: 50, height: 50, alignment: .center)
+                                    .modifier(CurrentImageModifier(width: 50, height: 50))
+                                    .foregroundColor(colorScheme == .light ? orange : firstTextColorLight)
                                 Text(daysForNtfn)
+                                    .modifier(MainTextNotificationViewModifier(size: 12))
+                                    .foregroundColor(colorScheme == .light ? orange : firstTextColorLight)
+                                .fixedSize(horizontal: false, vertical: true)
                             }
                         }
                             Image(isNtfnContinues ? "continues" : "notContinues")
                                 .resizable()
-                                .frame(width: 50, height: 50, alignment: .center)
+                                .modifier(CurrentImageModifier(width: 50, height: 50))
                     }
                 } else {
                         Image("notificationIsOff")
                             .resizable()
-                            .frame(width: 50, height: 50, alignment: .center)
-           
-                
-                
-            }
-        }
-            if notificationIsEnabled == false && showSetButton == true {
-                Button(action: {
-                    self.showNotificationSetView = true
-                }) {
-                    Image("setNotificationOn")
-                    .renderingMode(.original)
-                    .resizable()
-                    .frame(width: 80, height: 80, alignment: .center)
-                    Text("Set new notification")
+                            .modifier(CurrentImageModifier(width: 50, height: 50))
                 }
             }
         }
-        
+            .cornerRadius(20)
+            .shadow(color: .black, radius: 1, x: 5, y: 5)
     }
 }
 
