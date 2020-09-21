@@ -139,6 +139,7 @@ struct MainHabitView: View {
                                             .modifier(MainViewSubTextModifier())
                                             .foregroundColor(self.colorScheme == .light ?  orange: thirdTextColorDark)
                                         ProgressBar(percent: CGFloat(habit.percentCompletion))
+                                        .shadow(color: .black, radius: 1, x: 3, y: 3)
                                     
                                     }
                                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .trailing)

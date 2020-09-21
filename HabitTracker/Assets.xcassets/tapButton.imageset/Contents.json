@@ -1,23 +1,56 @@
 {
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
-  },
   "images" : [
     {
-      "scale" : "1x",
       "filename" : "tapButton~universal@1x.png",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "scale" : "1x"
     },
     {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "tapButtonNight~universal@1x.png",
       "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
       "filename" : "tapButton~universal@2x.png",
+      "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "scale" : "3x",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "tapButtonNight~universal@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
       "filename" : "tapButton~universal@3x.png",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "tapButtonNight~universal@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
-  ]
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
 }

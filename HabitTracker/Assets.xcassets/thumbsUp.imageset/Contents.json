@@ -1,4 +1,8 @@
 {
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
   "images" : [
     {
       "idiom" : "universal",
@@ -6,18 +10,14 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "thumbsUp~universal@2x.png"
+      "filename" : "thumbsUp~universal@2x.png",
+      "idiom" : "universal"
     },
     {
       "filename" : "thumbsUp~universal@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
-  ],
-  "info" : {
-    "version" : 1,
-    "author" : "xcode"
-  }
+  ]
 }

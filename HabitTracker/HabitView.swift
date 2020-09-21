@@ -43,7 +43,7 @@ struct CurrentImageModifier: ViewModifier {
         content
             .scaledToFit()
             .frame(width: width, height: height)
-            .shadow(color: .black, radius: 1, x: 5, y: 5)
+            .shadow(color: .black, radius: 1, x: 3, y: 3)
     }
 }
 
@@ -99,7 +99,7 @@ struct HabitView: View {
     @State private var notificationIsEnabled = false
     @State private var showNotificationSetView = false
     //binds
-    @State var id = UUID().uuidString
+    @State private var id = UUID().uuidString
     @State private var isDefaultNotificationEnabled = false
     @State private var isManualNotificationEnabled = false
     @State private var habitName = ""
@@ -110,8 +110,10 @@ struct HabitView: View {
     @State private var isContinues = false
     @State private var showDaysOfTheWeek = false
     @State private var selectedDaysArray = [String]()
-    @State var hourFromPicker: Int = 9
-    @State var minuteFromPicker: Int = 0
+    @State private var hourFromPicker: Int = 9
+    @State private var minuteFromPicker: Int = 0
+    @State private var plusIsTapped = false
+    @State private var minusIsTapped = false
     
     @State private var defaultORManualTypeOfNotification = TypeOfNotifications.def.rawValue
     @State private var typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
@@ -236,21 +238,33 @@ struct HabitView: View {
                             Spacer()
                             Button(action: {
                                 if self.habitGoal != 0 {
+                                    self.minusIsTapped.toggle()
                                     self.habitGoal -= 1
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        self.minusIsTapped.toggle()
+                                    }
                                 }
                             }) {
                                 Image("minus")
                                     .renderingMode(.original)
                                     .resizable()
                                     .modifier(CurrentImageModifier(width: 70, height: 70))
+                                    .scaleEffect(minusIsTapped ? 0.5 : 1)
+                                    .animation(.spring())
                             }
                             Button(action: {
                                 self.habitGoal += 1
+                                self.plusIsTapped.toggle()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    self.plusIsTapped.toggle()
+                                }
                             }) {
                                 Image("plus")
                                     .renderingMode(.original)
                                     .resizable()
                                     .modifier(CurrentImageModifier(width: 70, height: 70))
+                                    .scaleEffect(plusIsTapped ? 0.5 : 1)
+                                    .animation(.spring())
                             }
                         }
                             .buttonStyle(PlainButtonStyle())
@@ -297,7 +311,7 @@ struct HabitView: View {
                                     self.showNotificationSetView = true
                                 }) {
                                     HStack {
-                                        Image("setNotificationOn")
+                                        Image("notificationOn")
                                             .renderingMode(.original)
                                             .resizable()
                                             .modifier(CurrentImageModifier(width: 50, height: 50))

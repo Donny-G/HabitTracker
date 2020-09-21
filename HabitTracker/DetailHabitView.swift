@@ -70,7 +70,7 @@ struct ButtonBorderModifier: ViewModifier {
         content
             .overlay(RoundedRectangle(cornerRadius: 16)
                 .stroke(self.colorScheme == .light ? barColorLight : tabBarTextPrimaryDarkColor, lineWidth: 5)
-                        .shadow(color: .black, radius: 1, x: 3, y: 3)
+                        .shadow(color: .black, radius: 1, x: 2, y: 2)
             )
         .buttonStyle(PlainButtonStyle())
     }
@@ -152,7 +152,10 @@ struct DetailHabitView: View {
             }
         }
     }
-    
+    @State private var showNotificationInfo = false
+    @State private var showDeleteButton = false
+    @State private var isDeleteButtonTApped = false
+    @State private var isPlusButtonTapped = false
     @State private var notificationIsEnabled = true
     @State private var showNotificationSetView = false
     //binds
@@ -253,7 +256,8 @@ struct DetailHabitView: View {
                 
             Form {
                 
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 10) {
+                    
                     HStack {
                         Text("Habit name:")
                             .modifier(HabitAndDescriptionTitleTextModifier())
@@ -270,123 +274,144 @@ struct DetailHabitView: View {
                         Text(self.habit.wrappedDescr)
                             .modifier(HabitAndDescriptionContentTextModifier())
                     }
-                }.padding(.top, -50)
-                
-                
-                HStack(alignment: .center) {
-                    Spacer()
-        //Core Data + Image Picker
-                    if  habit.img == nil {
-                        Image("\(self.habit.typeOfAction)")
-                            .resizable()
-                            .modifier(CurrentImageModifier(width: 150, height: 150))
-                    } else {
-                        Image(uiImage: imageFromCoreData(habit: habit))
-                            .resizable()
-                            .cornerRadius(20)
-                            .modifier(CurrentImageModifier(width: 150, height: 150))
-                    }
-                    Spacer()
-                }
-        
-                HStack(alignment: .top, spacing: 10) {
-                    
-                    VStack{
-                        Text("Goal")
-                            .modifier(HabitAndDescriptionTitleTextModifier())
-                        ZStack{
-                            Capsule()
-                                .modifier(CircleSizeModifier())
-                                .modifier(CircleColorAndShadowModifier())
-                            Text("\(self.habit.wrappedGoal)")
-                                .modifier(GoalDigitsColorAndFontModifier())
-                        }
-                    }
-                
-                    VStack {
-                        Text("Streaks")
-                            .modifier(HabitAndDescriptionTitleTextModifier())
-                        ZStack{
-                            Capsule()
-                                .modifier(CircleSizeModifier())
-                                .modifier(CircleColorAndShadowModifier())
-                            Text("\(self.habit.wrappedSteps)")
-                                .modifier(StepsDigitsColorAndFontModifier())
-                        }
-                    }
-                    VStack() {
-                        Text("Progress")
-                            .modifier(HabitAndDescriptionTitleTextModifier())
-                        ProgressCircle(percent: CGFloat(habit.percentCompletion))
-                            .padding(.top, 10)
-                    }
-                }
-                Section(header:
-                HStack {
-                    Text("Notification").modifier(SectionTextModifier())
-                    Spacer()
-                    if notificationIsEnabled && habit.active {
-                        Button(action: {
-                            self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
-                        }){
-                            HStack {
-                                Image("setNotificationOff")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .modifier(CurrentImageModifier(width: 50, height: 50))
-                                Text("Cancel notification")
-                                    .modifier(NotificationAndSaveButtonTextModifier(size: 12))
-                            }
-                                .padding(.trailing, 10)
-                                .modifier(ButtonBorderModifier())
-                        }
-                    } else if !showNotificationSetView && habit.active {
-                        Button(action: {
-                            self.showNotificationSetView = true
-                        }) {
-                            HStack {
-                                Image("setNotificationOn")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .modifier(CurrentImageModifier(width: 50, height: 50))
-                                Text("Set Notification")
-                                    .modifier(NotificationAndSaveButtonTextModifier(size: 12))
-                            }
-                                .padding(.trailing, 10)
-                                .modifier(ButtonBorderModifier())
-                        }
-                    }
-                }.padding(.leading, 10)
-                .padding(.trailing, 10)) {
-                    if habit.active {
-                        NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
-                    }
-                }
-                HStack(alignment: .center) {
-                    Spacer()
-                    if habit.active {
-                        Button(action: {
-                            self.habit.steps += 1
-                            self.habit.percentCompletion = self.percentOfGoal
-                                if self.habit.steps == self.habit.wrappedGoal {
-                                    self.habit.active = false
-                                    if self.notificationIsEnabled {
-                                        self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
-                                    } else {
-                                        //bug solution
-                                        self.notificationIsEnabled = true
-                                    }
-                                }
-                                if self.moc.hasChanges {
-                                    try? self.moc.save()
-                                }
-                            self.simpleSuccess()
-                        }) {
-                            Image("tapButton")
-                                .renderingMode(.original)
+             
+                    HStack(alignment: .center) {
+                        Spacer()
+                        //Core Data + Image Picker
+                        if  habit.img == nil {
+                            Image("\(self.habit.typeOfAction)")
                                 .resizable()
-                                .modifier(CurrentImageModifier(width: 200, height: 200))
-                            }.modifier(ButtonBorderModifier())
+                                .modifier(CurrentImageModifier(width: 150, height: 150))
+                        } else {
+                            Image(uiImage: imageFromCoreData(habit: habit))
+                                .resizable()
+                                .cornerRadius(20)
+                                .modifier(CurrentImageModifier(width: 150, height: 150))
+                        }
+                        Spacer()
+                    }
+        
+                    HStack(alignment: .top, spacing: 10) {
+                        VStack{
+                            Text("Goal")
+                                .modifier(HabitAndDescriptionTitleTextModifier())
+                            ZStack{
+                                Capsule()
+                                    .modifier(CircleSizeModifier())
+                                    .modifier(CircleColorAndShadowModifier())
+                                Text("\(self.habit.wrappedGoal)")
+                                    .modifier(GoalDigitsColorAndFontModifier())
+                            }
+                        }
+                
+                        VStack {
+                            Text("Streaks")
+                                .modifier(HabitAndDescriptionTitleTextModifier())
+                            ZStack{
+                                Capsule()
+                                    .modifier(CircleSizeModifier())
+                                    .modifier(CircleColorAndShadowModifier())
+                                Text("\(self.habit.wrappedSteps)")
+                                    .modifier(StepsDigitsColorAndFontModifier())
+                            }
+                        }
+                        
+                        VStack() {
+                            Text("Progress")
+                                .modifier(HabitAndDescriptionTitleTextModifier())
+                            ProgressCircle(percent: CGFloat(habit.percentCompletion))
+                                .padding(.top, 10)
+                        }
+                    }
+                    
+                    if habit.active {
+                        HStack {
+                            Text("Show notification info")
+                                .modifier(SectionTextModifier())
+                            Spacer()
+                            Button(action: {
+                                self.showNotificationInfo.toggle()
+                            }) {
+                                Image(showNotificationInfo ? "toggleOn" : "toggleOff")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 70, height: 70, alignment: .center)
+                                }
+                        }  // .animation(.easeInOut)
+                    } else {
+                        Spacer()
+                    }
+                    
+                    if showNotificationInfo {
+                        VStack {
+                            if notificationIsEnabled && habit.active {
+                                Button(action: {
+                                    self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                                }){
+                                    HStack {
+                                        Image("setNotificationOff")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .modifier(CurrentImageModifier(width: 50, height: 50))
+                                        Text("Cancel notification")
+                                            .modifier(NotificationAndSaveButtonTextModifier(size: 12))
+                                    }
+                                        .padding(.trailing, 10)
+                                        .modifier(ButtonBorderModifier())
+                                }
+                            } else if !showNotificationSetView && habit.active {
+                                Button(action: {
+                                    self.showNotificationSetView = true
+                                }) {
+                                    HStack {
+                                        Image("notificationOn")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .modifier(CurrentImageModifier(width: 50, height: 50))
+                                        Text("Set Notification")
+                                            .modifier(NotificationAndSaveButtonTextModifier(size: 12))
+                                    }
+                                        .padding(.trailing, 10)
+                                        .modifier(ButtonBorderModifier())
+                                }
+                            }
+                            if habit.active {
+                                NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
+                                }
+                        }
+                    }
+               
+                    HStack(alignment: .center) {
+                        Spacer()
+                        if habit.active {
+                            Button(action: {
+                                self.isPlusButtonTapped = true
+                                self.habit.steps += 1
+                                self.habit.percentCompletion = self.percentOfGoal
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.15) {
+                                    self.isPlusButtonTapped = false
+                                }
+                                    if self.habit.steps == self.habit.wrappedGoal {
+                                        self.habit.active = false
+                                        if self.notificationIsEnabled {
+                                            self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                                        } else {
+                                            //bug solution
+                                            self.notificationIsEnabled = true
+                                        }
+                                    }
+                                    if self.moc.hasChanges {
+                                        try? self.moc.save()
+                                    }
+                                self.simpleSuccess()
+                            }) {
+                                Image(self.isPlusButtonTapped ? "tappedButton" : "tapButton")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 200, height: 200))
+                                   // .animation(.easeInOut)
+                            }
                         } else {
                             Image("done")
                                 .resizable()
@@ -396,35 +421,74 @@ struct DetailHabitView: View {
                                 .foregroundColor(colorScheme == .light ? fourthTextColorLight : thirdTextColorLight)
                                 .shadow(color: .black, radius: 1, x: 3, y: 3)
                         }
+                        Spacer()
+                    }
+                        .padding(.top, -20)
+                    
                     Spacer()
-                }
-                    .padding(.top, -20)
-                Spacer()
-                HStack(alignment: .center) {
-                    Spacer()
-                    VStack(spacing: -20) {
+                
+                    HStack {
+                        Text("Show delete button")
+                            .modifier(SectionTextModifier())
+                        Spacer()
                         Button(action: {
-                            if self.notificationIsEnabled {
-                                self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
-                            }
-                            self.moc.delete(self.habit)
-                            try? self.moc.save()
-                            self.presentationMode.wrappedValue.dismiss()
+                            self.showDeleteButton.toggle()
                         }) {
-                            Image("delete")
+                            Image(showDeleteButton ? "toggleOn" : "toggleOff")
                                 .renderingMode(.original)
                                 .resizable()
-                                .modifier(CurrentImageModifier(width: 150, height: 150))
+                                .scaledToFit()
+                                .frame(width: 70, height: 70, alignment: .center)
                         }
-                            Text("Delete")
-                                .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
-                                .foregroundColor(colorScheme == .light ? red : fourthTextColorDark)
+                    }   //.animation(.easeInOut)
+                    
+                    HStack(alignment: .center) {
+                        Spacer()
+                   
+                        if showDeleteButton {
+                            VStack(spacing: -20) {
+                                Button(action: {
+                                    self.isDeleteButtonTApped.toggle()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        if self.notificationIsEnabled {
+                                            self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                                        }
+                                        self.moc.delete(self.habit)
+                                        try? self.moc.save()
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    }
+                                }) {
+                                    Image("delete")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .modifier(CurrentImageModifier(width: 150, height: 150))
+                                        .rotation3DEffect(.degrees(isDeleteButtonTApped ? 360 : 0), axis: (x: 0, y: 0, z: 1))
+                                        .animation(.spring(response: 0.55, dampingFraction: 2, blendDuration: 4))
+                                }
+                                Text("Delete")
+                                    .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
+                                    .foregroundColor(colorScheme == .light ? red : fourthTextColorDark)
                                 
-                    }.modifier(ButtonBorderModifier())
-                }
+                            }
+                        }
+                    }
+                    
+                }.animation(.easeInOut)
             }
-        }.sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
-        }
+                .padding(.top, -40)
+                .buttonStyle(PlainButtonStyle())
+            HStack(alignment: .center, spacing: 10) {
+           
+                Image("plusOne")
+                           .resizable()
+                           .frame(width: 100, height: 100)
+                    .position(x: self.isPlusButtonTapped ? CGFloat.random(in: 10...400) : 50, y: self.isPlusButtonTapped ? CGFloat.random(in: 400...600): 1000)
+                               .animation(.spring())
+            
+            }
+           
+            
+        }   .sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker) }
     }
 }
 
