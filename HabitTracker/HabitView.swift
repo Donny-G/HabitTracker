@@ -122,7 +122,7 @@ struct HabitView: View {
     @State private var delayInMinutesFromNotificationView = ""
     @State private var delayInHoursFromNotificationView = ""
     @State private var showSetButton = false
-    
+    @State private var isAnimationOn = false
     func saveToCoreData() {
         let newHabit = Habit(context: self.moc)
         newHabit.active = true
@@ -381,14 +381,32 @@ struct HabitView: View {
                                 Image("\(habitType)")
                                     .resizable()
                                     .modifier(CurrentImageModifier(width: 250, height: 250))
+                                    .rotation3DEffect(.degrees(self.isAnimationOn ? 20 : -20), axis: (x: 10 , y: 40, z: 10))
+                                    .animation(
+                                        Animation.easeOut(duration: 3)
+                                            .repeatForever(autoreverses: true)
+                                    )
+                                    .onAppear {
+                                        self.isAnimationOn.toggle()
+                                    }
                             } else if selectedImage != nil {
                                 selectedImage?
                                     .resizable()
                                     .cornerRadius(20)
                                     .modifier(CurrentImageModifier(width: 250, height: 250))
+                                    .rotation3DEffect(.degrees(self.isAnimationOn ? 20 : -20), axis: (x: 10 , y: 40, z: 10))
+                                    .animation(
+                                        Animation.easeOut(duration: 3)
+                                            .repeatForever(autoreverses: true)
+                                    )
+                                    .onAppear {
+                                        self.isAnimationOn.toggle()
+                                    }
                             }
                             Spacer()
                         }
+                        
+                        
                     }
                     .sheet(isPresented: $showNotificationSetView , onDismiss: updateNotificationInfo) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker)
                     }

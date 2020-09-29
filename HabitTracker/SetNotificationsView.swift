@@ -25,8 +25,8 @@ struct MainTextNotificationViewModifier: ViewModifier {
 
 struct SetNotificationsView: View {
     @Binding var id: String
-    @Binding  var isDefaultNotificationEnabled: Bool
-    @Binding  var isManualNotificationEnabled:Bool
+    @Binding var isDefaultNotificationEnabled: Bool
+    @Binding var isManualNotificationEnabled:Bool
     @Binding var habitName: String
     @Binding var typeOfNotification: Int
     @Binding var delayInMinutes: String
@@ -43,7 +43,7 @@ struct SetNotificationsView: View {
     @State private var subtitle = ""
     @State private var selectedButtonsArray = [Int]()
     @State private var daysNotifyArray = [Int]()
-    
+    @State private var showAlert = false
     @State private var defaultIsTapped = false
     @State private var manualIsTapped = false
     @Environment(\.colorScheme) var colorScheme
@@ -197,203 +197,205 @@ struct SetNotificationsView: View {
     var body: some View {
         ZStack {
             colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
-            Form {
-                VStack(alignment: .leading) {
-                    if !isDefaultNotificationEnabled && !isManualNotificationEnabled {
+            GeometryReader { geo in
+                Form {
+                    VStack(alignment: .leading) {
+                        if !self.isDefaultNotificationEnabled && !self.isManualNotificationEnabled {
+                            Button(action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                                Text("Back")
+                                    .modifier(MainTextNotificationViewModifier(size: 25))
+                                    .foregroundColor(self.activatedColor)
+                            }
+                        }
                         Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
+                            if self.isDefaultNotificationEnabled == false && self.isManualNotificationEnabled == false {
+                                self.setDefaultNotification(title: self.habitName, subtitle: nil)
+                                self.isDefaultNotificationEnabled = true
+                                self.defaultIsTapped = true
+                            } else {
+                                self.deleteLocalNotification(identifier: self.id)
+                                self.isDefaultNotificationEnabled = false
+                                self.defaultIsTapped = false
+                            }
                         }) {
-                            Text("Back")
-                                .modifier(MainTextNotificationViewModifier(size: 25))
-                                .foregroundColor(activatedColor)
-                        }
-                    }
-                    Button(action: {
-                        if self.isDefaultNotificationEnabled == false && self.isManualNotificationEnabled == false {
-                            self.setDefaultNotification(title: self.habitName, subtitle: nil)
-                            self.isDefaultNotificationEnabled = true
-                            self.defaultIsTapped = true
-                        } else {
-                            self.deleteLocalNotification(identifier: self.id)
-                            self.isDefaultNotificationEnabled = false
-                            self.defaultIsTapped = false
-                        }
-                    }) {
-                        Image("auto")
-                            .renderingMode(.original)
-                            .resizable()
-                            .modifier(CurrentImageModifier(width: 200, height: 200))
-                            .shadow(color: .black, radius: 1, x: 1, y: 1)
-                        Text("Set default notification at 9:00 everyday")
-                            .modifier(MainTextNotificationViewModifier(size: 25))
-                            .foregroundColor(isDefaultNotificationEnabled ?  deactivatedColor : activatedColor)
-                    }
-                        .onAppear(perform: startNotification)
-                        .background(self.isDefaultNotificationEnabled ? activatedColor : deactivatedColor)
-                        .cornerRadius(20)
-                                   
-                    Button(action: {
-                        if self.isManualNotificationEnabled == false && self.isDefaultNotificationEnabled == false {
-                            self.isManualNotificationEnabled = true
-                        } else {
-                            self.deleteLocalNotification(identifier: self.id)
-                            self.isManualNotificationEnabled = false
-                        }
-                    }) {
-                        Image("manual")
-                            .renderingMode(.original)
-                            .resizable()
-                            .modifier(CurrentImageModifier(width: 200, height: 200))
-                            .shadow(color: .black, radius: 1, x: 1, y: 1)
-                        Text("Set manual notification")
-                            .modifier(MainTextNotificationViewModifier(size: 25))
-                            .foregroundColor(isManualNotificationEnabled ?  deactivatedColor : activatedColor)
-                    }
-                        .background(isManualNotificationEnabled ?  activatedColor : deactivatedColor)
-                        .cornerRadius(20)
-                }
-                    .buttonStyle(BorderlessButtonStyle())
-            
-                if isDefaultNotificationEnabled {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image("setNotificationOn")
+                            Image("auto")
                                 .renderingMode(.original)
                                 .resizable()
-                                .modifier(CurrentImageModifier(width: 200, height: 200))
-                            Text("Set and Back")
+                                .modifier(CurrentImageModifier(width: geo.size.width / 2, height: 200))
+                                .shadow(color: .black, radius: 1, x: 1, y: 1)
+                            Text("Set default notification at 9:00 everyday")
                                 .modifier(MainTextNotificationViewModifier(size: 25))
-                                .foregroundColor(activatedColor)
+                                .foregroundColor(self.isDefaultNotificationEnabled ?  self.deactivatedColor : self.activatedColor)
                         }
-                            Spacer()
-                    }
-                }
-            
-                VStack {
-                    if isManualNotificationEnabled {
-                        VStack( spacing: 20){
-                            Spacer()
-                            TextField("Enter title", text: $title)
-                                .modifier(TextFieldModifier(size: 20))
-                            TextField("Enter subtitle", text: $subtitle)
-                                .modifier(TextFieldModifier(size: 20))
-                            Picker("Notification type", selection: $typeOfNotification) {
-                                ForEach(0..<typesOfNotifications.count) {
-                                    Text(self.typesOfNotifications[$0])
-                                }
+                            .onAppear(perform: self.startNotification)
+                            .background(self.isDefaultNotificationEnabled ? self.activatedColor : self.deactivatedColor)
+                            .cornerRadius(20)
+                                   
+                        Button(action: {
+                            if self.isManualNotificationEnabled == false && self.isDefaultNotificationEnabled == false {
+                                self.isManualNotificationEnabled = true
+                            } else {
+                                self.deleteLocalNotification(identifier: self.id)
+                                self.isManualNotificationEnabled = false
                             }
-                                .pickerStyle(SegmentedPickerStyle())
-                                .padding()
-                                .background(colorScheme == .light ? barColorLight : blue)
-                                .cornerRadius(20)
-                                .shadow(color: .black, radius: 1, x: 5, y: 5)
-                                       
-                            if typeOfNotification == 0 {
-                                Picker("Choose type of delay", selection: $typeOfDelay) {
-                                    ForEach(0..<typesOfDelay.count) {
-                                        Text(self.typesOfDelay[$0])
+                        }) {
+                            Image("manual")
+                                .renderingMode(.original)
+                                .resizable()
+                                .modifier(CurrentImageModifier(width: geo.size.width / 2, height: 200))
+                                .shadow(color: .black, radius: 1, x: 1, y: 1)
+                            Text("Set manual notification")
+                                .modifier(MainTextNotificationViewModifier(size: 25))
+                                .foregroundColor(self.isManualNotificationEnabled ?  self.deactivatedColor : self.activatedColor)
+                        }
+                            .background(self.isManualNotificationEnabled ?  self.activatedColor : self.deactivatedColor)
+                            .cornerRadius(20)
+                    }
+                        .buttonStyle(BorderlessButtonStyle())
+            
+                    if self.isDefaultNotificationEnabled {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                                Image("setNotificationOn")
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 200, height: 200))
+                                Text("Set and Back")
+                                    .modifier(MainTextNotificationViewModifier(size: 25))
+                                    .foregroundColor(self.activatedColor)
+                            }
+                                Spacer()
+                        }
+                    }
+            
+                    VStack {
+                        if self.isManualNotificationEnabled {
+                            VStack( spacing: 20){
+                                Spacer()
+                                TextField("Enter title", text: self.$title)
+                                    .modifier(TextFieldModifier(size: 20))
+                                TextField("Enter subtitle", text: self.$subtitle)
+                                    .modifier(TextFieldModifier(size: 20))
+                                Picker("Notification type", selection: self.$typeOfNotification) {
+                                    ForEach(0..<self.typesOfNotifications.count) {
+                                        Text(self.typesOfNotifications[$0])
                                     }
                                 }
                                     .pickerStyle(SegmentedPickerStyle())
                                     .padding()
-                                    .background(colorScheme == .light ? barColorLight : blue)
+                                    .background(self.colorScheme == .light ? barColorLight : blue)
                                     .cornerRadius(20)
                                     .shadow(color: .black, radius: 1, x: 5, y: 5)
+                                       
+                                if self.typeOfNotification == 0 {
+                                    Picker("Choose type of delay", selection: self.$typeOfDelay) {
+                                        ForEach(0..<self.typesOfDelay.count) {
+                                            Text(self.typesOfDelay[$0])
+                                        }
+                                    }
+                                        .pickerStyle(SegmentedPickerStyle())
+                                        .padding()
+                                        .background(self.colorScheme == .light ? barColorLight : blue)
+                                        .cornerRadius(20)
+                                        .shadow(color: .black, radius: 1, x: 5, y: 5)
                                            
-                                if typeOfDelay == 0 {
-                                    TextField("Enter minutes for notification", text: $delayInMinutes)
-                                        .modifier(TextFieldModifier(size: 20))
-                                        .keyboardType(.numberPad)
-                                        //hide keyboard
-                                        .onTapGesture {}
-                                        .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
-                                } else {
-                                    TextField("Enter hours for notification", text: $delayInHours)
-                                        .modifier(TextFieldModifier(size: 20))
-                                        .keyboardType(.numberPad)
-                                        //hide keyboard
-                                        .onTapGesture {}
-                                        .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
-                                }
+                                    if self.typeOfDelay == 0 {
+                                        TextField("Enter minutes for notification", text: self.$delayInMinutes)
+                                            .modifier(TextFieldModifier(size: 20))
+                                            .keyboardType(.numberPad)
+                                            //hide keyboard
+                                            .onTapGesture {}
+                                            .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
+                                    } else {
+                                        TextField("Enter hours for notification", text: self.$delayInHours)
+                                            .modifier(TextFieldModifier(size: 20))
+                                            .keyboardType(.numberPad)
+                                            //hide keyboard
+                                            .onTapGesture {}
+                                            .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
+                                    }
                                         
-                                Toggle("Is continues", isOn: $isContinues)
-                                    .modifier(MainTextNotificationViewModifier(size: 20))
-                                    .foregroundColor(colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
-                                
-                                
-                                
+                                        Toggle("Is continues", isOn: self.$isContinues)
+                                            .modifier(MainTextNotificationViewModifier(size: 20))
+                                            .foregroundColor(self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
+                        
+                                } else if self.typeOfNotification == 1 {
                                
-                            } else if typeOfNotification == 1 {
-                               
-                                DatePicker("Select time", selection: $time, displayedComponents: .hourAndMinute)
-                                    .modifier(MainTextNotificationViewModifier(size: 25))
-                                    .foregroundColor(colorScheme == .light ? red : fourthTextColorDark)
-                                   
-                                Toggle("Is continues", isOn: $isContinues)
-                                    .modifier(MainTextNotificationViewModifier(size: 20))
-                                    .foregroundColor(colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
-                                Toggle("Days of the week", isOn: $showDaysOfTheWeek)
-                                    .modifier(MainTextNotificationViewModifier(size: 20))
-                                    .foregroundColor(colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
+                                    DatePicker("Select time", selection: self.$time, displayedComponents: .hourAndMinute)
+                                        .modifier(MainTextNotificationViewModifier(size: 25))
+                                        .foregroundColor(self.colorScheme == .light ? red : fourthTextColorDark)
+                                        .buttonStyle(PlainButtonStyle())
+                                    Toggle("Is continues", isOn: self.$isContinues)
+                                        .modifier(MainTextNotificationViewModifier(size: 20))
+                                        .foregroundColor(self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
+                                    Toggle("Days of the week", isOn: self.$showDaysOfTheWeek)
+                                        .modifier(MainTextNotificationViewModifier(size: 20))
+                                        .foregroundColor(self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
                             
-                                if showDaysOfTheWeek {
-                                    HStack {
-                                        ForEach(0..<weekDaysArray.count, id: \.self) { day in
-                                            Button(action: {
-                                                if let index = self.selectedButtonsArray.firstIndex(of: day) {
-                                                    self.daysNotifyArray.remove(at: index)
-                                                    self.selectedButtonsArray.remove(at: index)
-                                                    self.selectedDaysArray.remove(at: index)
-                                                    print(self.daysNotifyArray)
-                                                } else {
-                                                    self.daysNotifyArray.append(day + 1)
-                                                    self.selectedButtonsArray.append(day)
-                                                    self.selectedDaysArray.append(self.weekDaysArray[day])
-                                                    print(self.selectedDaysArray)
+                                    if self.showDaysOfTheWeek {
+                                        HStack {
+                                            ForEach(0..<self.weekDaysArray.count, id: \.self) { day in
+                                                Button(action: {
+                                                    if let index = self.selectedButtonsArray.firstIndex(of: day) {
+                                                        self.daysNotifyArray.remove(at: index)
+                                                        self.selectedButtonsArray.remove(at: index)
+                                                        self.selectedDaysArray.remove(at: index)
+                                                        print(self.daysNotifyArray)
+                                                    } else {
+                                                        self.daysNotifyArray.append(day + 1)
+                                                        self.selectedButtonsArray.append(day)
+                                                        self.selectedDaysArray.append(self.weekDaysArray[day])
+                                                        print(self.selectedDaysArray)
+                                                    }
+                                                }) {
+                                                    ZStack {
+                                                        Rectangle()
+                                                            .cornerRadius(20)
+                                                            .foregroundColor(mint)
+                                                        Text(self.weekDaysArray[day])
+                                                            .modifier(MainTextNotificationViewModifier(size: 15))
+                                                    }
                                                 }
-                                            }) {
-                                                ZStack {
-                                                Rectangle()
-                                                    .cornerRadius(20)
-                                                    .foregroundColor(mint)
-                                                Text(self.weekDaysArray[day])
-                                                    .modifier(MainTextNotificationViewModifier(size: 15))
-                                                }
+                                                .buttonStyle(PlainButtonStyle())
+                                                .foregroundColor(self.selectedButtonsArray.contains(day) ? self.activatedColor : self.deactivatedColor)
                                             }
-                                            .buttonStyle(PlainButtonStyle())
-                                            .foregroundColor(self.selectedButtonsArray.contains(day) ? self.activatedColor : self.deactivatedColor)
                                         }
                                     }
                                 }
-                            }
-                            HStack {
-                                Spacer()
-                                Button(action: {
-                                //add alert
-                                    if self.delayInMinutes.isEmpty && self.delayInHours.isEmpty && self.typeOfNotification == 0{
-                                        print("empty")
-                                    } else {
-                                        self.setManualNotification(title: self.title, subtitle: self.subtitle)
-                                        self.presentationMode.wrappedValue.dismiss()
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        //add alert
+                                        if self.delayInMinutes.isEmpty && self.delayInHours.isEmpty && self.typeOfNotification == 0{
+                                            print("empty")
+                                            self.showAlert = true
+                                        } else {
+                                            self.setManualNotification(title: self.title, subtitle: self.subtitle)
+                                            self.presentationMode.wrappedValue.dismiss()
+                                        }
+                                    }) {
+                                        Image("setNotificationOn")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .modifier(CurrentImageModifier(width: 150, height: 150))
+                                        Text("Set and Back")
+                                            .modifier(MainTextNotificationViewModifier(size: 25))
+                                            .foregroundColor(self.activatedColor)
                                     }
-                                }) {
-                                    Image("setNotificationOn")
-                                        .renderingMode(.original)
-                                        .resizable()
-                                        .modifier(CurrentImageModifier(width: 150, height: 150))
-                                    Text("Set and Back")
-                                    .modifier(MainTextNotificationViewModifier(size: 25))
-                                    .foregroundColor(activatedColor)
-                                }
-                                 Spacer()
-                            }
+                                    Spacer()
+                                }.buttonStyle(PlainButtonStyle())
                                
+                            }
                         }
                     }
                 }
+            }.alert(isPresented: $showAlert) {
+                Alert(title: Text("Warning"), message: Text("Please enter \(self.typeOfDelay == 0 ? "minutes" : "hours")"), dismissButton: .default(Text("Continue")))
             }
         }
         .edgesIgnoringSafeArea(.bottom)

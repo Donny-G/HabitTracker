@@ -45,6 +45,7 @@ struct MainHabitView: View {
     @State var isEditMode: EditMode = .inactive
     @Environment(\.presentationMode) var presentationMode
     @State private var showInfo = false
+    @State private var isAnimationOn = false
     @Environment(\.colorScheme) var colorScheme
     func deleteLocalNotification(identifier: String) {
         let notifCenter = UNUserNotificationCenter.current()
@@ -81,90 +82,116 @@ struct MainHabitView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                self.colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark 
-                VStack {
-                    List {
-                        ForEach(fetchRequest.wrappedValue, id: \.id) {
-                            habit in
-                            NavigationLink(destination: DetailHabitView(habit: habit)) {
-                                HStack(alignment: .center, spacing: 5) {
-                                    Text(habit.wrappedName)
-                                        .font(.system(size: self.isEditMode == .active ? 10 : 23, weight: .black, design: .rounded))
-                                        .foregroundColor(self.colorScheme == .light ?  firstTextColorLight: firstTextColorDark)
+         //   GeometryReader { geo in
+                ZStack {
+                    self.colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
+                
+                    VStack {
+                        //!
+                        GeometryReader { geo in
+                        List {
+                            ForEach(self.fetchRequest.wrappedValue, id: \.id) {
+                                habit in
+                                NavigationLink(destination: DetailHabitView(habit: habit)) {
+                                    HStack(alignment: .center, spacing: 5) {
+                                        Text(habit.wrappedName)
+                                            .font(.system(size: self.isEditMode == .active ? 10 : 20, weight: .black, design: .rounded))
+                                            .foregroundColor(self.colorScheme == .light ?  firstTextColorLight: firstTextColorDark)
                                        
-                                        //firstTextColorLight firstTextColorDark
-                                        //                     thirdTextColorDark
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .contextMenu {
-                                            Button(action: {
-                                                habit.steps += 1
-                                                if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
-                                                    habit.percentCompletion = Float((100 * habit.wrappedSteps) / habit.wrappedGoal)
-                                                }
-                                                if habit.wrappedGoal == habit.wrappedSteps {
-                                                    habit.active = false
-                                                    if habit.ntfnEnabled {
-                                                        self.deleteLocalNotification(identifier: habit.idForNtfn!)
-                                                        habit.ntfnEnabled = false
-                                                        habit.daysForNtfn = nil
-                                                        habit.delayInHours = nil
-                                                        habit.delayInMinutes = nil
-                                                        habit.isNtfnContinues = false
-                                                        habit.timeForNtfn = nil
-                                                        habit.typeOfManualNotification = nil
-                                                        habit.typeOfNtfn = nil
-                                                        habit.idForNtfn = nil
+                                            //firstTextColorLight firstTextColorDark
+                                            //                     thirdTextColorDark
+                                            .frame(width: geo.size.width * 0.25, alignment: .leading)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .contextMenu {
+                                                Button(action: {
+                                                    habit.steps += 1
+                                                    if habit.wrappedGoal != nil && habit.wrappedSteps != 0 {
+                                                        habit.percentCompletion = Float((100 * habit.wrappedSteps) / habit.wrappedGoal)
+                                                    }
+                                                    if habit.wrappedGoal == habit.wrappedSteps {
+                                                        habit.active = false
+                                                        if habit.ntfnEnabled {
+                                                            self.deleteLocalNotification(identifier: habit.idForNtfn!)
+                                                            habit.ntfnEnabled = false
+                                                            habit.daysForNtfn = nil
+                                                            habit.delayInHours = nil
+                                                            habit.delayInMinutes = nil
+                                                            habit.isNtfnContinues = false
+                                                            habit.timeForNtfn = nil
+                                                            habit.typeOfManualNotification = nil
+                                                            habit.typeOfNtfn = nil
+                                                            habit.idForNtfn = nil
+                                                        }
+                                                    }
+                                                    try? self.moc.save()
+                                                    self.simpleSuccess()
+                                                }) {
+                                                    HStack {
+                                                        Text("Tap to add progress")
+                                                        Image("tap")
                                                     }
                                                 }
-                                                try? self.moc.save()
-                                                self.simpleSuccess()
-                                            }) {
-                                                HStack {
-                                                    Text("Tap to add progress")
-                                                    Image("tap")
-                                                }
                                             }
-                                        }
-                                    VStack(alignment: .leading, spacing: 5) {
-                                        Text("Goal: \(habit.wrappedGoal)")
-                                            .modifier(MainViewSubTextModifier())
-                                            .foregroundColor(self.colorScheme == .light ?  mint: secondTextColorDark)
+                                        //.padding(.trailing, 20)
+                                        VStack(alignment: .leading) {
+                                            Text("Goal: \(habit.wrappedGoal)")
+                                                .modifier(MainViewSubTextModifier())
+                                                .foregroundColor(self.colorScheme == .light ?  mint: secondTextColorDark)
 
-                                        Text("Streaks: \(habit.wrappedSteps)")
-                                            .modifier(MainViewSubTextModifier())
-                                            .foregroundColor(self.colorScheme == .light ?  fourthTextColorDark: fourthTextColorDark)
+                                            Text("Streaks: \(habit.wrappedSteps)")
+                                                .modifier(MainViewSubTextModifier())
+                                                .foregroundColor(self.colorScheme == .light ?  fourthTextColorDark: fourthTextColorDark)
                             
-                                        Text("Progress:")
-                                            .modifier(MainViewSubTextModifier())
-                                            .foregroundColor(self.colorScheme == .light ?  orange: thirdTextColorDark)
-                                        ProgressBar(percent: CGFloat(habit.percentCompletion))
-                                        .shadow(color: .black, radius: 1, x: 3, y: 3)
+                                            Text("Progress:")
+                                                .modifier(MainViewSubTextModifier())
+                                                .foregroundColor(self.colorScheme == .light ?  orange: thirdTextColorDark)
+                                            ProgressBar(percent: CGFloat(habit.percentCompletion))
+                                                .shadow(color: .black, radius: 1, x: 3, y: 3)
                                     
-                                    }
-                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .trailing)
+                                        }
+                                            //.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .trailing)
+                                            .frame(width: geo.size.width * 0.25, alignment: .leading)
+                                        Spacer()
                                     
-                                    //Core Data + image from ImagePicker
-                                    if habit.typeOfAction != 12 {
-                                        Image("\(habit.typeOfAction)")
-                                            .resizable()
-                                            .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : 100, height: self.isEditMode == .active ? 50 : 100))
-                                    } else {
-                                        Image(uiImage: self.imageFromCoreData(habit: habit))
-                                            .resizable()
-                                            .cornerRadius(20)
-                                            .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : 100, height: self.isEditMode == .active ? 50 : 100))
+                                        //Core Data + image from ImagePicker
+                                        if habit.typeOfAction != 12 {
+                                            Image("\(habit.typeOfAction)")
+                                                .resizable()
+                                                .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : geo.size.width * 0.25, height: self.isEditMode == .active ? 50 : 80))
+                                                .animation(nil)
+                                                .rotation3DEffect(.degrees(self.isAnimationOn ? 10 : -10), axis: (x: 0 , y: 5, z: 0))
+                                                .animation(
+                                                    Animation.easeOut(duration: 3)
+                                                        .repeatForever(autoreverses: true)
+                                                )
+                                                .onAppear {
+                                                    self.isAnimationOn = true
+                                                }
+                                        } else {
+                                            Image(uiImage: self.imageFromCoreData(habit: habit))
+                                                .resizable()
+                                                .cornerRadius(20)
+                                                .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : geo.size.width * 0.25, height: self.isEditMode == .active ? 50 : 80))
+                                                .animation(nil)
+                                                .rotation3DEffect(.degrees(self.isAnimationOn ? 10 : -10), axis: (x: 0 , y: 5, z: 0))
+                                                .animation(
+                                                    Animation.easeOut(duration: 3)
+                                                        .repeatForever(autoreverses: true)
+                                                )
+                                        
+                                        }
                                     }
+                                        .padding()
+                                        .modifier(ButtonBorderModifier())
+                                    //окончание navlink
                                 }
-                                    .padding()
-                                    .modifier(ButtonBorderModifier())
-                                
-                                //окончание navlink
-                            }
-                        }.onDelete(perform: removeHabits)
-                    }
+                            }.onDelete(perform: self.removeHabits)
+                        }
+                            //!
+                        }
+                    }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 }
-            }
+           // }
             
                 .navigationBarTitle("Habit tracker", displayMode: .inline)
                 .navigationBarItems(leading:

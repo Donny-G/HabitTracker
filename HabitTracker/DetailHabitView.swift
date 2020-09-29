@@ -69,7 +69,7 @@ struct ButtonBorderModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(RoundedRectangle(cornerRadius: 16)
-                .stroke(self.colorScheme == .light ? barColorLight : tabBarTextPrimaryDarkColor, lineWidth: 5)
+                .stroke(self.colorScheme == .light ? barColorLight : tabBarTextPrimaryDarkColor, lineWidth: 3)
                         .shadow(color: .black, radius: 1, x: 2, y: 2)
             )
         .buttonStyle(PlainButtonStyle())
@@ -152,6 +152,8 @@ struct DetailHabitView: View {
             }
         }
     }
+    @State private var isCompleted = false
+    @State private var isAnimationOn = false
     @State private var showNotificationInfo = false
     @State private var showDeleteButton = false
     @State private var isDeleteButtonTApped = false
@@ -250,245 +252,289 @@ struct DetailHabitView: View {
         generator.notificationOccurred(.success)
     }
     
+    func isOdd(number: Int) -> Int {
+        return number % 2
+    }
+    
     var body: some View {
         ZStack {
             colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
+            GeometryReader { geo in
+                Form {
                 
-            Form {
-                
-                VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
                     
-                    HStack {
-                        Text("Habit name:")
-                            .modifier(HabitAndDescriptionTitleTextModifier())
-                        Text(self.habit.wrappedName)
-                            .modifier(HabitAndDescriptionContentTextModifier())
-                    }
-                        .onAppear {
-                            self.updateDataForNotificationInfoView()
-                        }
-            
-                    HStack {
-                        Text("Habit description: ")
-                            .modifier(HabitAndDescriptionTitleTextModifier())
-                        Text(self.habit.wrappedDescr)
-                            .modifier(HabitAndDescriptionContentTextModifier())
-                    }
-             
-                    HStack(alignment: .center) {
-                        Spacer()
-                        //Core Data + Image Picker
-                        if  habit.img == nil {
-                            Image("\(self.habit.typeOfAction)")
-                                .resizable()
-                                .modifier(CurrentImageModifier(width: 150, height: 150))
-                        } else {
-                            Image(uiImage: imageFromCoreData(habit: habit))
-                                .resizable()
-                                .cornerRadius(20)
-                                .modifier(CurrentImageModifier(width: 150, height: 150))
-                        }
-                        Spacer()
-                    }
-        
-                    HStack(alignment: .top, spacing: 10) {
-                        VStack{
-                            Text("Goal")
+                        HStack {
+                            Text("Habit name:")
                                 .modifier(HabitAndDescriptionTitleTextModifier())
-                            ZStack{
-                                Capsule()
-                                    .modifier(CircleSizeModifier())
-                                    .modifier(CircleColorAndShadowModifier())
-                                Text("\(self.habit.wrappedGoal)")
-                                    .modifier(GoalDigitsColorAndFontModifier())
+                            Text(self.habit.wrappedName)
+                                .modifier(HabitAndDescriptionContentTextModifier())
+                        }
+                            .onAppear {
+                                self.updateDataForNotificationInfoView()
+                            }
+            
+                        HStack {
+                            Text("Habit description: ")
+                                .modifier(HabitAndDescriptionTitleTextModifier())
+                            Text(self.habit.wrappedDescr)
+                                .modifier(HabitAndDescriptionContentTextModifier())
+                        }
+             
+                        HStack(alignment: .center) {
+                            Spacer()
+                            //Core Data + Image Picker
+                            if  self.habit.img == nil {
+                                Image("\(self.habit.typeOfAction)")
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: geo.size.width, height: 150))
+                            } else {
+                                Image(uiImage: self.imageFromCoreData(habit: self.habit))
+                                    .resizable()
+                                    .cornerRadius(20)
+                                    .modifier(CurrentImageModifier(width: geo.size.width, height: 150))
+                            }
+                            Spacer()
+                        }   .rotation3DEffect(.degrees(self.isAnimationOn ? 10 : -10), axis: (x: 0 , y: 5, z: 0))
+                            .animation(
+                                Animation.easeOut(duration: 3)
+                                    .repeatForever(autoreverses: true)
+                            )
+                        
+        
+                        HStack(alignment: .top, spacing: 10) {
+                            VStack{
+                                Text("Goal")
+                                    .modifier(HabitAndDescriptionTitleTextModifier())
+                                ZStack{
+                                    Capsule()
+                                        .modifier(CircleSizeModifier())
+                                        .modifier(CircleColorAndShadowModifier())
+                                    Text("\(self.habit.wrappedGoal)")
+                                        .modifier(GoalDigitsColorAndFontModifier())
+                                }
+                            }
+                
+                            VStack {
+                                Text("Streaks")
+                                    .modifier(HabitAndDescriptionTitleTextModifier())
+                                ZStack{
+                                    Capsule()
+                                        .modifier(CircleSizeModifier())
+                                        .modifier(CircleColorAndShadowModifier())
+                                    Text("\(self.habit.wrappedSteps)")
+                                        .modifier(StepsDigitsColorAndFontModifier())
+                                }
+                            }
+                        
+                            VStack() {
+                                Text("Progress")
+                                    .modifier(HabitAndDescriptionTitleTextModifier())
+                                ProgressCircle(percent: CGFloat(self.habit.percentCompletion))
+                                    .padding(.top, 10)
                             }
                         }
-                
-                        VStack {
-                            Text("Streaks")
-                                .modifier(HabitAndDescriptionTitleTextModifier())
-                            ZStack{
-                                Capsule()
-                                    .modifier(CircleSizeModifier())
-                                    .modifier(CircleColorAndShadowModifier())
-                                Text("\(self.habit.wrappedSteps)")
-                                    .modifier(StepsDigitsColorAndFontModifier())
+                    
+                        if self.habit.active {
+                            HStack {
+                                Text("Show notification info")
+                                    .modifier(SectionTextModifier())
+                                Spacer()
+                                Button(action: {
+                                    self.showNotificationInfo.toggle()
+                                }) {
+                                    Image(self.showNotificationInfo ? "toggleOn" : "toggleOff")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 70, height: 70, alignment: .center)
+                                    }
+                            }  // .animation(.easeInOut)
+                        } else {
+                            Spacer()
+                        }
+                    
+                        if self.showNotificationInfo {
+                            VStack {
+                                if self.notificationIsEnabled && self.habit.active {
+                                    Button(action: {
+                                        self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                                    }){
+                                        HStack {
+                                            Image("setNotificationOff")
+                                                .renderingMode(.original)
+                                                .resizable()
+                                                .modifier(CurrentImageModifier(width: 50, height: 50))
+                                            Text("Cancel notification")
+                                                .modifier(NotificationAndSaveButtonTextModifier(size: 12))
+                                        }
+                                            .padding(.trailing, 10)
+                                            .modifier(ButtonBorderModifier())
+                                    }
+                                } else if !self.showNotificationSetView && self.habit.active {
+                                    Button(action: {
+                                        self.showNotificationSetView = true
+                                    }) {
+                                        HStack {
+                                            Image("notificationOn")
+                                                .renderingMode(.original)
+                                                .resizable()
+                                                .modifier(CurrentImageModifier(width: 50, height: 50))
+                                            Text("Set Notification")
+                                                .modifier(NotificationAndSaveButtonTextModifier(size: 12))
+                                        }
+                                            .padding(.trailing, 10)
+                                            .modifier(ButtonBorderModifier())
+                                    }
+                                }
+                                if self.habit.active {
+                                    NotificationsInfoView(notificationIsEnabled: self.$notificationIsEnabled, typeOfNotification: self.$defaultORManualTypeOfNotification, typeOfManualNotification: self.$typeOfManualNotification, delayInMinutes: self.$delayInMinutesFromNotificationView, delayInHours: self.$delayInHoursFromNotificationView, timeForNtfn: self.$timeForNotification, daysForNtfn: self.$daysForNotification, isNtfnContinues: self.$isContinues, idForNtfn: self.$id, showSetButton: self.$showSetButton, showNotificationSetView: self.$showNotificationSetView)
+                                    }
                             }
                         }
                         
-                        VStack() {
-                            Text("Progress")
-                                .modifier(HabitAndDescriptionTitleTextModifier())
-                            ProgressCircle(percent: CGFloat(habit.percentCompletion))
-                                .padding(.top, 10)
+                        HStack(alignment: .center) {
+                           
+                            if self.habit.active {
+                                Spacer()
+                                Button(action: {
+                                    self.isPlusButtonTapped = true
+                                    self.habit.steps += 1
+                                    self.habit.percentCompletion = self.percentOfGoal
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.12) {
+                                        self.isPlusButtonTapped = false
+                                    }
+                                        if self.habit.steps == self.habit.wrappedGoal {
+                                            self.isCompleted.toggle()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                                                
+                                                self.habit.active = false
+                                                if self.notificationIsEnabled {
+                                                    self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                                                } else {
+                                                //bug solution
+                                                    self.notificationIsEnabled = true
+                                                }
+                                                if self.moc.hasChanges {
+                                                        try? self.moc.save()
+                                                    }
+                                               
+                                                self.presentationMode.wrappedValue.dismiss()
+                                            }
+                                        }
+                                       self.simpleSuccess()
+                                }) {
+                                    Image(self.isPlusButtonTapped ? "tappedButton" : "tapButton")
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .modifier(CurrentImageModifier(width: 200, height: 200))
+                                    
+                                        .rotation3DEffect(.degrees(self.isAnimationOn ? 5 : -5), axis: (x: 5 , y: 0, z: 0))
+                                        .animation(
+                                            Animation.easeOut(duration: 3)
+                                                .repeatForever(autoreverses: true)
+                                        )
+                                        .onAppear {
+                                        self.isAnimationOn.toggle()
+                                        }
+                                }
+                                Spacer()
+                            } else {
+                            
+                                Image("done")
+                                    .resizable()
+                                    .modifier(CurrentImageModifier(width: 200, height: 200))
+                                    .scaleEffect(self.isAnimationOn ? 1.2 : 1)
+                                    .rotation3DEffect(.degrees(self.isAnimationOn ? 40 : -40), axis: (x: 1 , y: 1, z: 1))
+                                    .animation(
+                                        Animation.easeOut(duration: 3)
+                                            .repeatForever(autoreverses: true)
+                                    )
+                                .onAppear {
+                                    self.isAnimationOn.toggle()
+                                }
+                                
+                                Text("Completed")
+                                    .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
+                                    .foregroundColor(self.colorScheme == .light ? red : yellow)
+                                    .shadow(color: .black, radius: 1, x: 2, y: 2)
+                                    .scaleEffect(self.isAnimationOn ? 1.2 : 1)
+                                    .animation(
+                                        Animation.easeOut(duration: 3)
+                                            .repeatForever(autoreverses: true)
+                                    )
+                            }
+                            
                         }
-                    }
+                            .padding(.top, -20)
                     
-                    if habit.active {
+                        Spacer()
+                
                         HStack {
-                            Text("Show notification info")
+                            Text("Show delete button")
                                 .modifier(SectionTextModifier())
                             Spacer()
                             Button(action: {
-                                self.showNotificationInfo.toggle()
+                                self.showDeleteButton.toggle()
                             }) {
-                                Image(showNotificationInfo ? "toggleOn" : "toggleOff")
+                                Image(self.showDeleteButton ? "toggleOn" : "toggleOff")
                                     .renderingMode(.original)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 70, height: 70, alignment: .center)
-                                }
-                        }  // .animation(.easeInOut)
-                    } else {
-                        Spacer()
-                    }
-                    
-                    if showNotificationInfo {
-                        VStack {
-                            if notificationIsEnabled && habit.active {
-                                Button(action: {
-                                    self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
-                                }){
-                                    HStack {
-                                        Image("setNotificationOff")
-                                            .renderingMode(.original)
-                                            .resizable()
-                                            .modifier(CurrentImageModifier(width: 50, height: 50))
-                                        Text("Cancel notification")
-                                            .modifier(NotificationAndSaveButtonTextModifier(size: 12))
-                                    }
-                                        .padding(.trailing, 10)
-                                        .modifier(ButtonBorderModifier())
-                                }
-                            } else if !showNotificationSetView && habit.active {
-                                Button(action: {
-                                    self.showNotificationSetView = true
-                                }) {
-                                    HStack {
-                                        Image("notificationOn")
-                                            .renderingMode(.original)
-                                            .resizable()
-                                            .modifier(CurrentImageModifier(width: 50, height: 50))
-                                        Text("Set Notification")
-                                            .modifier(NotificationAndSaveButtonTextModifier(size: 12))
-                                    }
-                                        .padding(.trailing, 10)
-                                        .modifier(ButtonBorderModifier())
-                                }
                             }
-                            if habit.active {
-                                NotificationsInfoView(notificationIsEnabled: $notificationIsEnabled, typeOfNotification: $defaultORManualTypeOfNotification, typeOfManualNotification: $typeOfManualNotification, delayInMinutes: $delayInMinutesFromNotificationView, delayInHours: $delayInHoursFromNotificationView, timeForNtfn: $timeForNotification, daysForNtfn: $daysForNotification, isNtfnContinues: $isContinues, idForNtfn: $id, showSetButton: $showSetButton, showNotificationSetView: $showNotificationSetView)
-                                }
                         }
-                    }
-               
-                    HStack(alignment: .center) {
-                        Spacer()
-                        if habit.active {
-                            Button(action: {
-                                self.isPlusButtonTapped = true
-                                self.habit.steps += 1
-                                self.habit.percentCompletion = self.percentOfGoal
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.15) {
-                                    self.isPlusButtonTapped = false
-                                }
-                                    if self.habit.steps == self.habit.wrappedGoal {
-                                        self.habit.active = false
-                                        if self.notificationIsEnabled {
-                                            self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
-                                        } else {
-                                            //bug solution
-                                            self.notificationIsEnabled = true
-                                        }
-                                    }
-                                    if self.moc.hasChanges {
-                                        try? self.moc.save()
-                                    }
-                                self.simpleSuccess()
-                            }) {
-                                Image(self.isPlusButtonTapped ? "tappedButton" : "tapButton")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .modifier(CurrentImageModifier(width: 200, height: 200))
-                                   // .animation(.easeInOut)
-                            }
-                        } else {
-                            Image("done")
-                                .resizable()
-                                .modifier(CurrentImageModifier(width: 200, height: 200))
-                            Text("Completed")
-                                .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
-                                .foregroundColor(colorScheme == .light ? fourthTextColorLight : thirdTextColorLight)
-                                .shadow(color: .black, radius: 1, x: 3, y: 3)
-                        }
-                        Spacer()
-                    }
-                        .padding(.top, -20)
                     
-                    Spacer()
-                
-                    HStack {
-                        Text("Show delete button")
-                            .modifier(SectionTextModifier())
-                        Spacer()
-                        Button(action: {
-                            self.showDeleteButton.toggle()
-                        }) {
-                            Image(showDeleteButton ? "toggleOn" : "toggleOff")
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 70, height: 70, alignment: .center)
-                        }
-                    }   //.animation(.easeInOut)
-                    
-                    HStack(alignment: .center) {
-                        Spacer()
+                        HStack(alignment: .center) {
+                            Spacer()
                    
-                        if showDeleteButton {
-                            VStack(spacing: -20) {
-                                Button(action: {
-                                    self.isDeleteButtonTApped.toggle()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        if self.notificationIsEnabled {
-                                            self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                            if self.showDeleteButton {
+                                VStack(spacing: -20) {
+                                    Button(action: {
+                                        self.isDeleteButtonTApped.toggle()
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            if self.notificationIsEnabled {
+                                                self.deleteLocalNotification(identifier: self.habit.idForNtfn!)
+                                            }
+                                            self.moc.delete(self.habit)
+                                            try? self.moc.save()
+                                            self.presentationMode.wrappedValue.dismiss()
                                         }
-                                        self.moc.delete(self.habit)
-                                        try? self.moc.save()
-                                        self.presentationMode.wrappedValue.dismiss()
+                                    }) {
+                                        Image("delete")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .modifier(CurrentImageModifier(width: 150, height: 150))
+                                            .rotation3DEffect(.degrees(self.isDeleteButtonTApped ? 360 : 0), axis: (x: 0, y: 0, z: 1))
+                                            .animation(.spring(response: 0.55, dampingFraction: 2, blendDuration: 4))
                                     }
-                                }) {
-                                    Image("delete")
-                                        .renderingMode(.original)
-                                        .resizable()
-                                        .modifier(CurrentImageModifier(width: 150, height: 150))
-                                        .rotation3DEffect(.degrees(isDeleteButtonTApped ? 360 : 0), axis: (x: 0, y: 0, z: 1))
-                                        .animation(.spring(response: 0.55, dampingFraction: 2, blendDuration: 4))
-                                }
-                                Text("Delete")
-                                    .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
-                                    .foregroundColor(colorScheme == .light ? red : fourthTextColorDark)
+                                    Text("Delete")
+                                        .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
+                                        .foregroundColor(self.colorScheme == .light ? red : fourthTextColorDark)
                                 
+                                }
                             }
                         }
-                    }
                     
-                }.animation(.easeInOut)
-            }
-                .padding(.top, -40)
-                .buttonStyle(PlainButtonStyle())
-            HStack(alignment: .center, spacing: 10) {
-           
-                Image("plusOne")
-                           .resizable()
-                           .frame(width: 100, height: 100)
-                    .position(x: self.isPlusButtonTapped ? CGFloat.random(in: 10...400) : 50, y: self.isPlusButtonTapped ? CGFloat.random(in: 400...600): 1000)
-                               .animation(.spring())
-            
-            }
-           
-            
-        }   .sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker) }
+                    }.animation(.easeInOut)
+                }
+                    .padding(.top, -40)
+                    .buttonStyle(PlainButtonStyle())
+        
+                    HStack(alignment: .center) {
+                        Spacer()
+                        ForEach(1 ..< 7) { image in
+                            Image("thumbsUp")
+                                .resizable()
+                                .frame(width: CGFloat(50), height: CGFloat(50))
+                                .offset(x: CGFloat(image) * geo.size.width * 0.002 , y: !self.isCompleted ? geo.size.height + 100 : -200)
+                                .shadow(color: .black, radius: 1, x: 2, y: 2)
+                                .animation(.spring(response: 3, dampingFraction: 3, blendDuration: 5))
+                        }
+                        Spacer()
+                    }
+                }
+            }   .sheet(isPresented: $showNotificationSetView, onDismiss: updateCoreDataAndNotificationInfoData) { SetNotificationsView(id: self.$id, isDefaultNotificationEnabled: self.$isDefaultNotificationEnabled, isManualNotificationEnabled: self.$isManualNotificationEnabled, habitName: self.$habitName, typeOfNotification: self.$typeOfNotification, delayInMinutes: self.$delayInMinutes, delayInHours: self.$delayInHours, typeOfDelay: self.$typeOfDelay, isContinues: self.$isContinues, showDaysOfTheWeek: self.$showDaysOfTheWeek, selectedDaysArray: self.$selectedDaysArray, hours: self.$hourFromPicker, minutes: self.$minuteFromPicker) }
     }
 }
 

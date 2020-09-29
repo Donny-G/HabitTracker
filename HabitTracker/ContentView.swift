@@ -32,7 +32,7 @@ struct ContentView: View {
 
     init() {
        // UITableView.appearance().allowsSelection = false
-               UITableViewCell.appearance().selectionStyle = .none
+        UITableViewCell.appearance().selectionStyle = .none
         UINavigationBar.appearance().barTintColor = UIColor(named: "tabBarColor")
       
         UITableView.appearance().separatorColor = .clear
@@ -96,7 +96,8 @@ struct ContentView: View {
                                         .resizable()
                                         .modifier(ImageTabModifier())
                                         .frame(width: 75, height: 75)
-                                        .rotationEffect(Angle(degrees: self.habitViewOpen ? 90 : 0))
+                                        .rotationEffect(Angle(degrees: self.habitViewOpen ? 360 : 0))
+                                        .animation(.easeInOut)
                                 }
                                     .offset(y: -geo.size.height/15)
                                     .onTapGesture {

@@ -10,6 +10,10 @@ import SwiftUI
 
 struct BarView: View {
     var value: CGFloat
+    var height: CGFloat
+    var secondHeight: CGFloat {
+        return value * (height * 0.01)
+    }
     @Environment(\.colorScheme) var colorScheme
     var body: some View {
         VStack {
@@ -27,11 +31,11 @@ struct BarView: View {
             
             ZStack(alignment: .bottom) {
                 RoundedRectangle(cornerRadius: 5)
-                    .frame(width: 40, height: 400)
+                    .frame(width: 40, height: height)
                     .foregroundColor(colorScheme == .light ? firstTextColorLight : .black)
                 RoundedRectangle(cornerRadius: 5)
                     .fill(LinearGradient(gradient: Gradient(colors: [blue, yellow, orange, red ]), startPoint: .top, endPoint: .bottom))
-                    .frame(width: 30, height: value * 4)
+                    .frame(width: 30, height: secondHeight)
             }
         }
     }
@@ -39,6 +43,6 @@ struct BarView: View {
 
 struct BarView_Previews: PreviewProvider {
     static var previews: some View {
-        BarView(value: 40)
+        BarView(value: 40, height: 300)
     }
 }

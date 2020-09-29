@@ -9,9 +9,10 @@
 import SwiftUI
 
 struct ImageModifier: ViewModifier {
+    var geo: CGFloat
     func body(content: Content) -> some View {
         content
-            .frame(width: 80, height: 80)
+            .frame(width: geo, height: 80)
             .scaledToFit()
             .shadow(color: .black, radius: 1, x: 3, y: 3)
     }
@@ -35,26 +36,28 @@ struct StatsView: View {
         NavigationView {
             ZStack {
                 self.colorScheme == .light ? mainSpaceColorLight : mainSpaceColorDark
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(habits, id: \.id) {
-                            habit in
-                            VStack {
-                                BarView(value: CGFloat(habit.percentCompletion))
-                                if habit.typeOfAction != 12 {
-                                    Image("\(habit.typeOfAction)")
-                                        .resizable()
-                                        .modifier(ImageModifier())
-                                } else {
-                                    Image(uiImage: self.imageFromCoreData(habit: habit))
-                                        .resizable()
-                                        .cornerRadius(20)
-                                        .modifier(ImageModifier())
+                GeometryReader { geo in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(self.habits, id: \.id) {
+                                habit in
+                                VStack {
+                                    BarView(value: CGFloat(habit.percentCompletion), height: geo.size.height * 0.45)
+                                    if habit.typeOfAction != 12 {
+                                        Image("\(habit.typeOfAction)")
+                                            .resizable()
+                                            .modifier(ImageModifier(geo: geo.size.width * 0.2))
+                                    } else {
+                                        Image(uiImage: self.imageFromCoreData(habit: habit))
+                                            .resizable()
+                                            .cornerRadius(20)
+                                            .modifier(ImageModifier(geo: geo.size.width * 0.2))
+                                    }
+                                    Text(habit.wrappedName)
+                                        .font(.system(size: 20, weight: .black, design: .rounded))
+                                        .foregroundColor(self.colorScheme == .light ? firstTextColorLight : firstTextColorDark)
+                                        .frame(width: geo.size.width * 0.3, height: geo.size.height * 0.2)
                                 }
-                                Text(habit.wrappedName)
-                                    .font(.system(size: 20, weight: .black, design: .rounded))
-                                    .foregroundColor(self.colorScheme == .light ? firstTextColorLight : firstTextColorDark)
-                                   
                             }
                         }
                     }
