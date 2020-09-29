@@ -14,6 +14,7 @@
 		C321825824D8397B00280C45 /* TypologyNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321825724D8397B00280C45 /* TypologyNotifications.swift */; };
 		C3219E7C24CF28FE001CEF12 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */; };
 		C3219E7E24CF4059001CEF12 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3219E7D24CF4059001CEF12 /* ProgressBar.swift */; };
+		C321CE142523838600DE4178 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C321CE132523838600DE4178 /* AlertView.swift */; };
 		C322F5B424C7830100FC116A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C322F5B324C7830100FC116A /* AppDelegate.swift */; };
 		C322F5B624C7830100FC116A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C322F5B524C7830100FC116A /* SceneDelegate.swift */; };
 		C322F5B924C7830100FC116A /* HabitTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C322F5B724C7830100FC116A /* HabitTracker.xcdatamodeld */; };
@@ -41,6 +42,7 @@
 		C321825724D8397B00280C45 /* TypologyNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypologyNotifications.swift; sourceTree = "<group>"; };
 		C3219E7B24CF28FE001CEF12 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
 		C3219E7D24CF4059001CEF12 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		C321CE132523838600DE4178 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		C322F5B024C7830100FC116A /* HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C322F5B324C7830100FC116A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C322F5B524C7830100FC116A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				C321146724DC1C3B00C45786 /* MainHabitView.swift */,
 				C3B43E2B24F51C60009380BA /* BarView.swift */,
 				C31F6B7B24D9524B00382B0B /* SetNotificationsView.swift */,
+				C321CE132523838600DE4178 /* AlertView.swift */,
 				C31F6B7D24D9F3C800382B0B /* NotificationsInfoView.swift */,
 				C335028324D05838003FEEBE /* logo.jpg */,
 				C322F5BC24C7830300FC116A /* Assets.xcassets */,
@@ -203,6 +206,7 @@
 			files = (
 				C3B43E2C24F51C60009380BA /* BarView.swift in Sources */,
 				C322F5B424C7830100FC116A /* AppDelegate.swift in Sources */,
+				C321CE142523838600DE4178 /* AlertView.swift in Sources */,
 				C31F6B7E24D9F3C800382B0B /* NotificationsInfoView.swift in Sources */,
 				C3219E7E24CF4059001CEF12 /* ProgressBar.swift in Sources */,
 				C322F5B624C7830100FC116A /* SceneDelegate.swift in Sources */,
