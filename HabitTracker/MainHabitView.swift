@@ -65,13 +65,13 @@ struct MainHabitView: View {
     }
     //load image object from Core Data
     func imageFromCoreData(habit: Habit) -> UIImage {
-        var imageToLoad = UIImage(named: "12")
+        var imageToLoad = UIImage(named: "14")
         if let data = habit.img {
             if let image = UIImage(data: data) {
                 imageToLoad = image
             }
         }
-        return imageToLoad ?? UIImage(named: "12")!
+        return imageToLoad ?? UIImage(named: "14")!
     }
     
     func simpleSuccess() {
@@ -154,7 +154,7 @@ struct MainHabitView: View {
                                         Spacer()
                                     
                                         //Core Data + image from ImagePicker
-                                        if habit.typeOfAction != 12 {
+                                        if habit.typeOfAction != 14 {
                                             Image("\(habit.typeOfAction)")
                                                 .resizable()
                                                 .modifier(CurrentImageModifier(width: self.isEditMode == .active ? 50 : geo.size.width * 0.25, height: self.isEditMode == .active ? 50 : 80))
@@ -193,7 +193,7 @@ struct MainHabitView: View {
                 }
            // }
             
-                .navigationBarTitle("Habit tracker", displayMode: .inline)
+                .navigationBarTitle("Habit At", displayMode: .inline)
                 .navigationBarItems(leading:
                         HStack {
                             EditButton()

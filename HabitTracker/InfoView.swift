@@ -47,6 +47,15 @@ struct TextDefModifier: ViewModifier {
 struct InfoView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment (\.presentationMode) var presentationMode
+   
+    var imageNames: [String] {
+        var images: [String] = []
+        for i in 1...59 {
+            images.append("Animation\(i)")
+            print(images)
+        }
+        return images
+    }
     
     var body: some View {
         NavigationView {
@@ -55,7 +64,16 @@ struct InfoView: View {
                 GeometryReader { geo in
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 15) {
-                        
+                            
+                            Text("Make good things to grow good habits")
+                                .font(.system(size: 25, weight: .black, design: .rounded))
+                                .foregroundColor(self.colorScheme == .light ? firstTextColorLight : firstTextColorDark)
+                                .shadow(color: .black, radius: 1, x: 1, y: 1)
+                                .frame(width: geo.size.width * 0.8,height: geo.size.height * 0.2, alignment: .center)
+                                .padding(.leading, 10)
+                            
+                            AnimatedImage(imageNames: self.imageNames, width: geo.size.width, height: geo.size.height / 2, duration: 0.08)
+                                
                             Text("Main View & Habit View")
                                 .modifier(TextHeadLineModifier())
                     

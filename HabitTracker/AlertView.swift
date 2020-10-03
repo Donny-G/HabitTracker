@@ -14,6 +14,7 @@ struct AlertView: View {
     var typeOfTimer: Int
     var alertWidth: CGFloat
     var alertHeight: CGFloat
+    var tag: Int = 0
     
     
     
@@ -27,10 +28,13 @@ struct AlertView: View {
                 VStack {
                     Text("Warning !")
                         .modifier(TextHeadLineModifier())
-                 
+                    if self.tag == 0 {
                     Text("Please enter \( self.typeOfTimer == 0 ? "minutes" : "hours")")
                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
-                    
+                    } else {
+                        Text("Please enter title of your notification")
+                        .modifier(TextDefModifier(geo: geo.size.width * 0.7))
+                    }
                     Button(action: {
                         self.isContinue.toggle()
                     }) {
@@ -56,7 +60,7 @@ struct AlertView_Previews: PreviewProvider {
     struct TesAlert: View {
         @State var testItem: Bool = true
         var body: some View {
-            AlertView(isContinue: $testItem, typeOfTimer: 0, alertWidth: 200, alertHeight: 200)
+            AlertView(isContinue: $testItem, typeOfTimer: 0, alertWidth: 200, alertHeight: 200, tag: 0)
         }
     }
     static var previews: some View {

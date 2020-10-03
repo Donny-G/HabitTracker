@@ -22,13 +22,13 @@ struct StatsView: View {
     @FetchRequest(entity: Habit.entity(), sortDescriptors: [])var habits: FetchedResults<Habit>
     @Environment(\.colorScheme) var colorScheme
     func imageFromCoreData(habit: Habit) -> UIImage {
-        var imageToLoad = UIImage(named: "12")
+        var imageToLoad = UIImage(named: "14")
         if let data = habit.img {
             if let image = UIImage(data: data) {
                 imageToLoad = image
             }
         }
-        return imageToLoad ?? UIImage(named: "12")!
+        return imageToLoad ?? UIImage(named: "14")!
     }
     
     
@@ -43,7 +43,7 @@ struct StatsView: View {
                                 habit in
                                 VStack {
                                     BarView(value: CGFloat(habit.percentCompletion), height: geo.size.height * 0.45)
-                                    if habit.typeOfAction != 12 {
+                                    if habit.typeOfAction != 14 {
                                         Image("\(habit.typeOfAction)")
                                             .resizable()
                                             .modifier(ImageModifier(geo: geo.size.width * 0.2))

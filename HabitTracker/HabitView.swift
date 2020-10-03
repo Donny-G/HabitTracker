@@ -68,7 +68,7 @@ struct HabitView: View {
     
     @State private var habitGoal: Int16 = 0
     @State private var habitDescription = ""
-    @State private var habitType = 12
+    @State private var habitType = 14
     @Environment(\.colorScheme) var colorScheme
     //Image Picker
     @State private var selectedImage: Image?
@@ -78,7 +78,7 @@ struct HabitView: View {
     func loadSelectedImage() {
         guard let inputImage = inputImage else { return }
         selectedImage = Image(uiImage: inputImage)
-        habitType = 12
+        habitType = 14
     }
     
     //Core Data
@@ -361,7 +361,7 @@ struct HabitView: View {
                         .buttonStyle(BorderlessButtonStyle())
                     ) {
                         Picker("Choose type of action", selection: $habitType) {
-                            ForEach(0..<12) {
+                            ForEach(0..<14) {
                                 //    VStack {
                                 //   Text("Action is \($0)")
                                 Image("\($0)")
@@ -377,7 +377,7 @@ struct HabitView: View {
                         //Image Picker
                         HStack(alignment: .center) {
                             Spacer()
-                            if selectedImage == nil || habitType != 12 {
+                            if selectedImage == nil || habitType != 14 {
                                 Image("\(habitType)")
                                     .resizable()
                                     .modifier(CurrentImageModifier(width: 250, height: 250))

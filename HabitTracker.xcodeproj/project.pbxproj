@@ -27,7 +27,8 @@
 		C324166A24C88A1300984E30 /* Habit+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166824C88A1300984E30 /* Habit+CoreDataClass.swift */; };
 		C324166B24C88A1300984E30 /* Habit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */; };
 		C324166D24C8D32200984E30 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C324166C24C8D32200984E30 /* ImagePicker.swift */; };
-		C335028424D05838003FEEBE /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C335028324D05838003FEEBE /* logo.jpg */; };
+		C3259251252787BE0081D356 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C3259250252787BE0081D356 /* logo.jpg */; };
+		C33CAB042526685B0068A5B4 /* AnimatedInfoImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33CAB032526685B0068A5B4 /* AnimatedInfoImage.swift */; };
 		C3509A1E24F9378D00DD94F5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3509A1D24F9378D00DD94F5 /* Colors.swift */; };
 		C3B43E2824F516ED009380BA /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2724F516ED009380BA /* StatsView.swift */; };
 		C3B43E2A24F518D7009380BA /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B43E2924F518D7009380BA /* InfoView.swift */; };
@@ -57,7 +58,8 @@
 		C324166824C88A1300984E30 /* Habit+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		C324166924C88A1300984E30 /* Habit+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		C324166C24C8D32200984E30 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
-		C335028324D05838003FEEBE /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		C3259250252787BE0081D356 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		C33CAB032526685B0068A5B4 /* AnimatedInfoImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedInfoImage.swift; sourceTree = "<group>"; };
 		C3509A1D24F9378D00DD94F5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		C3B43E2724F516ED009380BA /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		C3B43E2924F518D7009380BA /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
@@ -112,9 +114,10 @@
 				C321146724DC1C3B00C45786 /* MainHabitView.swift */,
 				C3B43E2B24F51C60009380BA /* BarView.swift */,
 				C31F6B7B24D9524B00382B0B /* SetNotificationsView.swift */,
+				C33CAB032526685B0068A5B4 /* AnimatedInfoImage.swift */,
 				C321CE132523838600DE4178 /* AlertView.swift */,
 				C31F6B7D24D9F3C800382B0B /* NotificationsInfoView.swift */,
-				C335028324D05838003FEEBE /* logo.jpg */,
+				C3259250252787BE0081D356 /* logo.jpg */,
 				C322F5BC24C7830300FC116A /* Assets.xcassets */,
 				C322F5C124C7830300FC116A /* LaunchScreen.storyboard */,
 				C322F5C424C7830300FC116A /* Info.plist */,
@@ -190,7 +193,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C335028424D05838003FEEBE /* logo.jpg in Resources */,
+				C3259251252787BE0081D356 /* logo.jpg in Resources */,
 				C322F5C324C7830300FC116A /* LaunchScreen.storyboard in Resources */,
 				C322F5C024C7830300FC116A /* Preview Assets.xcassets in Resources */,
 				C322F5BD24C7830300FC116A /* Assets.xcassets in Resources */,
@@ -208,6 +211,7 @@
 				C322F5B424C7830100FC116A /* AppDelegate.swift in Sources */,
 				C321CE142523838600DE4178 /* AlertView.swift in Sources */,
 				C31F6B7E24D9F3C800382B0B /* NotificationsInfoView.swift in Sources */,
+				C33CAB042526685B0068A5B4 /* AnimatedInfoImage.swift in Sources */,
 				C3219E7E24CF4059001CEF12 /* ProgressBar.swift in Sources */,
 				C322F5B624C7830100FC116A /* SceneDelegate.swift in Sources */,
 				C3B43E2A24F518D7009380BA /* InfoView.swift in Sources */,

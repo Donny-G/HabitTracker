@@ -44,6 +44,7 @@ struct SetNotificationsView: View {
     @State private var selectedButtonsArray = [Int]()
     @State private var daysNotifyArray = [Int]()
     @State private var showAlert = false
+    @State private var tag = 0
     @State private var defaultIsTapped = false
     @State private var manualIsTapped = false
     @Environment(\.colorScheme) var colorScheme
@@ -375,6 +376,10 @@ struct SetNotificationsView: View {
                                             if self.delayInMinutes.isEmpty && self.delayInHours.isEmpty && self.typeOfNotification == 0{
                                                 print("empty")
                                                 self.showAlert = true
+                                                self.tag = 0
+                                            } else if self.habitName.isEmpty && self.title.isEmpty{
+                                                self.showAlert = true
+                                                self.tag = 1
                                             } else {
                                                 self.setManualNotification(title: self.title, subtitle: self.subtitle)
                                                 self.presentationMode.wrappedValue.dismiss()
@@ -392,7 +397,7 @@ struct SetNotificationsView: View {
                                     }.buttonStyle(PlainButtonStyle())
                                     
                                 }
-                                AlertView(isContinue: self.$showAlert, typeOfTimer: self.typeOfDelay, alertWidth: geo.size.width * 0.5, alertHeight: geo.size.height * 0.3)
+                                AlertView(isContinue: self.$showAlert, typeOfTimer: self.typeOfDelay, alertWidth: geo.size.width * 0.5, alertHeight: geo.size.height * 0.3, tag: self.tag)
                                     .offset(x: self.showAlert ? 0 : 500, y: 0)
                                     .animation(.easeInOut)
                             }
