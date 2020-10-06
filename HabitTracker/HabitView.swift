@@ -62,7 +62,7 @@ struct HabitView: View {
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "colorSet1")
         
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: tabBarTextSecondaryLight], for: .normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "tabBarColor")], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named: "tabBarColor") ?? UIColor.red], for: .selected)
 
     }
     
