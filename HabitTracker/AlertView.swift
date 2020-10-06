@@ -64,7 +64,11 @@ struct AlertView_Previews: PreviewProvider {
         }
     }
     static var previews: some View {
+        ForEach(["en"], id: \.self) { identfier in
         TesAlert()
+            .environment(\.locale,.init(identifier: identfier))
+            .previewDisplayName(identfier)
+        }
     }
 }
 

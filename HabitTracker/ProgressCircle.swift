@@ -25,9 +25,13 @@ struct ProgressCircle: View {
                         .fill(AngularGradient(gradient: .init(colors: colors), center: .center, startAngle: .zero, endAngle: .init(degrees: 360))))
                         .animation(.spring(response: 1.0, dampingFraction: 1.0, blendDuration: 1.0))
                         .shadow(color: .black, radius: 1, x: 5, y: 5)
-                    Text(String(format: "%.0f", percent) + "%").font(.system(size: 30, weight: .black, design: .rounded))
-                        .foregroundColor(colorScheme == .light ? firstTextColorLight : secondTextColorDark)
-                        .shadow(color: .black, radius: 1, x: 3, y: 3)
+            Image("leaf3")
+                .resizable()
+                .frame(width: 100, height: 100, alignment: .center)
+                .shadow(color: .black, radius: 1, x: 1, y: 1)
+            Text(String(format: "%.0f", percent) + "%").font(.system(size: 30, weight: .black, design: .rounded))
+                .foregroundColor(.yellow)
+                .shadow(color: .black, radius: 1, x: 2, y: 2)
         }
     }
 }

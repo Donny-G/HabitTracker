@@ -50,7 +50,7 @@ struct GoalDigitsColorAndFontModifier:ViewModifier {
         content
             .font(.system(size: 30, weight: .black, design: .rounded))
             .foregroundColor(red)
-            .shadow(color: .black, radius: 1, x: 3, y: 3)
+            .shadow(color: .black, radius: 1, x: 2, y: 2)
     }
 }
 
@@ -59,8 +59,8 @@ struct StepsDigitsColorAndFontModifier:ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(size: 30, weight: .black, design: .rounded))
-            .foregroundColor(yellow)
-            .shadow(color: .black, radius: 1, x: 3, y: 3)
+            .foregroundColor(secondTextColorDark)
+            .shadow(color: .black, radius: 1, x: 2, y: 2)
     }
 }
 
@@ -72,7 +72,7 @@ struct ButtonBorderModifier: ViewModifier {
                 .stroke(self.colorScheme == .light ? barColorLight : tabBarTextPrimaryDarkColor, lineWidth: 3)
                         .shadow(color: .black, radius: 1, x: 2, y: 2)
             )
-        .buttonStyle(PlainButtonStyle())
+            .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -302,37 +302,41 @@ struct DetailHabitView: View {
                             )
                         
         
-                        HStack(alignment: .top, spacing: 10) {
-                            VStack{
-                                Text("Goal")
-                                    .modifier(HabitAndDescriptionTitleTextModifier())
-                                ZStack{
-                                    Capsule()
-                                        .modifier(CircleSizeModifier())
-                                        .modifier(CircleColorAndShadowModifier())
-                                    Text("\(self.habit.wrappedGoal)")
-                                        .modifier(GoalDigitsColorAndFontModifier())
-                                }
+                        HStack(alignment: .top) {
+                            Spacer ()
+                            
+                            ZStack{
+                                Capsule()
+                                    .modifier(CircleSizeModifier())
+                                    .modifier(CircleColorAndShadowModifier())
+                                Image("goal5")
+                                    .resizable()
+                                    .frame(width: 110, height: 110, alignment: .center)
+                                    .shadow(color: .black, radius: 1, x: 1, y: 1)
+                                Text("\(self.habit.wrappedGoal)")
+                                    .modifier(GoalDigitsColorAndFontModifier())
                             }
-                
-                            VStack {
-                                Text("Streaks")
-                                    .modifier(HabitAndDescriptionTitleTextModifier())
-                                ZStack{
-                                    Capsule()
-                                        .modifier(CircleSizeModifier())
-                                        .modifier(CircleColorAndShadowModifier())
-                                    Text("\(self.habit.wrappedSteps)")
-                                        .modifier(StepsDigitsColorAndFontModifier())
-                                }
+                            
+                            Spacer ()
+                            
+                            ZStack{
+                                Capsule()
+                                    .modifier(CircleSizeModifier())
+                                    .modifier(CircleColorAndShadowModifier())
+                                Image("drop5")
+                                    .resizable()
+                                    .frame(width: 120, height: 120, alignment: .center)
+                                    .shadow(color: .black, radius: 1, x: 1, y: 1)
+                                Text("\(self.habit.wrappedSteps)")
+                                    .modifier(StepsDigitsColorAndFontModifier())
                             }
                         
-                            VStack() {
-                                Text("Progress")
-                                    .modifier(HabitAndDescriptionTitleTextModifier())
-                                ProgressCircle(percent: CGFloat(self.habit.percentCompletion))
-                                    .padding(.top, 10)
-                            }
+                            Spacer ()
+                            
+                            ProgressCircle(percent: CGFloat(self.habit.percentCompletion))
+                                .padding(.top, 10)
+                       
+                            Spacer ()
                         }
                     
                         if self.habit.active {
@@ -348,8 +352,8 @@ struct DetailHabitView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 70, height: 70, alignment: .center)
-                                    }
-                            }  // .animation(.easeInOut)
+                                }
+                            }
                         } else {
                             Spacer()
                         }

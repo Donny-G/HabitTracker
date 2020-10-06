@@ -30,9 +30,12 @@ struct BarView: View {
                 .padding(.bottom,-12)
             
             ZStack(alignment: .bottom) {
-                RoundedRectangle(cornerRadius: 5)
-                    .frame(width: 40, height: height)
-                    .foregroundColor(colorScheme == .light ? firstTextColorLight : .black)
+                Image("tree")
+                    .resizable()
+                    .frame(width: 100, height: height)
+                    .shadow(color: .black, radius: 1, x: 3, y: 3)
+                //    .foregroundColor(colorScheme == .light ? firstTextColorLight : .black)
+                
                 RoundedRectangle(cornerRadius: 5)
                     .fill(LinearGradient(gradient: Gradient(colors: [blue, yellow, orange, red ]), startPoint: .top, endPoint: .bottom))
                     .frame(width: 30, height: secondHeight)
