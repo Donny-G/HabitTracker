@@ -127,7 +127,7 @@ struct MainHabitView: View {
                                                     self.simpleSuccess()
                                                 }) {
                                                     HStack {
-                                                        Text("Tap to add progress")
+                                                        Text("Tap to add one step to your goal")
                                                         Image("tap")
                                                     }
                                                 }
@@ -193,7 +193,7 @@ struct MainHabitView: View {
                 }
            // }
             
-                .navigationBarTitle("Habit At", displayMode: .inline)
+                .navigationBarTitle("Habitent", displayMode: .inline)
                 .navigationBarItems(leading:
                         HStack {
                             EditButton()

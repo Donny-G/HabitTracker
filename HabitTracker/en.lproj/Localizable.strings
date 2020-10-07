@@ -5,5 +5,87 @@
   Created by DeNNiO   G on 03.10.2020.
   Copyright © 2020 Donny G. All rights reserved.
 */
+"ActiveHabits" = "Active habits";
+"CompletedHabits" = "Completed habits";
 
+"Progress" = "Progress";
 
+"Do good things to grow good habits" = "Do good things to grow good habits";
+"Main View & Habit View" = "Main View & Habit View";
+"Press the button to add new habit" = "Press the button to add new habit";
+"ProgressView" = "See your progress";
+"By long pressing on habit you can add one step to your goal" = "By long pressing on habit you can add one step to your goal";
+"Press the button to add new step to your goal" = "Press the button to add new step to your goal";
+"Delete current habit" = "Delete current habit";
+"New habit view" = "New habit view";
+"Set new local notification" = "Set new local notification";
+"Disable and delete current local notification" = "Disable and delete current local notification";
+"Choose type of predifined habit" = "Choose type of predifined habit";
+"You can choose picture for habit from gallery" = "You can choose picture for habit from gallery";
+"Or you can take picture for habit from camera" = "Or you can take picture for habit from camera";
+"Notification" = "Notification";
+"Notification is enabled" = "Notification is enabled";
+"Notification is disabled" = "Notification is disabled";
+"Default notification at 9:00 everyday" = "Default notification at 9:00 everyday";
+"Manual notification" = "Manual notification";
+"Countdown timer" = "Countdown timer";
+"Time notification" = "Time notification";
+"Repeated notification" = "Repeated notification";
+"Not repeating notification" = "Not repeating notification";
+"Sheduled dayly notification" = "Sheduled dayly notification";
+
+"Habit name" = "Habit name";
+"Enter your habit name, please" = "Enter your habit name, please";
+"Goal" = "Goal";
+"Set your goal: %d" = "Set your goal: %d";
+"Habit description" = "Habit description";
+"Enter your habit description" = "Enter your habit description";
+"Notification" = "Notification";
+"Cancel notification" = "Cancel notification";
+"Set notification" = "Set notification";
+"Type of habit" = "Type of habit";
+"New habit" = "New habit";
+"Save habit" = "Save habit";
+"Do it now" = "Do it now";
+
+"Habit name:" = "Habit name:";
+"Habit description:" = "Habit description:";
+"Show notification info" = "Show notification info";
+"Completed" = "Completed";
+"Show delete button" = "Show delete button";
+"Delete" = "Delete";
+
+"Tap to add one step to your goal" = "Tap to add one step to your goal";
+"Goal: %d" = "Goal: %d";
+"Streaks: %d" = "Streaks: %d";
+"Progress:" = "Progress:";
+"Time delay" = "Countdown timer";
+"Time + days" = "Time";
+"Minutes" = "Minutes";
+"Hours" = "Hours";
+"Sun" = "Sun";
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+"Do it" = "Do it";
+"Right now" = "Right now";
+"Back" = "Back";
+"Enter title" = "Enter title";
+"Enter subtitle" = "Enter subtitle";
+"Enter minutes for countdown timer" = "Enter minutes for countdown timer";
+"Enter hours for countdown timer" = "Enter hours for countdown timer";
+"Repeating notification" = "Repeating notification";
+"Select time" = "Select time";
+"Days of the week" = "Days of the week";
+
+"Warning !" = "Warning !";
+"Please enter minutes" = "Please enter minutes";
+"Please enter hours" = "Please enter hours";
+"Please enter title for your notification" = "Please enter title for your notification";
+"Continue" = "Continue";
+
+"%d min" = "%d мин";
+"%d h" = "%d час";

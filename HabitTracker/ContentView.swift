@@ -69,7 +69,7 @@ struct ContentView: View {
                                         .onTapGesture {
                                             self.viewRouter.currentView = "active"
                                         }
-                                    Text("Active habits")
+                                    Text("ActiveHabits")
                                         .modifier(TextTabModifier())
                                         .foregroundColor(self.viewRouter.currentView == "active" ? (self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)  : (self.colorScheme == .light ? tabBarTextPrimaryLightColor : tabBarTextPrimaryDarkColor))
                                     Spacer()
@@ -111,7 +111,7 @@ struct ContentView: View {
                                         .onTapGesture {
                                             self.viewRouter.currentView = "completed"
                                         }
-                                    Text("Completed habits")
+                                    Text("CompletedHabits")
                                         .padding(.leading, -30)
                                         .modifier(TextTabModifier())
                                         .foregroundColor(self.viewRouter.currentView == "completed" ? (self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)  : (self.colorScheme == .light ? tabBarTextPrimaryLightColor : tabBarTextPrimaryDarkColor))

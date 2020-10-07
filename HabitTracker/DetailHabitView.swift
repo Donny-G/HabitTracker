@@ -229,7 +229,7 @@ struct DetailHabitView: View {
     }
     
     func updateDataForNotificationInfoView() {
-        habitName = habit.name ?? "Do it"
+        habitName = habit.name ?? "Do it now"
         if self.habit.ntfnEnabled == true {
             self.notificationIsEnabled = true
             defaultORManualTypeOfNotification = habit.wrappedTypeOfNtfn
@@ -275,7 +275,7 @@ struct DetailHabitView: View {
                             }
             
                         HStack {
-                            Text("Habit description: ")
+                            Text("Habit description:")
                                 .modifier(HabitAndDescriptionTitleTextModifier())
                             Text(self.habit.wrappedDescr)
                                 .modifier(HabitAndDescriptionContentTextModifier())
@@ -384,7 +384,7 @@ struct DetailHabitView: View {
                                                 .renderingMode(.original)
                                                 .resizable()
                                                 .modifier(CurrentImageModifier(width: 50, height: 50))
-                                            Text("Set Notification")
+                                            Text("Set notification")
                                                 .modifier(NotificationAndSaveButtonTextModifier(size: 12))
                                         }
                                             .padding(.trailing, 10)
@@ -531,7 +531,7 @@ struct DetailHabitView: View {
                             Image("thumbsUp")
                                 .resizable()
                                 .frame(width: CGFloat(50), height: CGFloat(50))
-                                .offset(x: CGFloat(image) * geo.size.width * 0.002 , y: !self.isCompleted ? geo.size.height + 100 : -200)
+                                .offset(x: CGFloat(image) * geo.size.width * 0.002 , y: !self.isCompleted ? geo.size.height + 100 : -300)
                                 .shadow(color: .black, radius: 1, x: 2, y: 2)
                                 .animation(.spring(response: 3, dampingFraction: 3, blendDuration: 5))
                         }

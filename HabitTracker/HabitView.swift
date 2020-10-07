@@ -229,10 +229,10 @@ struct HabitView: View {
                             .modifier(TextFieldModifier(size: 20))
                     }
                 
-                    Section(header: Text("Goal settings").modifier(SectionTextModifier())) {
+                    Section(header: Text("Goal").modifier(SectionTextModifier())) {
                         
                         HStack {
-                            Text("Set your goal for habit \(habitGoal)")
+                            Text("Set your goal: \(habitGoal)")
                                 .font(.system(size: 15, weight: .black, design: .rounded))
                                 .foregroundColor(colorScheme == .light ? red : secondTextColorDark)
                             Spacer()
@@ -315,7 +315,7 @@ struct HabitView: View {
                                             .renderingMode(.original)
                                             .resizable()
                                             .modifier(CurrentImageModifier(width: 50, height: 50))
-                                        Text("Set Notification")
+                                        Text("Set notification")
                                             .modifier(NotificationAndSaveButtonTextModifier(size: 12))
                                     }
                                         .padding(.trailing, 10)
@@ -329,7 +329,7 @@ struct HabitView: View {
                     }
                     Section(header:
                         HStack{
-                            Text("Type of action").modifier(SectionTextModifier())
+                            Text("Type of habit").modifier(SectionTextModifier())
                             Spacer()
                             Button(action: {
                                 self.showingImagePicker = true

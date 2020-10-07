@@ -29,10 +29,10 @@ struct AlertView: View {
                     Text("Warning !")
                         .modifier(TextHeadLineModifier())
                     if self.tag == 0 {
-                    Text("Please enter \( self.typeOfTimer == 0 ? "minutes" : "hours")")
-                        .modifier(TextDefModifier(geo: geo.size.width * 0.7))
+                        self.typeOfTimer == 0 ? Text("Please enter minutes").modifier(TextDefModifier(geo: geo.size.width * 0.7)) : Text("Please enter hours").modifier(TextDefModifier(geo: geo.size.width * 0.7))
+                    
                     } else {
-                        Text("Please enter title of your notification")
+                        Text("Please enter title for your notification")
                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                     }
                     Button(action: {

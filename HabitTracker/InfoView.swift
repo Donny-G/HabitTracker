@@ -65,7 +65,7 @@ struct InfoView: View {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack(alignment: .leading, spacing: 15) {
                             
-                            Text("Make good things to grow good habits")
+                            Text("Do good things to grow good habits")
                                 .font(.system(size: 25, weight: .black, design: .rounded))
                                 .foregroundColor(self.colorScheme == .light ? firstTextColorLight : firstTextColorDark)
                                 .shadow(color: .black, radius: 1, x: 1, y: 1)
@@ -83,42 +83,42 @@ struct InfoView: View {
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
                                
-                                    Text("Press button to add new habit")
+                                    Text("Press the button to add new habit")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("activeForInfo")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Active habits")
+                                    Text("ActiveHabits")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("completedForInfo")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Completed habits")
+                                    Text("CompletedHabits")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("statsForInfo")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Statistics info")
+                                    Text("ProgressView")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("tap")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("By long tapping on habit you can add one step to your progress")
+                                    Text("By long pressing on habit you can add one step to your goal")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("tapButton")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Press button to mark new step")
+                                    Text("Press the button to add new step to your goal")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
@@ -132,7 +132,7 @@ struct InfoView: View {
             
                             Spacer()
             
-                            Text("New habit")
+                            Text("New habit view")
                                 .modifier(TextHeadLineModifier())
             
                             Group {
@@ -140,14 +140,14 @@ struct InfoView: View {
                                     Image("setNotificationOn")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Enable current notification")
+                                    Text("Set new local notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("setNotificationOff")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Disable current notification")
+                                    Text("Disable and delete current local notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
@@ -158,7 +158,7 @@ struct InfoView: View {
                                         .shadow(color: .black, radius: 1, x: 3, y: 3)
                                         .padding(.leading, 10)
                             
-                                    Text("Choose type of activity")
+                                    Text("Choose type of predifined habit")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                    
                                 }
@@ -173,14 +173,14 @@ struct InfoView: View {
                                     Image("photo")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("You can take picture for habit from camera")
+                                    Text("Or you can take picture for habit from camera")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                             }
             
                             Spacer()
             
-                            Text("Notifications")
+                            Text("Notification")
                                 .modifier(TextHeadLineModifier())
                 
                             Group {
@@ -202,49 +202,49 @@ struct InfoView: View {
                                     Image("auto")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("You set default notification at 9:00 everyday")
+                                    Text("Default notification at 9:00 everyday")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("manual")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("You set manual notification")
+                                    Text("Manual notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("timer2")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Timer countdown")
+                                    Text("Countdown timer")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("alarm")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Time for notification")
+                                    Text("Time notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("continues")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Continues notification")
+                                    Text("Repeated notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("notContinues")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Not continues notification")
+                                    Text("Not repeating notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
                                     Image("daysweek")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Notification on days of week")
+                                    Text("Sheduled dayly notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                             }

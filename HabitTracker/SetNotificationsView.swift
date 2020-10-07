@@ -50,9 +50,9 @@ struct SetNotificationsView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment (\.presentationMode) var presentationMode
         
-    let typesOfNotifications = ["Time delay", "Time + days"]
-    let typesOfDelay = ["Minutes", "Hours"]
-    let weekDaysArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    let typesOfNotifications = [NSLocalizedString("Time delay", comment: ""), NSLocalizedString("Time + days", comment: "")]
+    let typesOfDelay = [NSLocalizedString("Minutes", comment: ""), NSLocalizedString("Hours", comment: "")]
+    let weekDaysArray = [NSLocalizedString("Sun", comment: ""), NSLocalizedString("Mon", comment: ""), NSLocalizedString("Tue", comment: ""), NSLocalizedString("Wed", comment: ""), NSLocalizedString("Thu", comment: ""), NSLocalizedString("Fri", comment: ""), NSLocalizedString("Sat", comment: "")]
     
     var activatedColor: Color {
         self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor
@@ -146,7 +146,7 @@ struct SetNotificationsView: View {
     func setDefaultNotification(title: String?, subtitle: String?) {
         let content = UNMutableNotificationContent()
         content.title = habitName
-        content.subtitle = "Do it right now"
+        content.subtitle = "Do it now"
         content.sound = UNNotificationSound.default
            
         //logo for notification
@@ -226,7 +226,7 @@ struct SetNotificationsView: View {
                                 .resizable()
                                 .modifier(CurrentImageModifier(width: geo.size.width / 2, height: 200))
                                 .shadow(color: .black, radius: 1, x: 1, y: 1)
-                            Text("Set default notification at 9:00 everyday")
+                            Text("Default notification at 9:00 everyday")
                                 .modifier(MainTextNotificationViewModifier(size: 25))
                                 .foregroundColor(self.isDefaultNotificationEnabled ?  self.deactivatedColor : self.activatedColor)
                         }
@@ -247,7 +247,7 @@ struct SetNotificationsView: View {
                                 .resizable()
                                 .modifier(CurrentImageModifier(width: geo.size.width / 2, height: 200))
                                 .shadow(color: .black, radius: 1, x: 1, y: 1)
-                            Text("Set manual notification")
+                            Text("Manual notification")
                                 .modifier(MainTextNotificationViewModifier(size: 25))
                                 .foregroundColor(self.isManualNotificationEnabled ?  self.deactivatedColor : self.activatedColor)
                         }
@@ -266,7 +266,7 @@ struct SetNotificationsView: View {
                                     .renderingMode(.original)
                                     .resizable()
                                     .modifier(CurrentImageModifier(width: 200, height: 200))
-                                Text("Set and Back")
+                                Text("Set notification")
                                     .modifier(MainTextNotificationViewModifier(size: 25))
                                     .foregroundColor(self.activatedColor)
                             }
@@ -307,14 +307,14 @@ struct SetNotificationsView: View {
                                             .shadow(color: .black, radius: 1, x: 5, y: 5)
                                            
                                         if self.typeOfDelay == 0 {
-                                            TextField("Enter minutes for notification", text: self.$delayInMinutes)
+                                            TextField("Enter minutes for countdown timer", text: self.$delayInMinutes)
                                                 .modifier(TextFieldModifier(size: 20))
                                                 .keyboardType(.numberPad)
                                                 //hide keyboard
                                                 .onTapGesture {}
                                                 .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
                                         } else {
-                                            TextField("Enter hours for notification", text: self.$delayInHours)
+                                            TextField("Enter hours for countdown timer", text: self.$delayInHours)
                                                 .modifier(TextFieldModifier(size: 20))
                                                 .keyboardType(.numberPad)
                                                 //hide keyboard
@@ -322,7 +322,7 @@ struct SetNotificationsView: View {
                                                 .onLongPressGesture(pressing: { isPressed in if isPressed { self.endEditing() } }, perform: {})
                                         }
                                         
-                                            Toggle("Is continues", isOn: self.$isContinues)
+                                            Toggle("Repeating notification", isOn: self.$isContinues)
                                                 .modifier(MainTextNotificationViewModifier(size: 20))
                                                 .foregroundColor(self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
                         
@@ -332,7 +332,7 @@ struct SetNotificationsView: View {
                                             .modifier(MainTextNotificationViewModifier(size: 25))
                                             .foregroundColor(self.colorScheme == .light ? red : fourthTextColorDark)
                                             .buttonStyle(PlainButtonStyle())
-                                        Toggle("Is continues", isOn: self.$isContinues)
+                                        Toggle("Repeating notification", isOn: self.$isContinues)
                                             .modifier(MainTextNotificationViewModifier(size: 20))
                                             .foregroundColor(self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)
                                         Toggle("Days of the week", isOn: self.$showDaysOfTheWeek)
@@ -389,7 +389,7 @@ struct SetNotificationsView: View {
                                                 .renderingMode(.original)
                                                 .resizable()
                                                 .modifier(CurrentImageModifier(width: 150, height: 150))
-                                            Text("Set and Back")
+                                            Text("Set notification")
                                                 .modifier(MainTextNotificationViewModifier(size: 25))
                                                 .foregroundColor(self.activatedColor)
                                             }
