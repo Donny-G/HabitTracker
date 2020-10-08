@@ -205,11 +205,11 @@ struct DetailHabitView: View {
                 habit.typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
                 typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
                 if self.typeOfDelay == 0 {
-                    habit.delayInMinutes = "\(self.delayInMinutes) min"
-                    delayInMinutesFromNotificationView = "\(self.delayInMinutes) min"
+                    habit.delayInMinutes = "\(self.delayInMinutes)"
+                    delayInMinutesFromNotificationView = "\(self.delayInMinutes)"
                 } else {
-                    habit.delayInHours = "\(self.delayInHours) h"
-                    delayInHoursFromNotificationView = "\(self.delayInHours) h"
+                    habit.delayInHours = "\(self.delayInHours)"
+                    delayInHoursFromNotificationView = "\(self.delayInHours)"
                 }
             } else {
                 habit.typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue

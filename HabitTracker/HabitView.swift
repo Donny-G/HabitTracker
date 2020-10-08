@@ -150,9 +150,9 @@ struct HabitView: View {
             if self.typeOfNotification == 0 {
                 newHabit.typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
                 if self.typeOfDelay == 0 {
-                    newHabit.delayInMinutes = "\(self.delayInMinutes) min"
+                    newHabit.delayInMinutes = "\(self.delayInMinutes)"
                 } else {
-                    newHabit.delayInHours = "\(self.delayInHours) h"
+                    newHabit.delayInHours = "\(self.delayInHours)"
                 }
             } else {
                 newHabit.typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue
@@ -181,9 +181,9 @@ struct HabitView: View {
             if typeOfNotification == 0 {
                 typeOfManualNotification = TypesOfManualNotifications.delay.rawValue
                 if self.typeOfDelay == 0 {
-                    delayInMinutesFromNotificationView = "\(self.delayInMinutes) min"
+                    delayInMinutesFromNotificationView = "\(self.delayInMinutes)"
                 } else {
-                    delayInHoursFromNotificationView = "\(self.delayInHours) h"
+                    delayInHoursFromNotificationView = "\(self.delayInHours)"
                 }
             } else {
                 typeOfManualNotification = TypesOfManualNotifications.timePlusDays.rawValue

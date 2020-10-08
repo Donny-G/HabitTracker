@@ -42,7 +42,10 @@ struct NotificationsInfoView: View {
                                 .resizable()
                                 .modifier(CurrentImageModifier(width: 50, height: 50))
                             if delayInMinutes != "" || delayInHours != "" {
-                                Text(delayInMinutes != "" ? delayInMinutes : delayInHours)
+                                
+                                
+                                delayInMinutes != "" ? Text("\(delayInMinutes) min").modifier(MainTextNotificationViewModifier(size: 15))
+                                .foregroundColor(colorScheme == .light ? orange : firstTextColorLight) : Text( "\(delayInHours) h")
                                     .modifier(MainTextNotificationViewModifier(size: 15))
                                     .foregroundColor(colorScheme == .light ? orange : firstTextColorLight)
                             } else {

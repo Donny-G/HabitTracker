@@ -158,7 +158,7 @@ struct InfoView: View {
                                         .shadow(color: .black, radius: 1, x: 3, y: 3)
                                         .padding(.leading, 10)
                             
-                                    Text("Choose type of predifined habit")
+                                    Text("Choose type of predefined habit")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                    
                                 }
@@ -244,7 +244,7 @@ struct InfoView: View {
                                     Image("daysweek")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
-                                    Text("Sheduled dayly notification")
+                                    Text("Scheduled daily notification")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                             }

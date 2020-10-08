@@ -5,22 +5,22 @@
   Created by DeNNiO   G on 03.10.2020.
   Copyright © 2020 Donny G. All rights reserved.
 */
-"ActiveHabits" = "Active habits";
+"ActiveHabits" = "Current habits in process";
 "CompletedHabits" = "Completed habits";
 
 "Progress" = "Progress";
 
-"Do good things to grow good habits" = "Do good things to grow good habits";
+"Do good things to grow good habits" = "Habit is a second nature. Do good things to grow good habits";
 "Main View & Habit View" = "Main View & Habit View";
-"Press the button to add new habit" = "Press the button to add new habit";
+"Press the button to add new habit" = "Add new habit button";
 "ProgressView" = "See your progress";
-"By long pressing on habit you can add one step to your goal" = "By long pressing on habit you can add one step to your goal";
-"Press the button to add new step to your goal" = "Press the button to add new step to your goal";
+"By long pressing on habit you can add one step to your goal" = "Button to add one step to your goal, appeared by long pressure on the habit";
+"Press the button to add new step to your goal" = "Button to add new step to your goal";
 "Delete current habit" = "Delete current habit";
 "New habit view" = "New habit view";
 "Set new local notification" = "Set new local notification";
 "Disable and delete current local notification" = "Disable and delete current local notification";
-"Choose type of predifined habit" = "Choose type of predifined habit";
+"Choose type of predefined habit" = "Choose type of predefined habit";
 "You can choose picture for habit from gallery" = "You can choose picture for habit from gallery";
 "Or you can take picture for habit from camera" = "Or you can take picture for habit from camera";
 "Notification" = "Notification";
@@ -32,7 +32,7 @@
 "Time notification" = "Time notification";
 "Repeated notification" = "Repeated notification";
 "Not repeating notification" = "Not repeating notification";
-"Sheduled dayly notification" = "Sheduled dayly notification";
+"Scheduled daily notification" = "Scheduled daily notification";
 
 "Habit name" = "Habit name";
 "Enter your habit name, please" = "Enter your habit name, please";
@@ -50,14 +50,14 @@
 
 "Habit name:" = "Habit name:";
 "Habit description:" = "Habit description:";
-"Show notification info" = "Show notification info";
+"Show notification info" = "Show notification settings";
 "Completed" = "Completed";
 "Show delete button" = "Show delete button";
 "Delete" = "Delete";
 
 "Tap to add one step to your goal" = "Tap to add one step to your goal";
 "Goal: %d" = "Goal: %d";
-"Streaks: %d" = "Streaks: %d";
+"Streaks: %d" = "Steps: %d";
 "Progress:" = "Progress:";
 "Time delay" = "Countdown timer";
 "Time + days" = "Time";
@@ -77,7 +77,7 @@
 "Enter subtitle" = "Enter subtitle";
 "Enter minutes for countdown timer" = "Enter minutes for countdown timer";
 "Enter hours for countdown timer" = "Enter hours for countdown timer";
-"Repeating notification" = "Repeating notification";
+"Repeating notification" = "Repeated notification";
 "Select time" = "Select time";
 "Days of the week" = "Days of the week";
 
@@ -87,5 +87,5 @@
 "Please enter title for your notification" = "Please enter title for your notification";
 "Continue" = "Continue";
 
-"%d min" = "%d мин";
-"%d h" = "%d час";
+"%@ min" = "%@ min";
+"%@ h" = "%@ h";

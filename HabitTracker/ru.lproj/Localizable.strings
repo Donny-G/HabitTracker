@@ -1,0 +1,90 @@
+/* 
+  Localizable.strings
+  HabitTracker
+
+  Created by DeNNiO   G on 03.10.2020.
+  Copyright © 2020 Donny G. All rights reserved.
+*/
+"ActiveHabits" = "Привычки в работе";
+"CompletedHabits" = "Сформированные привычки";
+
+"Progress" = "Прогресс";
+
+"Do good things to grow good habits" = "Привычка - вторая натура. Совершай хорошие дела, чтобы сформировать полезные привычки";
+"Main View & Habit View" = "Главное окно & Окно привычки";
+"Press the button to add new habit" = "Добавление новой привычки";
+"ProgressView" = "Шкала прогресса формирования привычек";
+"By long pressing on habit you can add one step to your goal" = "Кнопка добавления одного шага к заданной цели при долгом нажатии по привычке в главном окне";
+"Press the button to add new step to your goal" = "Кнопка добавления шага к заданной цели";
+"Delete current habit" = "Удаление текущей привычки";
+"New habit view" = "Новая привычка";
+"Set new local notification" = "Создать новое уведомление";
+"Disable and delete current local notification" = "Отключить и удалить текущее уведомление";
+"Choose type of predefined habit" = "Выбор типа привычки";
+"You can choose picture for habit from gallery" = "Кнопка выбора изображения привычки из галереи";
+"Or you can take picture for habit from camera" = "Кнопка для использования фото в качестве изображения для привычки";
+"Notification" = "Уведомление";
+"Notification is enabled" = "Уведомление включено";
+"Notification is disabled" = "Уведомление отключено";
+"Default notification at 9:00 everyday" = "Режим уведомления по умолчанию в 9:00 каждый день";
+"Manual notification" = "Ручной режим уведомления";
+"Countdown timer" = "Уведомление по таймеру обратного отсчёта";
+"Time notification" = "Уведомление по заданному времени";
+"Repeated notification" = "Уведомление с повтором";
+"Not repeating notification" = "Уведомление без повтора";
+"Scheduled daily notification" = "Уведомление по дням недели";
+
+"Habit name" = "Название привычки";
+"Enter your habit name, please" = "Укажите название привычки, пожалуйста";
+"Goal" = "Цель";
+"Set your goal: %d" = "Укажите вашу цель: %d";
+"Habit description" = "Описание привычки";
+"Enter your habit description" = "Укажите описание привычки";
+"Cancel notification" = "Отключить уведомление";
+"Set notification" = "Установить уведомление";
+"Type of habit" = "Тип привычки";
+"New habit" = "Новая привычка";
+"Save habit" = "Сохранить привычку";
+"Do it now" = "Сделай это сейчас";
+
+"Habit name:" = "Название привычки:";
+"Habit description:" = "Описание привычки:";
+"Show notification info" = "Показать настройки уведомления";
+"Completed" = "Завершено";
+"Show delete button" = "Показать кнопку удаления";
+"Delete" = "Удалить";
+
+"Tap to add one step to your goal" = "Нажмите для добавления шага к вашей цели";
+"Goal: %d" = "Цель: %d";
+"Streaks: %d" = "Шаги: %d";
+"Progress:" = "Прогресс:";
+"Time delay" = "Таймер обратного отсчёта";
+"Time + days" = "Время";
+"Minutes" = "Минуты";
+"Hours" = "Часы";
+"Sun" = "Вс";
+"Mon" = "Пн";
+"Tue" = "Вт";
+"Wed" = "Ср";
+"Thu" = "Чт";
+"Fri" = "Пт";
+"Sat" = "Сб";
+"Do it" = "Сделай это";
+"Right now" = "Прямо сейчас";
+"Back" = "Назад";
+"Enter title" = "Укажите название для уведомления";
+"Enter subtitle" = "Укажите описание для уведомления";
+"Enter minutes for countdown timer" = "Укажите минуты для обратного отсчёта";
+"Enter hours for countdown timer" = "Укажите часы для обратного отсчёта";
+"Repeating notification" = "Уведомление с повтором";
+"Select time" = "Выбрать время";
+"Days of the week" = "Уведомление по дням недели";
+
+"Warning !" = "Внимание !";
+"Please enter minutes" = "Пожалуйста, укажите минуты для обратного отсчёта";
+"Please enter hours" = "Пожалуйста, укажите часы для обратного отсчёта";
+"Please enter title for your notification" = "Пожалуйста, укажите название для уведомления";
+"Continue" = "Продолжить";
+
+"%@ min" = "%@ мин";
+"%@ h" = "%@ ч";
