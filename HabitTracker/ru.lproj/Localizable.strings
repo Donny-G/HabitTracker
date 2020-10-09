@@ -35,7 +35,7 @@
 "Scheduled daily notification" = "Уведомление по дням недели";
 
 "Habit name" = "Название привычки";
-"Enter your habit name, please" = "Укажите название привычки, пожалуйста";
+"Enter your habit name, please" = "Укажите название привычки";
 "Goal" = "Цель";
 "Set your goal: %d" = "Укажите вашу цель: %d";
 "Habit description" = "Описание привычки";
@@ -44,7 +44,7 @@
 "Set notification" = "Установить уведомление";
 "Type of habit" = "Тип привычки";
 "New habit" = "Новая привычка";
-"Save habit" = "Сохранить привычку";
+"Save habit" = "Сохранить";
 "Do it now" = "Сделай это сейчас";
 
 "Habit name:" = "Название привычки:";
@@ -58,7 +58,7 @@
 "Goal: %d" = "Цель: %d";
 "Streaks: %d" = "Шаги: %d";
 "Progress:" = "Прогресс:";
-"Time delay" = "Таймер обратного отсчёта";
+"Time delay" = "Таймер";
 "Time + days" = "Время";
 "Minutes" = "Минуты";
 "Hours" = "Часы";
@@ -72,10 +72,10 @@
 "Do it" = "Сделай это";
 "Right now" = "Прямо сейчас";
 "Back" = "Назад";
-"Enter title" = "Укажите название для уведомления";
-"Enter subtitle" = "Укажите описание для уведомления";
-"Enter minutes for countdown timer" = "Укажите минуты для обратного отсчёта";
-"Enter hours for countdown timer" = "Укажите часы для обратного отсчёта";
+"Enter title" = "Название уведомления";
+"Enter subtitle" = "Описание уведомления";
+"Enter minutes for countdown timer" = "Минуты для обратного отсчёта";
+"Enter hours for countdown timer" = "Часы для обратного отсчёта";
 "Repeating notification" = "Уведомление с повтором";
 "Select time" = "Выбрать время";
 "Days of the week" = "Уведомление по дням недели";
@@ -83,8 +83,9 @@
 "Warning !" = "Внимание !";
 "Please enter minutes" = "Пожалуйста, укажите минуты для обратного отсчёта";
 "Please enter hours" = "Пожалуйста, укажите часы для обратного отсчёта";
-"Please enter title for your notification" = "Пожалуйста, укажите название для уведомления";
+"Please enter title for your notification" = "Пожалуйста, укажите название уведомления";
 "Continue" = "Продолжить";
 
 "%@ min" = "%@ мин";
 "%@ h" = "%@ ч";
+

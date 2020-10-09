@@ -20,6 +20,7 @@ struct MainTextNotificationViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(size: size, weight: .black, design: .rounded))
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -227,7 +228,7 @@ struct SetNotificationsView: View {
                                 .modifier(CurrentImageModifier(width: geo.size.width / 2, height: 200))
                                 .shadow(color: .black, radius: 1, x: 1, y: 1)
                             Text("Default notification at 9:00 everyday")
-                                .modifier(MainTextNotificationViewModifier(size: 25))
+                                .modifier(MainTextNotificationViewModifier(size: 20))
                                 .foregroundColor(self.isDefaultNotificationEnabled ?  self.deactivatedColor : self.activatedColor)
                         }
                             .onAppear(perform: self.startNotification)
@@ -248,7 +249,7 @@ struct SetNotificationsView: View {
                                 .modifier(CurrentImageModifier(width: geo.size.width / 2, height: 200))
                                 .shadow(color: .black, radius: 1, x: 1, y: 1)
                             Text("Manual notification")
-                                .modifier(MainTextNotificationViewModifier(size: 25))
+                                .modifier(MainTextNotificationViewModifier(size: 20))
                                 .foregroundColor(self.isManualNotificationEnabled ?  self.deactivatedColor : self.activatedColor)
                         }
                             .background(self.isManualNotificationEnabled ?  self.activatedColor : self.deactivatedColor)
@@ -305,7 +306,6 @@ struct SetNotificationsView: View {
                                             .background(self.colorScheme == .light ? barColorLight : blue)
                                             .cornerRadius(20)
                                             .shadow(color: .black, radius: 1, x: 5, y: 5)
-                                           
                                         if self.typeOfDelay == 0 {
                                             TextField("Enter minutes for countdown timer", text: self.$delayInMinutes)
                                                 .modifier(TextFieldModifier(size: 20))
@@ -390,7 +390,7 @@ struct SetNotificationsView: View {
                                                 .resizable()
                                                 .modifier(CurrentImageModifier(width: 150, height: 150))
                                             Text("Set notification")
-                                                .modifier(MainTextNotificationViewModifier(size: 25))
+                                                .modifier(MainTextNotificationViewModifier(size: 20))
                                                 .foregroundColor(self.activatedColor)
                                             }
                                         Spacer()
@@ -398,7 +398,7 @@ struct SetNotificationsView: View {
                                     
                                 }
                                 AlertView(isContinue: self.$showAlert, typeOfTimer: self.typeOfDelay, alertWidth: geo.size.width * 0.5, alertHeight: geo.size.height * 0.3, tag: self.tag)
-                                    .offset(x: self.showAlert ? 0 : 500, y: 0)
+                                    .offset(x: self.showAlert ? 0 : 800, y: 0)
                                     .animation(.easeInOut)
                             }
                         }

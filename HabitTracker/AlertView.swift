@@ -28,19 +28,20 @@ struct AlertView: View {
                 VStack {
                     Text("Warning !")
                         .modifier(TextHeadLineModifier())
+                    Spacer()
                     if self.tag == 0 {
-                        self.typeOfTimer == 0 ? Text("Please enter minutes").modifier(TextDefModifier(geo: geo.size.width * 0.7)) : Text("Please enter hours").modifier(TextDefModifier(geo: geo.size.width * 0.7))
+                        self.typeOfTimer == 0 ? Text("Please enter minutes").modifier(TextDefModifier(geo: geo.size.width * 0.9)) : Text("Please enter hours").modifier(TextDefModifier(geo: geo.size.width * 0.9))
                     
                     } else {
                         Text("Please enter title for your notification")
-                        .modifier(TextDefModifier(geo: geo.size.width * 0.7))
+                        .modifier(TextDefModifier(geo: geo.size.width * 0.9))
                     }
                     Button(action: {
                         self.isContinue.toggle()
                     }) {
                         HStack {
                         Text("Continue")
-                            .modifier(NotificationAndSaveButtonTextModifier(size: 20))
+                            .modifier(NotificationAndSaveButtonTextModifier(size: 18))
                             .shadow(color: .black, radius: 1, x: 1, y: 1)
                         Image("okButton")
                             .renderingMode(.original)

@@ -413,6 +413,7 @@ struct HabitView: View {
                 }
             }   .edgesIgnoringSafeArea(.bottom)
                 .navigationBarTitle("New habit", displayMode: .inline)
+                .navigationViewStyle(StackNavigationViewStyle())
                 .navigationBarItems(leading:
                     Button("Save habit"){
                         self.saveToCoreData()
@@ -425,6 +426,7 @@ struct HabitView: View {
                     ImagePicker(image: self.$inputImage, typeOfSource: self.$source)
             }
         }
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

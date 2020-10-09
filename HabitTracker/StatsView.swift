@@ -12,7 +12,7 @@ struct ImageModifier: ViewModifier {
     var geo: CGFloat
     func body(content: Content) -> some View {
         content
-            .frame(width: geo, height: 80)
+            .frame(width: geo, height: geo)
             .scaledToFit()
             .shadow(color: .black, radius: 1, x: 3, y: 3)
     }

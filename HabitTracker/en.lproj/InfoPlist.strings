@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  HabitTracker
+
+  Created by DeNNiO   G on 09.10.2020.
+  Copyright © 2020 Donny G. All rights reserved.
+*/
+NSCameraUsageDescription = "Would you like to use your camera to take photo of your habit, please ?";

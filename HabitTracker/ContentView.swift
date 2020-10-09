@@ -62,17 +62,17 @@ struct ContentView: View {
                             Spacer()
                             
                             HStack {
-                                VStack {
-                                    Image("active3")
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 70, height: 70)
+                                        .foregroundColor(self.viewRouter.currentView == "active" ? (self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)  : (self.colorScheme == .light ? tabBarTextPrimaryLightColor : tabBarTextPrimaryDarkColor))
+                                        .shadow(color: .black, radius: 1, x: 3, y: 3)
+                                    Image("active11")
                                         .resizable()
                                         .modifier(ImageTabModifier())
                                         .onTapGesture {
                                             self.viewRouter.currentView = "active"
                                         }
-                                    Text("ActiveHabits")
-                                        .modifier(TextTabModifier())
-                                        .foregroundColor(self.viewRouter.currentView == "active" ? (self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)  : (self.colorScheme == .light ? tabBarTextPrimaryLightColor : tabBarTextPrimaryDarkColor))
-                                    Spacer()
                                 }
                                     .frame(width: geo.size.width/3, height: 75)
                             
@@ -104,23 +104,22 @@ struct ContentView: View {
                                         self.habitViewOpen.toggle()
                                     }
                             
-                                VStack {
-                                    Image("completed3")
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 70, height: 70)
+                                        .foregroundColor(self.viewRouter.currentView == "completed" ? (self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)  : (self.colorScheme == .light ? tabBarTextPrimaryLightColor : tabBarTextPrimaryDarkColor))
+                                        .shadow(color: .black, radius: 1, x: 3, y: 3)
+                                    Image("completed4")
                                         .resizable()
                                         .modifier(ImageTabModifier())
                                         .onTapGesture {
                                             self.viewRouter.currentView = "completed"
                                         }
-                                    Text("CompletedHabits")
-                                        .padding(.leading, -30)
-                                        .modifier(TextTabModifier())
-                                        .foregroundColor(self.viewRouter.currentView == "completed" ? (self.colorScheme == .light ? tabBarTextSecondaryLightColor : tabBarTextSecondaryDarkColor)  : (self.colorScheme == .light ? tabBarTextPrimaryLightColor : tabBarTextPrimaryDarkColor))
-                                    Spacer()
                                 }
                                     .frame(width: geo.size.width/3, height: 75)
                             
                             }
-                                .frame(width: geo.size.width, height: geo.size.height/10)
+                                .frame(width: geo.size.width, height: geo.size.height/8)
                                 .background(self.colorScheme == .light ? barColorLight : barColorDark)
                         }
                     }

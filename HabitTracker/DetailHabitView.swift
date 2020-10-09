@@ -148,7 +148,6 @@ struct DetailHabitView: View {
         let notifcenter = UNUserNotificationCenter.current()
         notifcenter.getPendingNotificationRequests { (notificationRequests) in
             for notificationRequest: UNNotificationRequest in notificationRequests {
-                print(notificationRequest.identifier)
             }
         }
     }
@@ -287,7 +286,7 @@ struct DetailHabitView: View {
                             if  self.habit.img == nil {
                                 Image("\(self.habit.typeOfAction)")
                                     .resizable()
-                                    .modifier(CurrentImageModifier(width: geo.size.width, height: 150))
+                                    .modifier(CurrentImageModifier(width: geo.size.width / 2, height: geo.size.width / 2))
                             } else {
                                 Image(uiImage: self.imageFromCoreData(habit: self.habit))
                                     .resizable()
@@ -295,7 +294,7 @@ struct DetailHabitView: View {
                                     .modifier(CurrentImageModifier(width: geo.size.width, height: 150))
                             }
                             Spacer()
-                        }   .rotation3DEffect(.degrees(self.isAnimationOn ? 10 : -10), axis: (x: 0 , y: 5, z: 0))
+                        }   .rotation3DEffect(.degrees(self.isAnimationOn ? 20 : -20), axis: (x: 0 , y: 10, z: 0))
                             .animation(
                                 Animation.easeOut(duration: 3)
                                     .repeatForever(autoreverses: true)
@@ -462,6 +461,7 @@ struct DetailHabitView: View {
                                     .font(.system(size: 25, weight: Font.Weight.bold, design: Font.Design.rounded))
                                     .foregroundColor(self.colorScheme == .light ? red : yellow)
                                     .shadow(color: .black, radius: 1, x: 2, y: 2)
+                                    .fixedSize(horizontal: true, vertical: false)
                                     .scaleEffect(self.isAnimationOn ? 1.2 : 1)
                                     .animation(
                                         Animation.easeOut(duration: 3)
@@ -524,14 +524,13 @@ struct DetailHabitView: View {
                 }
                     .padding(.top, -40)
                     .buttonStyle(PlainButtonStyle())
-        
                     HStack(alignment: .center) {
                         Spacer()
                         ForEach(1 ..< 7) { image in
                             Image("thumbsUp")
                                 .resizable()
                                 .frame(width: CGFloat(50), height: CGFloat(50))
-                                .offset(x: CGFloat(image) * geo.size.width * 0.002 , y: !self.isCompleted ? geo.size.height + 100 : -300)
+                                .offset(x: CGFloat(image) * geo.size.width * 0.002 , y: !self.isCompleted ? geo.size.height + 100 : -1000)
                                 .shadow(color: .black, radius: 1, x: 2, y: 2)
                                 .animation(.spring(response: 3, dampingFraction: 3, blendDuration: 5))
                         }

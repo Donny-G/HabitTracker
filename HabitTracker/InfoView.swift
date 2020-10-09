@@ -12,7 +12,7 @@ struct ImageInfoModifier: ViewModifier {
     var geo: CGFloat
     func body(content: Content) -> some View {
         content
-            .frame(width: geo, height: 80)
+            .frame(width: geo, height: geo)
             .scaledToFit()
             .shadow(color: .black, radius: 1, x: 3, y: 3)
             .padding(.leading, 10)
@@ -27,6 +27,7 @@ struct TextHeadLineModifier: ViewModifier {
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
             .foregroundColor(colorScheme == .light ? firstTextColorLight : firstTextColorDark)
             .shadow(color: .black, radius: 1, x: 2, y: 2)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -52,7 +53,6 @@ struct InfoView: View {
         var images: [String] = []
         for i in 1...59 {
             images.append("Animation\(i)")
-            print(images)
         }
         return images
     }
@@ -69,9 +69,9 @@ struct InfoView: View {
                                 .font(.system(size: 25, weight: .black, design: .rounded))
                                 .foregroundColor(self.colorScheme == .light ? firstTextColorLight : firstTextColorDark)
                                 .shadow(color: .black, radius: 1, x: 1, y: 1)
-                                .frame(width: geo.size.width * 0.8,height: geo.size.height * 0.2, alignment: .center)
-                                .padding(.leading, 10)
-                            
+                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.top, 15)
                             AnimatedImage(imageNames: self.imageNames, width: geo.size.width, height: geo.size.height / 2, duration: 0.08)
                                 
                             Text("Main View & Habit View")
@@ -87,28 +87,28 @@ struct InfoView: View {
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
-                                    Image("activeForInfo")
+                                    Image("active11")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
                                     Text("ActiveHabits")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
-                                    Image("completedForInfo")
+                                    Image("completed4")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
                                     Text("CompletedHabits")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
-                                    Image("statsForInfo")
+                                    Image("graph")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
                                     Text("ProgressView")
                                         .modifier(TextDefModifier(geo: geo.size.width * 0.7))
                                 }
                                 HStack {
-                                    Image("tap")
+                                    Image("tap5")
                                         .resizable()
                                         .modifier(ImageInfoModifier(geo: geo.size.width * 0.2))
                                     Text("By long pressing on habit you can add one step to your goal")
@@ -262,6 +262,7 @@ struct InfoView: View {
                             .foregroundColor(self.colorScheme == .light ? tabBarTextPrimaryLightColor  : tabBarTextPrimaryDarkColor)
                     })
         }
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
